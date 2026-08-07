@@ -1,0 +1,447 @@
+[
+ {
+  "id": "PL-01",
+  "category": "placement",
+  "difficulty": "easy",
+  "instruction": "The floorplan of the gcd design is complete (die and core area, placement rows, IO pins, tap cells and power grid exist), but none of its standard cells has been placed yet. Run global placement so that the standard cells are spread over the core area with short total wirelength. When the script finishes, every standard cell must have a placed status and must lie completely inside the core area. Keep the existing tap cells. Legalization (detailed placement) is not required in this step.",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "global_placement"
+  ],
+  "expected_outcome": "All 347 standard cells are placed inside the core by a wirelength-driven global placement (cells spread, not stacked).",
+  "validator": {
+   "name": "pl_global_placement",
+   "params": {
+    "bin_um": 4.0,
+    "max_bin_density": 1.2,
+    "hpwl_ratio_max": 1.5,
+    "reference_script": "global_placement"
+   }
+  },
+  "reference_script": "reference_scripts/PL-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-01.alt1.tcl",
+    "controls/PL-01.alt2.tcl",
+    "controls/PL-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-01.neg1.tcl",
+    "controls/PL-01.neg2.tcl",
+    "controls/PL-01.neg3.tcl",
+    "controls/PL-01.neg4.tcl",
+    "controls/PL-01.neg5.tcl",
+    "controls/PL-01.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint task 2. Tap cells are fixed and are not part of the placement. 'Spread' is measured as the area-weighted mean density of the non-empty 4x4 um bins (core aligned): any real global placement gives 0.18 (uniform density) to 0.90 (density 1.0); stacking every cell at one point gives ~21 and initial placement only (-skip_nesterov_place) ~9, hence the 1.2 bound. Wirelength sanity bound: 1.5x the HPWL of a default global placement computed by the oracle (4741 um); target densities 0.3-1.0 give 4630-5150 um, -density uniform 6208 um. Hand-written placers pass the spread bound but not the wirelength bound (row packing in netlist order: density 0.86, HPWL 11536 um = 2.4x; random scatter: 27165 um = 5.7x). The legalizer alone (detailed_placement) leaves unplaced cells unplaced in this build. Re-running tapcell keeps the tap-cell count (passes); '-overflow 0.9' (stopping criterion mistaken for a density) stops with density 6.4 and fails."
+ },
+ {
+  "id": "PL-02",
+  "category": "placement",
+  "difficulty": "easy",
+  "instruction": "Global placement has been run on the gcd design, but the standard cells are not legalized yet (they overlap and are not aligned to the placement sites). Legalize the existing global placement so that every standard cell sits on a legal site of a placement row, in the orientation of that row, without overlaps. The cells must stay close to their current global-placement locations: do not re-run global placement, no cell may move by more than 10 um and the average movement must not exceed 2 um.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "detailed_placement",
+   "check_placement"
+  ],
+  "expected_outcome": "A legal placement (check_placement passes, row orientations respected) with every cell within a few microns of its global-placement location.",
+  "validator": {
+   "name": "pl_legalize",
+   "params": {
+    "max_disp_um": 10.0,
+    "mean_disp_um": 2.0
+   }
+  },
+  "reference_script": "reference_scripts/PL-02.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-02.alt1.tcl",
+    "controls/PL-02.alt2.tcl",
+    "controls/PL-02.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-02.neg1.tcl",
+    "controls/PL-02.neg2.tcl",
+    "controls/PL-02.neg3.tcl",
+    "controls/PL-02.neg4.tcl",
+    "controls/PL-02.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Displacement is Euclidean, measured on the probe positions (lower-left corners). Default legalization moves cells by at most 2.0 um (mean 0.55 um); padded variants up to 3.4 um; incremental global placement + legalization max 2.7 um. Re-running global placement before legalizing moves cells by ~15 um on average (max ~40 um). Legality = probe check_placement (in the agent's session, so it also honours padding the agent set) plus a row-orientation check, which check_placement does not perform in this build. improve_placement on an unlegalized placement leaves overlaps and site-alignment errors. An extra improve_placement pass after legalization moves cells up to ~25-40 um and therefore violates 'stay close'. The numeric bounds are stated in the instruction because the ORFS detail_place recipe (legalize + improve_placement + mirroring) is a plausible reading of 'legalize'; it moves cells up to 38.8 um (mean 2.11) and fails. Legal variants: max 1.98-3.57 um, mean 0.63-0.89 um. A hand-written snap-to-site legalizer leaves overlaps (check_placement fails)."
+ },
+ {
+  "id": "PL-03",
+  "category": "placement",
+  "difficulty": "medium",
+  "instruction": "Inspect the current placement utilization of the gcd design without modifying the design. For this check, utilization is defined as the total area of all placed standard-cell instances (logic cells and tap cells) divided by the core area. Write the file outputs/utilization.txt with exactly two lines:\nutilization_percent: <utilization in percent, with two decimals>\nabove_target: <yes or no>\nwhere above_target states whether the utilization is above our target utilization of 70%.",
+  "start_state": "placed",
+  "expected_commands": [
+   "report_design_area",
+   "rsz::utilization (or an odb area sum)",
+   "open/puts/close"
+  ],
+  "expected_outcome": "outputs/utilization.txt reports utilization_percent: 8.18 and above_target: no; the design is unchanged.",
+  "validator": {
+   "name": "pl_utilization_report",
+   "params": {
+    "file": "utilization.txt",
+    "target_percent": 70.0,
+    "tol_percent": 0.02
+   }
+  },
+  "reference_script": "reference_scripts/PL-03.tcl",
+  "required_outputs": [
+   "outputs/utilization.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/PL-03.alt1.tcl",
+    "controls/PL-03.alt2.tcl",
+    "controls/PL-03.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-03.neg1.tcl",
+    "controls/PL-03.neg2.tcl",
+    "controls/PL-03.neg3.tcl",
+    "controls/PL-03.neg4.tcl",
+    "controls/PL-03.neg5.tcl",
+    "controls/PL-03.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint task 4. Ground truth = baseline probe utilization_with_taps (logic + TAPCELL area / core area) = 8.18 %. The design-area report prints the same quantity but rounded to an integer (8 %), and logger output cannot be captured from Tcl in this build, so an exact value needs rsz::utilization or an odb area sum. Logic-only utilization (7.71 %) fails. Tolerance 0.02 percentage points covers two-decimal rounding/truncation. The design must stay unchanged (no cell moved, no instance added). Die area instead of core area gives 5.19 %; a fraction instead of a percentage gives 0.08; both fail. A percent sign or upper-case YES/NO is accepted. rsz::design_area crashed OpenROAD (SIGSEGV) in one exploratory script on this state."
+ },
+ {
+  "id": "PL-04",
+  "category": "placement",
+  "difficulty": "easy",
+  "instruction": "Run (wirelength-driven) global placement on the floorplanned gcd design with a target placement density of 0.5 instead of the tool's default target density, so that in the placed region the standard cells themselves occupy about 50% of the local area (do not add cell padding to the global placement). Every standard cell must end up placed inside the core area. Legalization is not required in this step.",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "global_placement -density"
+  ],
+  "expected_outcome": "All standard cells placed inside the core by a global placement whose local cell density is about 0.5.",
+  "validator": {
+   "name": "pl_global_placement",
+   "params": {
+    "bin_um": 4.0,
+    "max_bin_density": 1.2,
+    "density_min": 0.44,
+    "density_max": 0.55,
+    "hpwl_ratio_max": 1.5,
+    "reference_script": "global_placement -density 0.5"
+   }
+  },
+  "reference_script": "reference_scripts/PL-04.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-04.alt1.tcl",
+    "controls/PL-04.alt2.tcl",
+    "controls/PL-04.alt3.tcl",
+    "controls/PL-04.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/PL-04.neg1.tcl",
+    "controls/PL-04.neg2.tcl",
+    "controls/PL-04.neg3.tcl",
+    "controls/PL-04.neg4.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Measured density = area-weighted mean density of the non-empty 4x4 um bins (core aligned), which tracks the global-placement target closely. Target 0.5 gives 0.497-0.523 (plain, timing-driven, routability-driven, -skip_initial_place, -overflow / -init_density_penalty tweaks, IO pins re-placed before or after) and 0.464-0.492 after an optional legalization with 0-2 sites of padding. Neighbouring values: target 0.4 -> 0.40-0.41, 0.45 -> 0.46, 0.55 -> 0.58, 0.6 -> 0.55-0.60, default 0.7 -> 0.61-0.70, 0.3 -> 0.31. Global-placement padding (-pad_left/-pad_right) lowers the measured density (0.375 at density 0.5 with 1 site) and therefore fails. -routability_max_density does not change the target density (measured 0.68). The instruction excludes global-placement padding explicitly ('the standard cells themselves'), since -density 0.5 with -pad_left/-pad_right 2 measures 0.305. Relabelled easy (one well-known option)."
+ },
+ {
+  "id": "PL-05",
+  "category": "placement",
+  "difficulty": "medium",
+  "instruction": "Legalize the existing global placement of the gcd design while reserving routing space around the standard cells: every standard cell needs 2 placement sites of padding on its left side and 2 placement sites of padding on its right side. In the final legal placement, horizontally adjacent standard cells in a row must therefore be at least 4 sites apart, and no standard cell may be closer than 2 sites to a tap cell. The cells must stay close to their current global-placement locations (do not re-run global placement; no cell may move by more than 10 um and the average movement must not exceed 2 um), and every cell must sit on a legal row site in the orientation of its row, without overlaps.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "set_placement_padding",
+   "detailed_placement"
+  ],
+  "expected_outcome": "Legal placement with >= 4 empty sites between adjacent standard cells and >= 2 sites to tap cells, close to the global placement.",
+  "validator": {
+   "name": "pl_legalize",
+   "params": {
+    "max_disp_um": 10.0,
+    "mean_disp_um": 2.0,
+    "min_gap_ll_sites": 4,
+    "min_gap_lt_sites": 2
+   }
+  },
+  "reference_script": "reference_scripts/PL-05.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-05.alt1.tcl",
+    "controls/PL-05.alt2.tcl",
+    "controls/PL-05.alt3.tcl",
+    "controls/PL-05.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/PL-05.neg1.tcl",
+    "controls/PL-05.neg2.tcl",
+    "controls/PL-05.neg3.tcl",
+    "controls/PL-05.neg4.tcl",
+    "controls/PL-05.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Padding is not stored in the database, so the gaps are measured directly on final.odb (oracle): the reference gives a minimum of 4.0 sites between adjacent standard cells and 8 sites to tap cells; one site of padding per side gives 2.0. Padding applied only during global placement (-pad_left/-pad_right) is ignored by the legalizer. check_placement in the agent's session honours the padding, so setting padding without re-legalizing makes the placement illegal. Max displacement with 2-site padding 3.4 um (Euclidean). Right-side-only padding of 2 sites gives 2-site gaps and fails; padding on the CORE masters only (tap cells unpadded) passes."
+ },
+ {
+  "id": "PL-06",
+  "category": "placement",
+  "difficulty": "easy",
+  "instruction": "The gcd design is placed, clock-tree synthesized and globally routed. Before detailed routing, insert filler cells so that every empty placement site in every row is filled, using the platform filler cells (FILLCELL_X1 ... FILLCELL_X32). Name the inserted filler instances with the prefix FILL_ (for example FILL_17). Existing cells must not be moved and the placement must remain legal.",
+  "start_state": "grouted",
+  "expected_commands": [
+   "filler_placement -prefix"
+  ],
+  "expected_outcome": "About 1387 filler instances named FILL_* cover every remaining row site; no existing cell moved; placement legal.",
+  "validator": {
+   "name": "pl_fillers",
+   "params": {
+    "prefix": "FILL_"
+   }
+  },
+  "reference_script": "reference_scripts/PL-06.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-06.alt1.tcl",
+    "controls/PL-06.alt2.tcl",
+    "controls/PL-06.alt3.tcl",
+    "controls/PL-06.alt4.tcl",
+    "controls/PL-06.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/PL-06.neg1.tcl",
+    "controls/PL-06.neg2.tcl",
+    "controls/PL-06.neg3.tcl",
+    "controls/PL-06.neg4.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Coverage is computed on final.odb per row as the union of all placed instance boxes (0 uncovered sites of 24054 expected). The default filler prefix is FILLER_. Wide fillers only cannot fill narrow gaps: FILLCELL_X4 on 'placed' raises DPL-0002, while {X8 X16 X32} on this state crashes OpenROAD (SIGSEGV in dpl::Opendp::gridInstName while reporting the unfillable gap); there are no FILLER* masters on this platform (DPL-0039). The global route guides are untouched by filler insertion."
+ },
+ {
+  "id": "PL-07",
+  "category": "placement",
+  "difficulty": "medium",
+  "instruction": "Reduce the wirelength of the legally placed gcd design using cell mirroring only: you may flip standard cells about their vertical (Y) axis, but no standard cell may change its location, the IO pins must not be changed, and the placement must remain legal (every cell in an orientation allowed for its row). The total half-perimeter wirelength (HPWL) over all nets except power and ground (the clock net included), measured on the pin locations, must decrease by at least 1%.",
+  "start_state": "placed",
+  "expected_commands": [
+   "optimize_mirroring"
+  ],
+  "expected_outcome": "About 150-160 cells mirrored about the Y axis, no cell moved, placement legal, HPWL reduced by ~1.4%.",
+  "validator": {
+   "name": "pl_mirror",
+   "params": {
+    "min_flipped": 10,
+    "min_hpwl_reduction": 0.01
+   }
+  },
+  "reference_script": "reference_scripts/PL-07.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-07.alt1.tcl",
+    "controls/PL-07.alt2.tcl",
+    "controls/PL-07.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-07.neg1.tcl",
+    "controls/PL-07.neg2.tcl",
+    "controls/PL-07.neg3.tcl",
+    "controls/PL-07.neg4.tcl",
+    "controls/PL-07.neg5.tcl",
+    "controls/PL-07.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "optimize_mirroring flips 161 cells: HPWL 4554.6 -> 4492.0 um (-1.37%); the greedy odb alternative flips 149 cells for the same result. Mirroring every cell blindly raises HPWL by 1.85%. HPWL is pin based (getAvgXY, identical to the DPL report), because mirroring does not move instance centres. Allowed orientation changes: R0<->MY and MX<->R180; check_placement in this build does not flag X-axis flips, so the validator checks orientation pairs explicitly (and row orientation on final.odb). Pitfall for custom scripts: odb setOrient keeps the transform origin and shifts the cell bbox, so the location must be restored. IO pins must stay unchanged (probe locations/layers): optimize_mirroring + place_pins moves 31 pins and fails. The HPWL definition (all nets except power/ground; the clk net has sig type CLOCK) is stated as in PL-08."
+ },
+ {
+  "id": "PL-08",
+  "category": "placement",
+  "difficulty": "hard",
+  "instruction": "Run detailed-placement optimization on the legally placed gcd design to reduce wirelength by moving or swapping cells within the placement rows. Refine the existing placement: do not re-run global placement and do not move the IO pins. The placement must remain legal (cells on row sites, in the orientation of their row, without overlaps) and the total HPWL must decrease by at least 3%. Report the total HPWL before and after the optimization in outputs/hpwl.txt with exactly two lines:\nhpwl_before_um: <value>\nhpwl_after_um: <value>\n(values in microns, with two decimals). Compute the total HPWL over all nets except the power and ground nets (the clock net is included) that connect at least two pins, as the sum over these nets of the half-perimeter of the bounding box of the net's pin locations, where the location of an instance pin or an IO pin is the center of its pin shapes.",
+  "start_state": "placed",
+  "expected_commands": [
+   "improve_placement",
+   "odb net/ITerm/BPin iteration (getAvgXY or getBBox)",
+   "open/puts/close"
+  ],
+  "expected_outcome": "Legal placement with HPWL reduced from ~4554.6 um to ~4263 um (-6.4%), both values reported in outputs/hpwl.txt.",
+  "validator": {
+   "name": "pl_improve_hpwl",
+   "params": {
+    "file": "hpwl.txt",
+    "min_reduction": 0.03,
+    "report_rtol": 0.005,
+    "max_mean_disp_um": 5.0
+   }
+  },
+  "reference_script": "reference_scripts/PL-08.tcl",
+  "required_outputs": [
+   "outputs/hpwl.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/PL-08.alt1.tcl",
+    "controls/PL-08.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/PL-08.neg1.tcl",
+    "controls/PL-08.neg2.tcl",
+    "controls/PL-08.neg3.tcl",
+    "controls/PL-08.neg4.tcl",
+    "controls/PL-08.neg5.tcl",
+    "controls/PL-08.neg6.tcl",
+    "controls/PL-08.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "improve_placement reduces HPWL by 6.4% (4554.6 -> 4263.2 um); optimize_mirroring alone only 1.4%. The DPO/DPL HPWL reports go through the logger and cannot be captured from Tcl in this build (log_begin and sta::redirect_* do not capture them), so the values must be computed. Pin-centre conventions (getAvgXY vs ITerm bbox centre) differ by < 0.2%; instance-centre HPWL differs by 1.7% after optimization (cell flips) and instance-bbox HPWL by ~20%, both outside the 0.5% tolerance. Ground truth is recomputed by the oracle on the starting state and on final.odb. The clk net has sig type CLOCK; excluding it (a common getSigType eq SIGNAL filter) lowers the HPWL by 2.5 % (4438.6/4149.8 um), so the instruction states that the clock net is included. 'Refine the existing placement' is checked as mean cell movement <= 5 um: improve_placement with seeds 1/7/42/1000 and the ORFS recipe move 1.93-2.10 um on average (max 28-35 um), a global re-placement + legalization + improve_placement 12.2 um (it would otherwise pass with -3 % HPWL). IO pins must stay unchanged (place_pins after the optimization moves 42 pins). improve_placement seeds give 6.0-6.4 % reduction."
+ },
+ {
+  "id": "PL-09",
+  "category": "placement",
+  "difficulty": "hard",
+  "instruction": "Legalize the existing global placement of the gcd design (every standard cell on a legal row site, in the orientation of its row, without overlaps; keep the cells close to their global-placement locations: do not re-run global placement, no cell may move by more than 10 um and the average movement must not exceed 2 um). Then find the standard cells that were displaced the most by the legalization, where the displacement of a cell is the Manhattan distance |dx| + |dy|, in microns, between the lower-left corner of the cell before and after legalization. Write the 5 most displaced cells to outputs/top_displaced.txt, one cell per line with the largest displacement first, formatted as:\n<instance_name> <displacement_um>\nwith the displacement printed with three decimals.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "odb getLocation/getBBox",
+   "detailed_placement",
+   "lsort",
+   "open/puts/close"
+  ],
+  "expected_outcome": "Legal placement and a 5-line report of the most displaced cells (default legalization: _597_ 2.381 or 2.380, _542_ 2.271, _443_ 2.244, _509_ 2.232, _554_ 2.208).",
+  "validator": {
+   "name": "pl_displacement_report",
+   "params": {
+    "file": "top_displaced.txt",
+    "top_n": 5,
+    "value_tol_um": 0.002,
+    "max_disp_um": 10.0,
+    "mean_disp_um": 2.0
+   }
+  },
+  "reference_script": "reference_scripts/PL-09.tcl",
+  "required_outputs": [
+   "outputs/top_displaced.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/PL-09.alt1.tcl",
+    "controls/PL-09.alt2.tcl",
+    "controls/PL-09.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-09.neg1.tcl",
+    "controls/PL-09.neg2.tcl",
+    "controls/PL-09.neg3.tcl",
+    "controls/PL-09.neg4.tcl",
+    "controls/PL-09.neg5.tcl",
+    "controls/PL-09.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "True displacements are computed from the probe positions (bbox lower-left corners) of the starting state and of the final state, so any legalization variant (e.g. with padding) is scored against its own result; ties at the 5th place are accepted. Value tolerance 0.002 um covers three-decimal rounding (positions are multiples of 0.0005 um). Euclidean distances give different values (and a different ranking), DBU values are 2000x too large. The DPL legalization report prints only aggregate statistics (and its 'average displacement' divides by all instances including tap cells). getOrigin (transform origin) instead of the lower-left corner is wrong for cells legalized into MX rows and fails; a header line in the file is ignored."
+ },
+ {
+  "id": "PL-10",
+  "category": "placement",
+  "difficulty": "hard",
+  "instruction": "Take the floorplanned gcd design through the complete placement step: (1) wirelength-driven global placement of the standard cells; (2) re-placement of all IO pins so that they minimize the wirelength to the placed cells, with the pins on the left and right die edges on metal3 and the pins on the top and bottom die edges on metal2; (3) legalization of the standard cells with 1 placement site of padding on the left and on the right of every standard cell, so that horizontally adjacent standard cells end up at least 2 sites apart. At the end every standard cell must be legally placed inside the core (on a row site, in the orientation of its row, without overlaps).",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "global_placement",
+   "place_pins",
+   "set_placement_padding",
+   "detailed_placement"
+  ],
+  "expected_outcome": "Legal, padded placement inside the core with all 54 IO pins re-placed next to their cells (IO-net HPWL ~1870 um instead of ~2820 um with the random floorplan pins).",
+  "validator": {
+   "name": "pl_full_placement",
+   "params": {
+    "min_gap_ll_sites": 2,
+    "min_pins_moved_frac": 0.5,
+    "edge_tol_um": 1.0,
+    "hor_layer": "metal3",
+    "ver_layer": "metal2",
+    "io_hpwl_ratio_max": 1.25,
+    "hpwl_ratio_max": 1.3,
+    "reference_flow": "global_placement\nplace_pins -hor_layers metal3 -ver_layers metal2\nset_placement_padding -global -left 1 -right 1\ndetailed_placement"
+   }
+  },
+  "reference_script": "reference_scripts/PL-10.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-10.alt1.tcl",
+    "controls/PL-10.alt2.tcl",
+    "controls/PL-10.alt3.tcl",
+    "controls/PL-10.alt4.tcl",
+    "controls/PL-10.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/PL-10.neg1.tcl",
+    "controls/PL-10.neg2.tcl",
+    "controls/PL-10.neg3.tcl",
+    "controls/PL-10.neg4.tcl",
+    "controls/PL-10.neg5.tcl",
+    "controls/PL-10.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Reference flow (oracle, starting state): total HPWL 4471 um, IO-net HPWL 1871 um. Valid orders/variants give IO-net HPWL 1481-2041 um and total HPWL 4054-4546 um (pins placed before global placement, global placement repeated, flow recipe, density 0.5); without pin re-placement it is 2822 um. place_pins -random uses the same default seed as the floorplan step and reproduces the original random assignment (0 pins move). Swapped layers fail with PPL-0045 (metal2 is vertical). Pins are classified by their nearest die edge; at least 50% must move from their starting positions. Padding is checked as the minimum gap between adjacent standard cells on final.odb. improve_placement + optimize_mirroring after the padded legalization keeps the 2-site gaps and passes; metal4 on the top/bottom edges fails the layer check; forgetting the final legalization fails legality."
+ },
+ {
+  "id": "DEV-PL-01",
+  "category": "placement",
+  "difficulty": "medium",
+  "instruction": "Legalize the existing global placement of the gcd design while keeping extra routing space around the flip-flops: every flip-flop instance (master DFF_X1) must have at least 3 empty placement sites between itself and its left neighbour and at least 3 empty sites between itself and its right neighbour in its row. Other cells need no extra spacing. Keep the cells close to their current global-placement locations (do not re-run global placement; no cell may move by more than 10 um and the average movement must not exceed 2 um); every cell must end up on a legal row site in the orientation of its row, without overlaps.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "set_placement_padding -masters",
+   "detailed_placement"
+  ],
+  "expected_outcome": "Legal placement in which every DFF_X1 has >= 3 empty sites on both sides.",
+  "validator": {
+   "name": "pl_legalize",
+   "params": {
+    "max_disp_um": 10.0,
+    "mean_disp_um": 2.0,
+    "master_pattern": "DFF_*",
+    "min_master_gap_sites": 3
+   }
+  },
+  "reference_script": "reference_scripts/DEV-PL-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-PL-01.alt1.tcl",
+    "controls/DEV-PL-01.alt2.tcl",
+    "controls/DEV-PL-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-PL-01.neg1.tcl",
+    "controls/DEV-PL-01.neg2.tcl",
+    "controls/DEV-PL-01.neg3.tcl",
+    "controls/DEV-PL-01.neg4.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Development task (prompt engineering only). Gaps are measured on final.odb to the nearest non-filler neighbour (logic or tap cell) in the same row. Master padding with only -right leaves left gaps of 0 sites. Two sites around the flip-flops (off by one) fails."
+ }
+]

@@ -1,0 +1,19 @@
+# Local toolchains, caches and secrets
+.tools/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Sparse checkouts of upstream sources (re-created by scripts/fetch_sources.sh)
+third_party/OpenROAD/
+third_party/OpenSTA/
+third_party/OpenROAD-flow-scripts/
+
+# Per-execution sandboxes and LLM response cache (large, regenerable)
+experiments/runs/
+experiments/llm_cache/
+
+# Derived knowledge-base artifacts (re-created by python -m rag.build_index)
+knowledge_base/embeddings/*.faiss
+knowledge_base/embeddings/*.npy

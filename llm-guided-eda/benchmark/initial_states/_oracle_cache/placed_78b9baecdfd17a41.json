@@ -1,0 +1,1 @@
+{"worst_setup_slack": -0.09606174461117158, "total_negative_setup_slack": -1.794400234745563, "worst_hold_slack": 0.10528226505265399, "setup_violating_endpoints": 41, "clock_period": 0.39999998889776944, "min_period_api": 0.4960617612645174, "setup_skew": 0.0, "hold_skew": 0.0}

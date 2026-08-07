@@ -1,0 +1,17 @@
+# OpenROAD execution environment (pinned; see scripts/setup_env.sh).
+openroad_bin: .tools/envs/openroad/bin/openroad
+openroad_version: 2.0-10927-g0922eecb9          # git describe of commit 0922eecb9 (2023-11-06)
+platform_dir: third_party/OpenROAD/test/Nangate45
+design_dir: benchmark/designs/gcd
+states_dir: benchmark/initial_states
+runs_dir: experiments/runs
+
+timeout_s: 300            # wall-clock limit per OpenROAD execution
+memory_limit_mb: 6144     # resident-memory watchdog limit per execution
+threads: 1                # set_thread_count used by the harness preamble
+write_final_db: true      # harness writes final.odb after the agent script (used by validators)
+keep_large_outputs: false # delete agent outputs larger than 2 MB once a run is validated
+
+sandbox:
+  static_policy: true     # reject dangerous Tcl (exec, sockets, harness tampering) before execution
+  seatbelt: auto          # macOS sandbox-exec write/network isolation: auto | on | off

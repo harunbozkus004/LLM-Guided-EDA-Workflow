@@ -1,0 +1,26 @@
+# Experimental protocol. Identical budgets for every configuration.
+runs_per_config: 3
+parallel_episodes: 8
+task_split: test               # 50 evaluation tasks; "dev" tasks are for prompt/debug work only
+
+retrieval:
+  top_k_semantic: 8
+  top_k_keyword: 8
+  final_k: 6
+  rrf_k: 60
+  max_context_chars: 14000     # cap on retrieved documentation injected per prompt
+
+# rag: none | hybrid | vector | bm25
+# feedback: execution feedback + iterative correction enabled
+# max_attempts: total OpenROAD executions allowed per task (1 = single shot)
+# targeted_repair: add the exact syntax card of the failing command to repair prompts
+configurations:
+  A_baseline:      {rag: none,   feedback: false, max_attempts: 1}
+  B_rag:           {rag: hybrid, feedback: false, max_attempts: 1}
+  C_feedback:      {rag: none,   feedback: true,  max_attempts: 4}
+  D_full:          {rag: hybrid, feedback: true,  max_attempts: 4}
+  E_vector_only:   {rag: vector, feedback: true,  max_attempts: 4}
+  F_single_repair: {rag: hybrid, feedback: true,  max_attempts: 2}
+  # Follow-up: D plus the exact syntax card of the failing command in each repair prompt.
+  # Its first attempt replays D_full's (identical prompt and key), so D vs G differ only in repairs.
+  G_targeted_repair: {rag: hybrid, feedback: true, max_attempts: 4, targeted_repair: true, first_attempt_from: D_full}

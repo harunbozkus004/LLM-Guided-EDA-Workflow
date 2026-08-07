@@ -1,0 +1,1 @@
+{"n_reg_pins": 35, "n_reached": 35, "n_port_direct": 0, "min_depth": 2, "max_depth": 2, "n_cells": 5, "n_subnets": 5, "n_roots": 1, "cells": "clkbuf_0_clk,BUF_X4,1,0,4,PORT:clk;clkbuf_2_3__f_clk,BUF_X4,2,9,0,clkbuf_0_clk;clkbuf_2_2__f_clk,BUF_X4,2,7,0,clkbuf_0_clk;clkbuf_2_1__f_clk,BUF_X4,2,9,0,clkbuf_0_clk;clkbuf_2_0__f_clk,BUF_X4,2,10,0,clkbuf_0_clk"}

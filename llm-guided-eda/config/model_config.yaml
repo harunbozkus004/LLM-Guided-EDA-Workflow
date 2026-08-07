@@ -1,0 +1,38 @@
+# LLM configuration shared by every experiment configuration.
+# Every LLM call records the model actually reported by the API, these
+# generation settings, token usage and timestamps (see agent/llm.py).
+provider: local                # local | anthropic | openai_compatible | mock (local: llama.cpp server, see local_llm)
+model: example-model            # model id, only used by the anthropic / openai_compatible providers
+max_tokens: 16000
+effort: medium                 # Anthropic output_config.effort (anthropic provider only)
+thinking: adaptive             # Anthropic thinking mode (anthropic provider only)
+request_timeout_s: 600
+max_retries: 4
+max_concurrent_requests: 6
+use_prompt_cache: true         # Anthropic prompt caching of the stable prefix
+cache_dir: experiments/llm_cache
+
+# Credentials are read from the environment or from a git-ignored .env file:
+#   anthropic:          ANTHROPIC_API_KEY (or an `ant auth login` profile)
+#   openai_compatible:  LLM_API_KEY and LLM_BASE_URL (OpenAI, vLLM, llama.cpp, ...)
+openai_compatible:
+  base_url_env: LLM_BASE_URL
+  api_key_env: LLM_API_KEY
+  temperature: null            # leave unset to use the provider default
+
+# Free local backend (chosen 2026-06-10): llama.cpp b11829 serving Qwen3.6-35B-A3B Q4_K_M
+# (scripts/setup_llm.sh, scripts/llm_server.sh). Non-thinking mode: on the dev task it was
+# ~4.5x faster with the same code-block compliance (experiments/llm_calibration.json).
+local_llm:
+  base_url: http://127.0.0.1:8080/v1
+  model: qwen3.6-35b-a3b-q4_k_m
+  weights: ggml-org/Qwen3.6-35B-A3B-GGUF@7878dc9a905c7c9379e5e8d6a1aa9affdd6839c5 Qwen3.6-35B-A3B-Q4_K_M.gguf
+  server: llama.cpp b11829, 4 slots x 32768 ctx, flash attention, all layers on Metal
+  enable_thinking: false
+  sampling: {temperature: 0.7, top_p: 0.8, top_k: 20, min_p: 0.0, presence_penalty: 0.0}  # model-card instruct values; presence_penalty 0 because code repeats identifiers
+  seed: per_call             # sha256 of the replay cache_key -> reproducible yet independent runs
+  max_tokens: 8192
+
+# Cost accounting only (USD per million tokens). Add an entry per hosted model id you use.
+pricing_usd_per_mtok:
+  qwen3.6-35b-a3b-q4_k_m: {input: 0.0, output: 0.0, cache_read: 0.0, cache_write: 0.0}  # local llama.cpp server: free

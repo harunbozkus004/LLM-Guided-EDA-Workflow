@@ -1,0 +1,126 @@
+[
+ {
+  "id": "OP-01",
+  "category": "optimization",
+  "difficulty": "easy",
+  "instruction": "Insert input buffers for this placed block: every primary input port except the clock port clk must drive exactly one buffer, and that buffer must drive all the loads the port drove before. Do not buffer the clock input or any output port. Every new buffer must be placed inside the core area; legalizing the placement is not required in this step (detailed placement will be rerun later in the flow).",
+  "start_state": "placed",
+  "expected_commands": ["buffer_ports -inputs"],
+  "expected_outcome": "Each of the 35 data input ports drives a single buffer that drives the port's original loads; clk and the 18 output ports keep their original connections; all buffers are placed inside the core.",
+  "validator": {
+   "name": "op_buffer_inputs",
+   "params": {
+    "clock_port": "clk"
+   }
+  },
+  "reference_script": "reference_scripts/OP-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": ["controls/OP-01.alt1.tcl", "controls/OP-01.alt2.tcl", "controls/OP-01.alt3.tcl"],
+   "negatives": ["controls/OP-01.neg1.tcl", "controls/OP-01.neg2.tcl", "controls/OP-01.neg3.tcl", "controls/OP-01.neg4.tcl", "controls/OP-01.neg5.tcl", "controls/OP-01.neg6.tcl"]
+  },
+  "split": "test",
+  "notes": "Structural ground truth from a buffer-transparent connectivity oracle on the final and starting databases: every data input port net has exactly one sink and it is a buffer (master *BUF_X*, so a CLKBUF_X* also counts), every original driver (ports included) still reaches exactly its original sink pins, every output port keeps its original driver instance, and the clock path of every register is unchanged. Any buffer size and any insertion method pass (buffer_ports, or hand-made ODB buffers placed anywhere inside the core, legalized or not). Rejected: also buffering clk (clock path changes), buffers placed on the IO pins outside the core, one buffer per load pin instead of per port. buffer_ports places the new buffers at the core boundary next to the ports without legalizing them, which is why legality is explicitly not required (an extra legalization is accepted). Pitfall: buffer_ports without -inputs also buffers all outputs. In this build buffer_ports silently ignores a -buffer_cell option."
+ },
+ {
+  "id": "OP-02",
+  "category": "optimization",
+  "difficulty": "medium",
+  "instruction": "The clock tree is built, and hold timing currently passes with only about 53 ps of worst-case slack. Before routing we want more hold margin: repair hold timing so that every hold check has at least 80 ps (0.080 ns) of slack. The fix must not degrade setup timing: the worst setup slack may drop by at most 5 ps from its current value. Evaluate both with propagated clocks and placement-based parasitic estimates against the original timing constraints. Do not modify the clock tree, keep the logic function unchanged and leave the design legally placed.",
+  "start_state": "cts",
+  "expected_commands": ["estimate_parasitics -placement", "repair_timing -hold -hold_margin 0.08", "detailed_placement"],
+  "expected_outcome": "About 20 hold buffers raise the worst hold slack from 0.053 ns to at least 0.080 ns while the worst setup slack stays at about -0.098 ns; clock tree, logic and legality intact.",
+  "validator": {
+   "name": "op_hold_margin",
+   "params": {
+    "min_hold_slack": 0.08,
+    "hold_tol": 0.0005,
+    "max_setup_degradation": 0.005
+   }
+  },
+  "reference_script": "reference_scripts/OP-02.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": ["controls/OP-02.alt1.tcl", "controls/OP-02.alt2.tcl", "controls/OP-02.alt3.tcl", "controls/OP-02.alt4.tcl", "controls/OP-02.alt5.tcl"],
+   "negatives": ["controls/OP-02.neg1.tcl", "controls/OP-02.neg2.tcl", "controls/OP-02.neg3.tcl", "controls/OP-02.neg4.tcl", "controls/OP-02.neg5.tcl", "controls/OP-02.neg6.tcl", "controls/OP-02.neg7.tcl"]
+  },
+  "split": "test",
+  "notes": "Hold and setup slack are measured by an oracle session on the final database that reloads the original SDC (with propagated clocks) and re-runs estimate_parasitics -placement, so SDC tricks such as a hold uncertainty only count through the netlist they produce (that route is a valid alternative). The reference reaches 0.0827 ns; hold_tol (0.5 ps) only absorbs rounding of the 1 ps-resolution target. Setup floor = starting oracle WNS (-0.0975 ns) - 5 ps. The netlist guard (buffer-transparent connectivity, clock path of every register clock pin, constrained hold endpoints) rejects delay obtained by disconnecting paths or retiming the clock. Pitfalls: the margin is in ns (-hold_margin 80 asks for 80 ns and the repair gives up), plain repair_timing -hold does nothing because hold is already met, and hold buffers leave the placement illegal until detailed_placement is rerun. Accepted variants: hold uncertainty + repair to zero, setup repair (-repair_tns 100) followed by hold repair, margins 0.085-0.15 ns. Rejected: an oversized margin with -allow_setup_violations (0.15 ns gives setup -0.117 ns), constraint-only changes in the agent session, delaying the clock by resizing clock-tree buffers. -hold_margin 0.08 with -allow_setup_violations, or without estimate_parasitics, still gives 0.0827 ns and passes."
+ },
+ {
+  "id": "OP-03",
+  "category": "optimization",
+  "difficulty": "medium",
+  "instruction": "Run post-CTS setup timing repair on this design. The repair must work on every violating endpoint, not only the most critical one: afterwards the worst setup slack must be -0.060 ns or better and the total negative setup slack -0.400 ns or better (currently about -0.098 ns and -0.481 ns), both evaluated with propagated clocks and placement-based parasitic estimates against the original timing constraints. Do not modify the clock tree, keep the logic function unchanged and leave the design legally placed.",
+  "start_state": "cts",
+  "expected_commands": ["estimate_parasitics -placement", "repair_timing -setup -repair_tns 100", "detailed_placement"],
+  "expected_outcome": "Setup repair across all violating endpoints brings WNS to about -0.048 ns and TNS to about -0.22 to -0.34 ns (oracle) with a legal placement and an unchanged clock tree.",
+  "validator": {
+   "name": "op_setup_repair",
+   "params": {
+    "min_wns": -0.06,
+    "min_tns": -0.4,
+    "slack_tol": 0.0001
+   }
+  },
+  "reference_script": "reference_scripts/OP-03.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": ["controls/OP-03.alt1.tcl", "controls/OP-03.alt2.tcl", "controls/OP-03.alt3.tcl", "controls/OP-03.alt4.tcl", "controls/OP-03.alt5.tcl", "controls/OP-03.alt6.tcl"],
+   "negatives": ["controls/OP-03.neg1.tcl", "controls/OP-03.neg2.tcl", "controls/OP-03.neg3.tcl", "controls/OP-03.neg4.tcl", "controls/OP-03.neg5.tcl", "controls/OP-03.neg6.tcl", "controls/OP-03.neg7.tcl"]
+  },
+  "split": "test",
+  "notes": "Version-specific pitfall: in this build repair_timing defaults to -repair_tns 0, i.e. only the worst endpoint is repaired; that alone gives WNS -0.048 ns but TNS -0.636 ns (worse than the start), and repeated runs, a setup margin without -repair_tns, or -repair_tns 1..30 do not help (TNS -0.62 to -0.64 ns). Repair on all endpoints (-repair_tns 50..100, with or without pin swapping / gate cloning, a preceding repair_design, a second pass or setup margins 0.01-0.2 ns) gives WNS -0.045 to -0.057 ns and TNS -0.17 to -0.34 ns (setup margins of 0.04-0.06 ns land at -0.31 to -0.34 ns, which is why the TNS bound is -0.400 and not tighter). Thresholds sit between these groups: WNS -0.060 vs start -0.0975 (and -0.071 when the repair is cut to -max_passes 5); TNS -0.400 vs the valid cluster (>= -0.34), the start (-0.481), repair_design only (-0.52) and worst-endpoint-only repair (-0.62/-0.64). Timing is measured by an oracle that reloads the original SDC and re-estimates parasitics, so relaxing the clock in the agent session cannot fake success. Logic guard is tolerant to pin swapping and gate cloning (per-instance sinks, clones allowed, no change of cell function family) and also requires an unchanged number of constrained setup endpoints; the clock-tree guard compares every register's clock driver chain (names and masters), so resizing clock buffers fails."
+ },
+ {
+  "id": "OP-04",
+  "category": "optimization",
+  "difficulty": "hard",
+  "instruction": "This block will be integrated under stricter electrical design rules than the library defaults: a maximum transition time of 0.05 ns, a maximum load capacitance of 10 fF and a maximum fanout of 10, applied to the whole design on top of the existing constraints. Apply these rules, count the pins that violate each of them on the current design, fix the violations by buffering and gate sizing, legalize the placement, and count again on the final design. Count with placement-based parasitic estimates that match the placement being measured. After the fix no transition or fanout violations may remain and at most 10 pins may still violate the capacitance limit; the logic function must not change. Write outputs/drv_summary.txt with exactly three lines, in this order: \"max_slew <before> <after>\", \"max_capacitance <before> <after>\" and \"max_fanout <before> <after>\", where <before> and <after> are the numbers of violating pins before and after the fix.",
+  "start_state": "placed",
+  "expected_commands": ["set_max_transition", "set_max_capacitance", "set_max_fanout", "estimate_parasitics -placement", "report_check_types -max_slew -max_capacitance -max_fanout -violators", "repair_design", "detailed_placement"],
+  "expected_outcome": "76/22/5 slew/capacitance/fanout violators before; after repair_design, legalization and re-estimation 0/5/0 remain; outputs/drv_summary.txt reports exactly these counts.",
+  "validator": {
+   "name": "op_drv_repair_report",
+   "params": {
+    "report": "outputs/drv_summary.txt",
+    "max_transition": 0.05,
+    "max_capacitance": 10,
+    "max_fanout": 10,
+    "max_cap_violations_after": 10
+   }
+  },
+  "reference_script": "reference_scripts/OP-04.tcl",
+  "required_outputs": ["outputs/drv_summary.txt"],
+  "controls": {
+   "alternatives": ["controls/OP-04.alt1.tcl", "controls/OP-04.alt2.tcl", "controls/OP-04.alt3.tcl", "controls/OP-04.alt4.tcl"],
+   "negatives": ["controls/OP-04.neg1.tcl", "controls/OP-04.neg2.tcl", "controls/OP-04.neg3.tcl", "controls/OP-04.neg4.tcl", "controls/OP-04.neg5.tcl", "controls/OP-04.neg6.tcl", "controls/OP-04.neg7.tcl"]
+  },
+  "split": "test",
+  "notes": "Ground truth: an oracle reloads the original SDC, applies the three stated rules with set_max_transition/set_max_capacitance/set_max_fanout on the design, runs estimate_parasitics -placement and counts violating pins with the same STA checks report_check_types uses (sta::check_slew_limits / check_capacitance_limits / check_fanout_limits, all violators); 'before' on the starting state, 'after' on the final database. Counts are integers and must match exactly. Plain repair_design leaves 5 capacitance violators (on its own buffers), margins or a second pass leave 1-4; repairing without parasitics leaves 18, hence the limit of 10. Pitfalls: counting without estimate_parasitics gives 42/11/5 before; counting after legalization without re-estimating gives 6 capacitance violators instead of 5; limits are in ns/fF (library units). Report parsing accepts any order and ':' ',' '=' separators but needs one line per check. Logic guard: buffer-transparent connectivity identical to the start (repair_design only buffers and resizes). Counting with sta::max_slew/max_capacitance/max_fanout_violation_count, sta::check_*_limits or '(VIOLATED)' rows of report_check_types -violators gives identical numbers. Rejected: capacitance limit written in pF (0.01 = 0.01 fF), counting report_check_types without -violators (only the worst pin, 1 per check), counting 'before' prior to applying the rules (0/0/0). A report with hard-coded but correct numbers cannot be told apart from a measured one."
+ },
+ {
+  "id": "DEV-OP-01",
+  "category": "optimization",
+  "difficulty": "medium",
+  "instruction": "Enforce a maximum fanout of 10 on this placed design: afterwards no signal net may drive more than 10 cell input pins (output ports are not counted). The clock net is exempt and must be left exactly as it is, since clock tree synthesis will buffer it later. Fix the violations by inserting buffers without changing the logic function, and leave the design legally placed.",
+  "start_state": "placed",
+  "expected_commands": ["set_max_fanout 10 [current_design]", "estimate_parasitics -placement", "repair_design", "detailed_placement"],
+  "expected_outcome": "The five nets with fanout 16-40 are split by buffer trees so that no non-clock net drives more than 10 cell inputs; the clock net still drives all 35 registers directly; placement legal.",
+  "validator": {
+   "name": "op_max_fanout",
+   "params": {
+    "max_fanout": 10,
+    "clock_port": "clk"
+   }
+  },
+  "reference_script": "reference_scripts/DEV-OP-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": ["controls/DEV-OP-01.alt1.tcl", "controls/DEV-OP-01.alt2.tcl", "controls/DEV-OP-01.alt3.tcl", "controls/DEV-OP-01.alt4.tcl"],
+   "negatives": ["controls/DEV-OP-01.neg1.tcl", "controls/DEV-OP-01.neg2.tcl", "controls/DEV-OP-01.neg3.tcl", "controls/DEV-OP-01.neg4.tcl", "controls/DEV-OP-01.neg5.tcl", "controls/DEV-OP-01.neg6.tcl"]
+  },
+  "split": "dev",
+  "notes": "Fanout is counted as in OpenSTA's max-fanout check (number of cell input pins on the net, top-level output ports excluded); nets on the clock path of any register are exempt. The Nangate45 library defines no max_fanout, so repair_design only repairs fanout after set_max_fanout on the design. Starting fanout: req_rdy 40 (+1 output port), _188_ 32, three nets with 16, one with 9. Logic guard: buffer-transparent connectivity identical to the start; clock path of every register unchanged. Accepted: remove_buffers first, limits on ports in addition to the design, a stricter limit. Rejected: building a clock tree (clock net changed), splitting nets with inverters (inverters are not buffers for the logic guard)."
+ }
+]

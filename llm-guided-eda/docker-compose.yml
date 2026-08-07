@@ -1,0 +1,14 @@
+# docker compose run --rm eda python -m experiments.run_experiment --config all --runs 1 2 3
+services:
+  eda:
+    build: .
+    image: llm-guided-eda:openroad-0922eecb9
+    env_file: .env              # ANTHROPIC_API_KEY or LLM_* (never baked into the image)
+    volumes:
+      - ./experiments/results:/work/llm-guided-eda/experiments/results
+      - ./paper:/work/llm-guided-eda/paper
+    mem_limit: 16g
+    cpus: 8
+    read_only: false
+    security_opt:
+      - no-new-privileges:true

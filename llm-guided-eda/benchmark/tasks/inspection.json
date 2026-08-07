@@ -1,0 +1,286 @@
+[
+ {
+  "id": "IN-01",
+  "category": "inspection",
+  "difficulty": "easy",
+  "instruction": "List all top-level IO ports of the gcd design together with their directions. Write them to outputs/io_ports.txt with one line per port in the form '<port_name> <direction>', where <direction> is either input or output. Multi-bit (bus) ports must be listed bit by bit, one line per bit in bit-select notation (for example, a 2-bit bus d gives one line for d[0] and one for d[1]). The order of the lines does not matter; write no header or other lines. Do not modify the design.",
+  "start_state": "synth",
+  "expected_commands": [
+   "get_ports",
+   "get_full_name",
+   "get_property"
+  ],
+  "expected_outcome": "outputs/io_ports.txt lists all 54 port bits (36 inputs including clk, 18 outputs) with their correct directions; the design is unchanged.",
+  "validator": {
+   "name": "in_io_ports",
+   "params": {
+    "file": "outputs/io_ports.txt"
+   }
+  },
+  "reference_script": "reference_scripts/IN-01.tcl",
+  "required_outputs": [
+   "outputs/io_ports.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-01.alt1.tcl",
+    "controls/IN-01.alt2.tcl",
+    "controls/IN-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-01.neg1.tcl",
+    "controls/IN-01.neg2.tcl",
+    "controls/IN-01.neg3.tcl",
+    "controls/IN-01.neg4.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth: the baseline probe io_pins (OpenDB BTerm names and IO types). Directions are case-insensitive (INPUT from OpenDB is fine; port names are case-sensitive); parsing is tolerant of Tcl list quoting ({req_msg[0]}, req_msg\\[0\\]), tabs, ':' separators, blank and '#' lines; columns after the direction are ignored. Every bit must appear exactly once. Version pitfall: all_inputs takes no options in this build (no -no_clocks; it errors with 'wrong # args'). Negatives: clock port filtered out of the inputs (the SDC non-clock-inputs idiom), signal type written instead of the direction, buses not expanded bit by bit, report written to the working directory instead of outputs/. Caveat: the gcd port interface is public and identical in every state, so a list reproduced from memory would also pass; that is accepted as a correct outcome (this easy task mainly exercises port/direction queries and file output)."
+ },
+ {
+  "id": "IN-02",
+  "category": "inspection",
+  "difficulty": "easy",
+  "instruction": "Export the current gate-level netlist of the design, which now includes the clock-tree buffers inserted by clock tree synthesis, as a structural Verilog file outputs/gcd_netlist.v. The file must define the top module gcd with all of its ports and contain every standard-cell instance of the current design with its instance name, cell type and pin connections exactly as they are in the database. Physical-only cells (the tap cells) may be included or omitted. Do not modify the design.",
+  "start_state": "cts",
+  "expected_commands": [
+   "write_verilog"
+  ],
+  "expected_outcome": "outputs/gcd_netlist.v is a structural Verilog netlist of module gcd with the 54 port bits and all 352 standard-cell instances (including the 5 BUF_X4 clock-tree buffers) connected exactly as in the database; the design is unchanged.",
+  "validator": {
+   "name": "in_verilog_netlist",
+   "params": {
+    "file": "outputs/gcd_netlist.v",
+    "top": "gcd"
+   }
+  },
+  "reference_script": "reference_scripts/IN-02.tcl",
+  "required_outputs": [
+   "outputs/gcd_netlist.v"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-02.alt1.tcl",
+    "controls/IN-02.alt2.tcl",
+    "controls/IN-02.alt3.tcl",
+    "controls/IN-02.alt4.tcl",
+    "controls/IN-02.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/IN-02.neg1.tcl",
+    "controls/IN-02.neg2.tcl",
+    "controls/IN-02.neg3.tcl",
+    "controls/IN-02.neg4.tcl",
+    "controls/IN-02.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Checked with a built-in structural-Verilog reader against an OpenDB connectivity oracle on the cts snapshot: port bits and directions, instance names and cell types (tap cells optional), and connectivity compared as a partition of instance pins and ports into nets, so net naming, pins on single-pin nets written as unconnected (.QN()), escaped bit-blasted ports, assign statements, instance order (-sort) and power pins (-include_pwr_gnd) do not matter (alt3 and alt5 are hand-written OpenDB and STA dumps with renamed nets / escaped names / unconnected dangling pins). Single mutations (two pins swapped, one CK pin moved, one cell resized or dropped, one port direction flipped) all fail. Version pitfall: read_verilog + link_design on the loaded design silently replaces the post-CTS netlist with the synthesized one (no error); together with copying design/gcd.v (stale netlist), writing DEF, remove_buffers before writing (drops the 5 clock-tree buffers) and a wrong file name this is rejected. In this build -remove_cells takes master names/patterns; passing get_lib_cells objects errors (STA-0467)."
+ },
+ {
+  "id": "IN-03",
+  "category": "inspection",
+  "difficulty": "medium",
+  "instruction": "Produce a cell-usage summary of the current design: the number of instances of each standard-cell type (library cell). Count only cells that have a logic function and exclude physical-only cells such as tap/endcap cells and filler cells. Write outputs/cell_usage.txt with one line per cell type used in the design (cell types with zero instances are not listed) in the form '<cell_type> <count>' (any order), followed by one final line 'total <count>' giving the total number of counted instances. Write no other lines and do not modify the design.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "get_cells",
+   "get_property"
+  ],
+  "expected_outcome": "26 cell types totalling 347 instances (e.g. NAND2_X1 103, DFF_X1 35, OAI21_X1 35); the 114 TAPCELL_X1 instances are excluded; the design is unchanged.",
+  "validator": {
+   "name": "in_cell_usage",
+   "params": {
+    "file": "outputs/cell_usage.txt"
+   }
+  },
+  "reference_script": "reference_scripts/IN-03.tcl",
+  "required_outputs": [
+   "outputs/cell_usage.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-03.alt1.tcl",
+    "controls/IN-03.alt2.tcl",
+    "controls/IN-03.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-03.neg1.tcl",
+    "controls/IN-03.neg2.tcl",
+    "controls/IN-03.neg3.tcl",
+    "controls/IN-03.neg4.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version pitfall: report_cell_usage does not exist in this build, so a solution has to iterate the instances (STA get_cells + ref_name, or OpenDB masters). Ground truth: OpenDB oracle on the gplaced snapshot; physical-only means filler or master class WELLTAP/SPACER/ANTENNACELL/ENDCAP (only TAPCELL_X1 here). Counts must match exactly. The synthesized netlist design/gcd.v is stale (it still has the 15 buffers removed during floorplanning), so counting cells in that file fails. Also rejected: a total that counts the tap cells while the per-type rows do not. Alternatives cover OpenDB masters, STA ref_name and a loop over liberty cells (tap cells have no liberty model)."
+ },
+ {
+  "id": "IN-04",
+  "category": "inspection",
+  "difficulty": "medium",
+  "instruction": "Find the five signal nets with the highest fanout in the current design, excluding the clock net and the power/ground nets. The fanout of a net is the number of sinks it drives: input pins of cell instances plus top-level output ports connected to the net (the driving pin is not counted). Write outputs/high_fanout_nets.txt with exactly five lines of the form '<net_name> <fanout>', sorted by decreasing fanout (nets with equal fanout may appear in any order). Do not modify the design.",
+  "start_state": "placed",
+  "expected_commands": [
+   "get_nets",
+   "get_pins",
+   "get_ports",
+   "get_property"
+  ],
+  "expected_outcome": "req_rdy 41, _188_ 32, then _233_, _236_ and _240_ with 16 each; the design is unchanged.",
+  "validator": {
+   "name": "in_high_fanout_nets",
+   "params": {
+    "file": "outputs/high_fanout_nets.txt",
+    "count": 5
+   }
+  },
+  "reference_script": "reference_scripts/IN-04.tcl",
+  "required_outputs": [
+   "outputs/high_fanout_nets.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-04.alt1.tcl",
+    "controls/IN-04.alt2.tcl",
+    "controls/IN-04.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-04.neg1.tcl",
+    "controls/IN-04.neg2.tcl",
+    "controls/IN-04.neg3.tcl",
+    "controls/IN-04.neg4.tcl",
+    "controls/IN-04.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth: OpenDB oracle counting INPUT ITerms (signal pins) plus OUTPUT BTerms per net; excluded are supply/special nets and clock nets (connected to a clock source port or of signal type CLOCK). Any top-5 selection consistent with ties is accepted (no tie at the 5th place here: the next net has 9). Distractors: the clock net clk (35 sinks) ranks 2nd if kept; VDD/VSS carry 461 ITerms in OpenDB; counting all pins of a net (driver included) gives _188_ 33; ignoring the port sink gives req_rdy 40 (neg5); increasing order fails sorted_decreasing (neg4). Exactly five lines and decreasing order are required, as instructed. Version pitfalls: get_nets -of_objects rejects port objects (STA-0467) and returns NULL for the top-level pin returned by a clock's sources property, so the clock net is easiest found from the register clock pins or by name."
+ },
+ {
+  "id": "IN-05",
+  "category": "inspection",
+  "difficulty": "hard",
+  "instruction": "Write a floorplan and area summary of the routed design to outputs/floorplan_summary.txt with exactly these four lines: 'die_area <llx> <lly> <urx> <ury>' giving the die boundary (lower-left and upper-right corner) in microns; 'core_area <llx> <lly> <urx> <ury>' giving the core area boundary in microns; 'cell_area <value>' giving the total area in square microns of all cell instances except filler cells (tap cells are included); 'utilization <value>' giving cell_area as a percentage of the core area (for example 12.34 for 12.34%). Write plain numbers without units, each with a precision of at least two decimal places. Do not modify the design.",
+  "start_state": "routed",
+  "expected_commands": [
+   "ord::get_db_block",
+   "getDieArea",
+   "getCoreArea",
+   "getInsts",
+   "getMaster",
+   "isFiller"
+  ],
+  "expected_outcome": "die_area 0 0 100.13 100.8, core_area 10.07 11.2 90.25 91.0, cell_area 578.82, utilization 9.05; the design is unchanged.",
+  "validator": {
+   "name": "in_floorplan_summary",
+   "params": {
+    "file": "outputs/floorplan_summary.txt",
+    "box_tol_um": 0.01,
+    "value_tol": 0.01
+   }
+  },
+  "reference_script": "reference_scripts/IN-05.tcl",
+  "required_outputs": [
+   "outputs/floorplan_summary.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-05.alt1.tcl",
+    "controls/IN-05.alt2.tcl",
+    "controls/IN-05.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-05.neg1.tcl",
+    "controls/IN-05.neg2.tcl",
+    "controls/IN-05.neg3.tcl",
+    "controls/IN-05.neg4.tcl",
+    "controls/IN-05.neg5.tcl",
+    "controls/IN-05.neg6.tcl",
+    "controls/IN-05.neg7.tcl",
+    "controls/IN-05.neg8.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version pitfalls: report_design_area prints only rounded integers ('Design area 579 u^2 9% utilization.') through the logger, and in this build that output can be neither redirected ('>' gives 'wrong # args') nor captured (with_output_to_variable, log_begin and sta::redirect_file_begin all yield nothing); get_property area on liberty cells is rounded to an integer and TAPCELL_X1 has no liberty model; the undocumented rsz::design_area returns square meters and crashes OpenROAD (segfault) unless rsz::utilization (a fraction) or report_design_area was called first. Summing every instance includes the 1387 filler cells (5819.55 um^2, i.e. 100% utilization); dropping the tap cells gives 548.49 / 8.57; a die-based utilization gives 5.73. remove_fillers followed by summing all instances gives the right numbers but modifies the design and fails design_unchanged (which also compares routed-net count and detailed wirelength). Ground truth: die/core from the baseline probe, cell area from an OpenDB oracle (non-filler masters). Tolerance 0.01 = one unit of the requested second decimal (accepts rounding or truncation); every wrong approach above misses by more than 0.4 (liberty areas, rounded to integers: 376.00 / 5.88; Tcl integer division of DBU values: 100 / 10 / 0 ...), and the integer report values (579 u^2, 9 %) miss by 0.18 and 0.046."
+ },
+ {
+  "id": "IN-06",
+  "category": "inspection",
+  "difficulty": "hard",
+  "instruction": "Analyze the flip-flops of the design and the cells that drive their clock pins. Write two files: (1) outputs/flop_types.txt with one line '<cell_type> <count>' for each flip-flop cell type used in the design (any order), followed by a final line 'total <count>' with the total number of flip-flops; (2) outputs/flop_clock_drivers.txt with one line '<instance_name> <count>' for every cell instance whose output directly drives the clock pin of at least one flip-flop, where <count> is the number of flip-flops whose clock pin it drives (any order). Write no other lines and do not modify the design.",
+  "start_state": "grouted",
+  "expected_commands": [
+   "all_registers",
+   "get_property",
+   "get_nets",
+   "get_pins",
+   "get_cells",
+   "get_full_name"
+  ],
+  "expected_outcome": "flop_types: DFF_X1 22, DFF_X2 13, total 35; flop_clock_drivers: clkbuf_2_0__f_clk 10, clkbuf_2_1__f_clk 9, clkbuf_2_2__f_clk 7, clkbuf_2_3__f_clk 9; the design is unchanged.",
+  "validator": {
+   "name": "in_flop_report",
+   "params": {
+    "types_file": "outputs/flop_types.txt",
+    "drivers_file": "outputs/flop_clock_drivers.txt"
+   }
+  },
+  "reference_script": "reference_scripts/IN-06.tcl",
+  "required_outputs": [
+   "outputs/flop_types.txt",
+   "outputs/flop_clock_drivers.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-06.alt1.tcl",
+    "controls/IN-06.alt2.tcl",
+    "controls/IN-06.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-06.neg1.tcl",
+    "controls/IN-06.neg2.tcl",
+    "controls/IN-06.neg3.tcl",
+    "controls/IN-06.neg4.tcl",
+    "controls/IN-06.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth: STA all_registers -edge_triggered identifies the flip-flops (liberty based), OpenDB gives the clock-pin connectivity. Version pitfall: dbMaster isSequential returns false for every master in this build (the harness probe's sequential_count is 0 as well), so OpenDB-only flop detection finds nothing; all_fanin / all_fanout do not exist in this build. Rejected: tracing the clock path back to the port (transitive drivers, root buffer listed) and get_cells -of_objects on the clock net (returns the flip-flops too). The CTS root buffer clkbuf_0_clk drives only the four leaf buffers and must not be listed; clock net names are not instance names. A harmless extra 'total' line in the drivers file is ignored; counts are exact."
+ },
+ {
+  "id": "DEV-IN-01",
+  "category": "inspection",
+  "difficulty": "medium",
+  "instruction": "Find every signal net in the design that has a driver but no load at all, i.e. it is connected to no cell input pin and to no top-level output port. Write outputs/unloaded_nets.txt with one line per such net in the form '<net_name> <driver_instance>/<driver_pin>' (any order); write no other lines. Do not modify the design.",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "get_nets",
+   "get_pins",
+   "get_ports",
+   "get_property"
+  ],
+  "expected_outcome": "34 nets (_311_ ... _344_), each driven by the unused QN output of a flip-flop (_673_/QN ... _706_/QN); the design is unchanged.",
+  "validator": {
+   "name": "in_unloaded_nets",
+   "params": {
+    "file": "outputs/unloaded_nets.txt"
+   }
+  },
+  "reference_script": "reference_scripts/DEV-IN-01.tcl",
+  "required_outputs": [
+   "outputs/unloaded_nets.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-IN-01.alt1.tcl",
+    "controls/DEV-IN-01.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-IN-01.neg1.tcl",
+    "controls/DEV-IN-01.neg2.tcl",
+    "controls/DEV-IN-01.neg3.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Ground truth: OpenDB oracle (signal nets with an OUTPUT ITerm or INPUT BTerm driver and no INPUT ITerm / OUTPUT BTerm sink). The floating-net check (report_floating_nets: loads but no driver) finds nothing in this design and answers a different question. The shortcut 'every flip-flop QN net' is wrong because _672_/QN drives _003_, which has loads. Writing only the driving instance (no /pin) fails driver_pins."
+ }
+]

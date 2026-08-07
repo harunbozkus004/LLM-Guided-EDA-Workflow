@@ -1,0 +1,406 @@
+[
+ {
+  "id": "FP-01",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "The synthesized gcd netlist is loaded but has no floorplan yet. Initialize the floorplan with a target core utilization of 40%, a core aspect ratio (height/width) of 1.0 and 2 um of spacing between the core and the die boundary on all four sides, using standard-cell rows of site FreePDK45_38x28_10R_NP_162NW_34O. Do not modify the netlist. Then verify the resulting geometry by writing the file outputs/fp_geometry.txt with exactly three lines (all coordinates in microns with three decimals):\nDIE <llx> <lly> <urx> <ury>\nCORE <llx> <lly> <urx> <ury>\nUTIL <value>\nwhere DIE is the die area, CORE is the core area as stored in the design database after the rows are created (the bounding box of the placement rows), and UTIL is the achieved core utilization in percent (total standard-cell area divided by the CORE area, times 100).",
+  "start_state": "synth",
+  "expected_commands": [
+   "initialize_floorplan",
+   "ord::get_die_area",
+   "ord::get_core_area",
+   "rsz::utilization"
+  ],
+  "expected_outcome": "A square floorplan with ~2 um core margins and ~40% utilization (41.4% after row/site snapping), and a report whose die, core and utilization values match the database.",
+  "validator": {
+   "name": "fp_util_init_report",
+   "params": {
+    "site": "FreePDK45_38x28_10R_NP_162NW_34O",
+    "utilization": 0.4,
+    "util_tol": 0.02,
+    "aspect_ratio": 1.0,
+    "ar_tol": 0.06,
+    "margin_um": 2.0,
+    "margin_tol_low": 0.05,
+    "margin_tol_high_x": 0.2,
+    "margin_tol_high_y": 1.45,
+    "report": "outputs/fp_geometry.txt",
+    "coord_tol": 0.01,
+    "util_report_tol": 0.55
+   }
+  },
+  "reference_script": "reference_scripts/FP-01.tcl",
+  "required_outputs": [
+   "outputs/fp_geometry.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/FP-01.alt1.tcl",
+    "controls/FP-01.alt2.tcl",
+    "controls/FP-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/FP-01.neg1.tcl",
+    "controls/FP-01.neg2.tcl",
+    "controls/FP-01.neg3.tcl",
+    "controls/FP-01.neg4.tcl",
+    "controls/FP-01.neg5.tcl",
+    "controls/FP-01.neg6.tcl",
+    "controls/FP-01.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint Task 1. Rows snap the core inwards to the site grid (0.19 um) and row height (1.4 um), so the measured utilization of the reference is 41.35% (core 35.91 x 35.0 um): util_tol 0.02 accepts this while rejecting 35%/45%. Each margin grows by < 1 site (0.19 um) left/right and < 1 row (1.4 um) bottom/top, hence the per-axis upper tolerances (a 2.5 um spacing gives a 2.66 um left margin and fails). The report is compared with the probe (rows bounding box = ord::get_core_area / dbBlock::getCoreArea in this version); UTIL tolerance 0.55 points covers the integer rounding of report_design_area (41 vs 41.35). Pitfalls: -utilization is a percentage (0.4 means 0.4%), and the core reported by the tool is the snapped row area, not the requested box. Further pitfalls (negative control neg7): get_property <lib_cell> area returns 1 for every cell in this build (UTIL 28.8), and rsz::design_area crashes OpenROAD (exit -11) unless the resizer was initialised first (rsz::utilization and report_design_area are safe)."
+ },
+ {
+  "id": "FP-02",
+  "category": "floorplanning",
+  "difficulty": "easy",
+  "instruction": "The synthesized gcd netlist is loaded but has no floorplan yet. Create the floorplan with an explicit die area from (0, 0) to (120, 100) um and an explicit core area from (10, 10) to (110, 90) um, with standard-cell rows of site FreePDK45_38x28_10R_NP_162NW_34O. Then create the routing tracks for all ten routing layers (metal1 to metal10). Do not modify the netlist.",
+  "start_state": "synth",
+  "expected_commands": [
+   "initialize_floorplan",
+   "make_tracks"
+  ],
+  "expected_outcome": "Die (0,0)-(120,100) um, rows filling the requested core (snapped to (10.07,11.2)-(109.82,89.6)), and track grids on metal1-metal10.",
+  "validator": {
+   "name": "fp_explicit_die_core",
+   "params": {
+    "site": "FreePDK45_38x28_10R_NP_162NW_34O",
+    "die": [
+     0,
+     0,
+     120,
+     100
+    ],
+    "core": [
+     10,
+     10,
+     110,
+     90
+    ],
+    "die_tol": 0.005,
+    "site_width": 0.19,
+    "row_height": 1.4
+   }
+  },
+  "reference_script": "reference_scripts/FP-02.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-02.alt1.tcl",
+    "controls/FP-02.alt2.tcl",
+    "controls/FP-02.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/FP-02.neg1.tcl",
+    "controls/FP-02.neg2.tcl",
+    "controls/FP-02.neg3.tcl",
+    "controls/FP-02.neg4.tcl",
+    "controls/FP-02.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The core stored in the database is the bounding box of the rows, which the tool snaps inwards to the site grid (x) and to whole rows (y); each core edge may therefore move inwards by less than one site width (0.19 um) or one row height (1.4 um). Either make_tracks or sourcing platform/Nangate45.tracks is accepted."
+ },
+ {
+  "id": "FP-03",
+  "category": "floorplanning",
+  "difficulty": "easy",
+  "instruction": "The floorplan is initialized but the IO pins are not placed yet. Place all 54 IO pins on the die boundary: pins on the left and right edges must use metal5 and pins on the top and bottom edges must use metal4, and neighbouring pins on the same edge must be at least 4 um apart (center to center). Do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "place_pins"
+  ],
+  "expected_outcome": "All 54 pins on the boundary, metal5 on left/right, metal4 on top/bottom, >= 4 um apart along each edge.",
+  "validator": {
+   "name": "fp_io_layers_spacing",
+   "params": {
+    "hor_layer": "metal5",
+    "ver_layer": "metal4",
+    "min_distance_um": 4.0,
+    "spacing_tol_um": 0.005
+   }
+  },
+  "reference_script": "reference_scripts/FP-03.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-03.alt1.tcl",
+    "controls/FP-03.alt2.tcl",
+    "controls/FP-03.alt3.tcl",
+    "controls/FP-03.alt4.tcl",
+    "controls/FP-03.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/FP-03.neg1.tcl",
+    "controls/FP-03.neg2.tcl",
+    "controls/FP-03.neg3.tcl",
+    "controls/FP-03.neg4.tcl",
+    "controls/FP-03.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Pin shapes are read from the final database by an oracle query. A pin in a die corner touches two edges and is accepted on the layer of either. The pin placer rounds the minimum distance up to whole tracks (4 um -> 15 x 0.28 um = 4.2 um). With unplaced cells the placer clusters pins, so omitting the minimum distance gives 0.56 um spacing. Pitfall: -min_distance_in_tracks changes the unit of -min_distance. A pin counts as on an edge when its shape touches or straddles that edge from inside the die span (pin extensions beyond the die are accepted)."
+ },
+ {
+  "id": "FP-04",
+  "category": "floorplanning",
+  "difficulty": "easy",
+  "instruction": "The floorplan of gcd is complete (die/core, rows, routing tracks, placed IO pins, tap cells and the power grid). Save it as a DEF file at outputs/gcd_floorplan.def. The downstream tool only reads DEF version 5.7, so the file must be written in DEF 5.7 format (header line VERSION 5.7). Do not change the design.",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "write_def"
+  ],
+  "expected_outcome": "outputs/gcd_floorplan.def in DEF 5.7 with the floorplan's die area, 57 rows, tracks, 461 components, 54 placed pins and the VDD/VSS special nets.",
+  "validator": {
+   "name": "fp_def_export",
+   "params": {
+    "file": "outputs/gcd_floorplan.def",
+    "version": "5.7",
+    "tap_master": "TAPCELL_X1",
+    "supply_nets": [
+     "VDD",
+     "VSS"
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/FP-04.tcl",
+  "required_outputs": [
+   "outputs/gcd_floorplan.def"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/FP-04.alt1.tcl",
+    "controls/FP-04.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/FP-04.neg1.tcl",
+    "controls/FP-04.neg2.tcl",
+    "controls/FP-04.neg3.tcl",
+    "controls/FP-04.neg4.tcl",
+    "controls/FP-04.neg5.tcl",
+    "controls/FP-04.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The DEF content is compared with the starting-state probe (die area, row count, track layers, component and tap counts, every pin's layer and location, followpin rails = rows + 1, signal net count), so a hand-written or stale DEF fails. write_def defaults to DEF 5.8; odb::write_def <block> <file> 5.7 is an equivalent API. The final database must also equal the starting state (design_unchanged: die/core/rows/tracks, instances and their status, pin locations, nets, power-grid wires), as the instruction says. For this design the 5.7 and 5.8 files differ only in the VERSION line."
+ },
+ {
+  "id": "FP-05",
+  "category": "floorplanning",
+  "difficulty": "hard",
+  "instruction": "The floorplan is initialized but the IO pins are not placed yet. Place all IO pins on the die boundary, using metal3 for pins on the left and right edges and metal2 for pins on the top and bottom edges. All 32 pins of the input bus req_msg must be on the bottom edge and ordered by bit index from left to right: req_msg[0] is the leftmost and the x coordinate strictly increases with the bit index up to req_msg[31]. The remaining pins may be placed anywhere on the boundary. Do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "set_io_pin_constraint",
+   "place_pins"
+  ],
+  "expected_outcome": "All pins placed on metal3/metal2; req_msg[0..31] on the bottom edge with strictly increasing x.",
+  "validator": {
+   "name": "fp_io_bus_order",
+   "params": {
+    "hor_layer": "metal3",
+    "ver_layer": "metal2",
+    "bus": "req_msg",
+    "width": 32,
+    "edge": "bottom"
+   }
+  },
+  "reference_script": "reference_scripts/FP-05.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-05.alt1.tcl",
+    "controls/FP-05.alt2.tcl",
+    "controls/FP-05.alt3.tcl",
+    "controls/FP-05.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/FP-05.neg1.tcl",
+    "controls/FP-05.neg2.tcl",
+    "controls/FP-05.neg3.tcl",
+    "controls/FP-05.neg4.tcl",
+    "controls/FP-05.neg5.tcl",
+    "controls/FP-05.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version-specific pitfalls: in set_io_pin_constraint -group takes literal pin names, so a glob such as req_msg* only triggers warning PPL-0047 and the group/order is silently dropped; get_ports req_msg* returns the bits in descending order (req_msg[31] first) and passing port objects fails with PPL-0061. A bit-ordered list (loop or lsort -dictionary) with -group -order, or explicit place_pin calls, solve it. Constraints must be set before place_pins."
+ },
+ {
+  "id": "FP-06",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "The floorplan is initialized (placement rows exist) but there are no well-tap or endcap cells yet. Insert TAPCELL_X1 well-tap cells in a checkerboard pattern with a tap distance of 20 um: within a row the tap cells are 2 x 20 = 40 um apart (on the site grid) and the taps of adjacent rows are staggered by 20 um; the first and last rows may contain the taps of both phases. In addition, place a TAPCELL_X1 endcap at both ends of every row. Do not insert any other cells and do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "tapcell"
+  ],
+  "expected_outcome": "114 endcaps (two per row) and 118 checkerboard taps (row pitch 39.9 um, rows offset by 19.95 um).",
+  "validator": {
+   "name": "fp_tapcells",
+   "params": {
+    "tap_master": "TAPCELL_X1",
+    "tap_distance_um": 20.0,
+    "tap_tol_um": 0.4
+   }
+  },
+  "reference_script": "reference_scripts/FP-06.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-06.alt1.tcl",
+    "controls/FP-06.alt2.tcl",
+    "controls/FP-06.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/FP-06.neg1.tcl",
+    "controls/FP-06.neg2.tcl",
+    "controls/FP-06.neg3.tcl",
+    "controls/FP-06.neg4.tcl",
+    "controls/FP-06.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Tool semantics: tapcell -distance d puts taps 2d apart in a row and offsets alternate rows by d; the first/last rows get both phases. The validator checks the geometry, not the command: endcaps at both row ends, every in-row gap <= 2d + 0.4 um, interior taps >= 2d - 0.4 um apart (>= d - 0.4 in the first/last row), adjacent rows staggered by >= d - 0.4 um, no overlaps and no extra instances. 0.4 um = two sites of snapping. place_endcaps -endcap X also fills the first and last rows with boundary cells (rejected); -endcap_vertical plus place_tapcells reproduces tapcell exactly."
+ },
+ {
+  "id": "FP-07",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "The floorplan is initialized but there is no power grid yet. Build the VDD/VSS power distribution network exactly as defined by the platform PDN configuration file platform/Nangate45.pdn.tcl (metal1 standard-cell rails, metal4 and metal7 straps and the vias connecting them), and make sure the power and ground pins of every standard cell are connected to VDD and VSS respectively. Do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "source",
+   "pdngen"
+  ],
+  "expected_outcome": "VDD/VSS special nets with 58 metal1 followpin rails, three metal4 straps and two metal7 straps (what pdngen keeps after trimming) plus vias, and all 362 cells connected to VDD/VSS.",
+  "validator": {
+   "name": "fp_pdn_platform",
+   "params": {
+    "pdn_config": "platform/Nangate45.pdn.tcl",
+    "layer_widths_um": {
+     "metal1": 0.17,
+     "metal4": 0.48,
+     "metal7": 1.4
+    }
+   }
+  },
+  "reference_script": "reference_scripts/FP-07.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-07.alt1.tcl",
+    "controls/FP-07.alt2.tcl",
+    "controls/FP-07.alt3.tcl",
+    "controls/FP-07.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/FP-07.neg1.tcl",
+    "controls/FP-07.neg2.tcl",
+    "controls/FP-07.neg3.tcl",
+    "controls/FP-07.neg4.tcl",
+    "controls/FP-07.neg5.tcl",
+    "controls/FP-07.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The oracle removes the agent's VDD/VSS wires in its own session, rebuilds the grid from the platform file on the same floorplan and requires every reference shape to be present, all supply shapes to be on the configured layers/widths and at least as many vias. Untrimmed grids (pdngen -skip_trim keeps two extra configured metal7 VDD straps) are accepted. Pitfall: sourcing the file only defines the grid; pdngen must be run. Global connections (add_global_connection + global_connect) are part of the file. 'Exactly' is enforced in both directions: every agent VDD/VSS shape must lie inside a shape of the trimmed or the untrimmed reference build (grid_no_unconfigured_shapes), so extra straps fail. In this build add_global_connection connects the existing cells immediately (-defer_connection is deprecated), so an explicit global_connect is optional (alt4); cells created later stay unconnected."
+ },
+ {
+  "id": "FP-08",
+  "category": "floorplanning",
+  "difficulty": "hard",
+  "instruction": "Run the complete floorplan stage for the synthesized gcd netlist in one script, without modifying the netlist:\n1. initialize the floorplan with a target core utilization of 30%, a core aspect ratio of 1.0 and 4 um of core-to-die spacing on all four sides, with standard-cell rows of site FreePDK45_38x28_10R_NP_162NW_34O;\n2. create the routing tracks for all ten routing layers (metal1 to metal10);\n3. place all IO pins on the die boundary, using metal3 for pins on the left/right edges and metal2 for pins on the top/bottom edges;\n4. insert TAPCELL_X1 well-tap cells in a checkerboard with a tap distance of 15 um (taps 2 x 15 = 30 um apart within a row, adjacent rows staggered by 15 um; the first and last rows may contain both phases), a TAPCELL_X1 endcap at both ends of every row, and no other cells;\n5. build the VDD/VSS power grid exactly as defined by the platform PDN configuration file platform/Nangate45.pdn.tcl, with the power and ground pins of every cell, including the tap and endcap cells, connected to VDD and VSS.",
+  "start_state": "synth",
+  "expected_commands": [
+   "initialize_floorplan",
+   "make_tracks",
+   "place_pins",
+   "tapcell",
+   "pdngen"
+  ],
+  "expected_outcome": "~30% utilization square floorplan with 4 um margins, tracks on all layers, all pins placed on metal3/metal2, endcaps + 15 um checkerboard taps, and the platform grid with every cell connected.",
+  "validator": {
+   "name": "fp_full_flow",
+   "params": {
+    "site": "FreePDK45_38x28_10R_NP_162NW_34O",
+    "utilization": 0.3,
+    "util_tol": 0.02,
+    "aspect_ratio": 1.0,
+    "ar_tol": 0.06,
+    "margin_um": 4.0,
+    "margin_tol_low": 0.05,
+    "margin_tol_high_x": 0.2,
+    "margin_tol_high_y": 1.45,
+    "hor_layer": "metal3",
+    "ver_layer": "metal2",
+    "tap_master": "TAPCELL_X1",
+    "tap_distance_um": 15.0,
+    "tap_tol_um": 0.4,
+    "pdn_config": "platform/Nangate45.pdn.tcl",
+    "layer_widths_um": {
+     "metal1": 0.17,
+     "metal4": 0.48,
+     "metal7": 1.4
+    }
+   }
+  },
+  "reference_script": "reference_scripts/FP-08.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-08.alt1.tcl",
+    "controls/FP-08.alt2.tcl",
+    "controls/FP-08.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/FP-08.neg1.tcl",
+    "controls/FP-08.neg2.tcl",
+    "controls/FP-08.neg3.tcl",
+    "controls/FP-08.neg4.tcl",
+    "controls/FP-08.neg5.tcl",
+    "controls/FP-08.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Combines the FP-01/03/06/07 checks on the agent's own floorplan (the reference grid is rebuilt by the oracle on that floorplan; on this small core pdngen trims all metal7 straps). Ordering pitfalls: initialize_floorplan deletes existing tracks and place_pins needs tracks; global_connect in the PDN file only connects cells that exist at that moment, so taps inserted after the grid stay unconnected unless global_connect is re-run. Measured utilization of the reference is 30.9% after snapping. The FP-07 grid exactness check (no unconfigured supply shapes) applies here too."
+ },
+ {
+  "id": "DEV-FP-01",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "The floorplan is initialized but the IO pins are not placed yet. Place all IO pins on the die boundary using metal3 for pins on the left/right edges and metal2 for pins on the top/bottom edges, such that every input pin is on the left edge and every output pin is on the right edge. Do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "set_io_pin_constraint",
+   "place_pins"
+  ],
+  "expected_outcome": "36 input pins on the left edge and 18 output pins on the right edge, all on metal3.",
+  "validator": {
+   "name": "fp_io_direction_edges",
+   "params": {
+    "hor_layer": "metal3",
+    "ver_layer": "metal2",
+    "input_edge": "left",
+    "output_edge": "right"
+   }
+  },
+  "reference_script": "reference_scripts/DEV-FP-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-FP-01.alt1.tcl",
+    "controls/DEV-FP-01.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-FP-01.neg1.tcl",
+    "controls/DEV-FP-01.neg2.tcl",
+    "controls/DEV-FP-01.neg3.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Development task for the pin-constraint commands (direction-based region constraints)."
+ }
+]

@@ -1,0 +1,2210 @@
+[
+ {
+  "id": "CT-01",
+  "category": "cts",
+  "difficulty": "easy",
+  "instruction": "Synthesize the clock tree for the placed gcd design. Use BUF_X4 as the root clock buffer and as the buffer cell for the rest of the clock tree. After the run, every flip-flop clock pin must be driven through the new clock-tree buffers instead of directly by the clk input port.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis"
+  ],
+  "expected_outcome": "A buffered clock tree (TritonCTS builds 5 BUF_X4 buffers in two levels) drives all 35 register clock pins from the clk port.",
+  "validator": {
+   "name": "ct_clock_tree",
+   "params": {
+    "tree_masters": [
+     "BUF_X4"
+    ],
+    "root_master": "BUF_X4",
+    "require_legal": false
+   }
+  },
+  "reference_script": "reference_scripts/CT-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/CT-01.alt1.tcl",
+    "controls/CT-01.alt2.tcl",
+    "controls/CT-01.alt3.tcl",
+    "controls/CT-01.alt4.tcl",
+    "controls/CT-01.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/CT-01.neg1.tcl",
+    "controls/CT-01.neg2.tcl",
+    "controls/CT-01.neg3.tcl",
+    "controls/CT-01.neg4.tcl",
+    "controls/CT-01.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The validator traces the clock network on the final database from the clock source port to the STA register clock pins: all 35 must be reached through at least one clock-tree cell and every clock-tree cell must be BUF_X4. Legalization is not required (not asked), so extra legalization passes too. Pitfalls in this build: -buf_list is mandatory (CTS-0055) and the CTS regression examples use CLKBUF_X3; when -root_buf is omitted the FIRST cell of -buf_list becomes the master of every H-tree buffer, so '-buf_list {BUF_X2 BUF_X4}' yields an all-BUF_X2 tree."
+ },
+ {
+  "id": "CT-02",
+  "category": "cts",
+  "difficulty": "easy",
+  "instruction": "Run clock tree synthesis on the placed design using BUF_X8 for the root clock buffer and for all other clock-tree buffers. Then save the CTS summary metrics to outputs/ct02_cts_summary.txt: the number of clock roots, the number of clock buffers inserted, the number of clock subnets (nets driven by the inserted clock buffers) and the number of clock sinks (register clock pins). Put each metric on its own line, containing the metric name (roots, buffers, subnets or sinks) and its integer value.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis",
+   "report_cts"
+  ],
+  "expected_outcome": "An all-BUF_X8 clock tree (5 buffers) is built and the summary file reports 1 root, 5 buffers, 5 subnets and 35 sinks.",
+  "validator": {
+   "name": "ct_cts_summary",
+   "params": {
+    "tree_masters": [
+     "BUF_X8"
+    ],
+    "root_master": "BUF_X8",
+    "report": "outputs/ct02_cts_summary.txt"
+   }
+  },
+  "reference_script": "reference_scripts/CT-02.tcl",
+  "required_outputs": [
+   "outputs/ct02_cts_summary.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/CT-02.alt1.tcl",
+    "controls/CT-02.alt2.tcl",
+    "controls/CT-02.alt3.tcl",
+    "controls/CT-02.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/CT-02.neg1.tcl",
+    "controls/CT-02.neg2.tcl",
+    "controls/CT-02.neg3.tcl",
+    "controls/CT-02.neg4.tcl",
+    "controls/CT-02.neg5.tcl",
+    "controls/CT-02.neg6.tcl",
+    "controls/CT-02.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Each line's metric is the keyword (subnet/root/sink/buffer) that appears first in it, and its value is the first integer after that keyword (the last integer of the line when none follows, e.g. '5 buffers'), so remarks such as 'buffers: 5 (1 root + 4 leaf)' are read correctly; the value is compared with the oracle: roots = clock source ports whose net drives a clock-tree cell, buffers = clock-tree cells, subnets = nets driven by clock-tree cells, sinks = register clock pins reached. Pitfalls in this build: report_cts only accepts -out_file (the README example 'report_cts \"file.txt\"' and 'report_cts > file' fail with STA-0406), and report_cts in a session that did not run CTS prints zeros. Metric lines may use 'name value', 'name: value' or 'name=value'; capturing report_cts with with_output_to_variable yields an empty string (it prints through the logger)."
+ },
+ {
+  "id": "CT-03",
+  "category": "cts",
+  "difficulty": "medium",
+  "instruction": "The clock tree of the design has already been synthesized and the clock is propagated. Without modifying the design, estimate the parasitics from the current placement and then write the static timing analyzer's clock-skew report for setup checks of core_clock, with 4 digits after the decimal point, to outputs/ct03_clock_skew.rpt. The report must name the two register clock pins that define the worst skew and must end with the skew value (in ns).",
+  "start_state": "cts",
+  "expected_commands": [
+   "estimate_parasitics",
+   "report_clock_skew"
+  ],
+  "expected_outcome": "outputs/ct03_clock_skew.rpt names _675_/CK and _679_/CK and ends with the setup skew 0.0032 ns (placement parasitics).",
+  "validator": {
+   "name": "ct_skew_report",
+   "params": {
+    "report": "outputs/ct03_clock_skew.rpt",
+    "skew_tol_ns": 0.0001
+   }
+  },
+  "reference_script": "reference_scripts/CT-03.tcl",
+  "required_outputs": [
+   "outputs/ct03_clock_skew.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/CT-03.alt1.tcl",
+    "controls/CT-03.alt2.tcl",
+    "controls/CT-03.alt3.tcl",
+    "controls/CT-03.alt4.tcl",
+    "controls/CT-03.alt5.tcl",
+    "controls/CT-03.alt6.tcl"
+   ],
+   "negatives": [
+    "controls/CT-03.neg1.tcl",
+    "controls/CT-03.neg2.tcl",
+    "controls/CT-03.neg3.tcl",
+    "controls/CT-03.neg4.tcl",
+    "controls/CT-03.neg5.tcl",
+    "controls/CT-03.neg6.tcl",
+    "controls/CT-03.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The oracle re-establishes placement parasitics on the final database and takes sta::worst_clock_skew -setup plus the pin pair from its own report_clock_skew. The reported skew is the last standalone number in the file. Tolerance 1e-4 ns covers rounding to 4 decimals (+/-5e-5); the wrong-parasitics value (no estimation, 0.0018 ns) and the default 2-digit report (0.00) are both more than 1e-3 ns away. In this build the skew does not depend on ideal/propagated mode, so parasitics are the discriminating prerequisite; setup and hold skew are identical for this single-corner design. A unit suffix glued to the number (0.0032ns) is accepted. design_unchanged also compares the placement status counts and the traced clock-tree connectivity with the starting state. Known blind spot: in this build report_clock_skew gives the same pins and value for -hold as for -setup and the same value with an ideal clock (unset_propagated_clock), so neither mistake can be detected on this design. More than 4 digits (-digits 5/6) is accepted because only the value is checked."
+ },
+ {
+  "id": "CT-04",
+  "category": "cts",
+  "difficulty": "hard",
+  "instruction": "Build the clock tree for the placed design so that the root clock buffer (the buffer driven directly by the clk input port) is a BUF_X8 and every other clock-tree buffer is a BUF_X2. Afterwards legalize the placement so that all cells, including the new clock buffers, are on legal sites without overlaps.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis",
+   "replace_cell",
+   "detailed_placement"
+  ],
+  "expected_outcome": "Clock tree with one BUF_X8 root buffer and four BUF_X2 leaf buffers driving all 35 register clock pins; legal placement.",
+  "validator": {
+   "name": "ct_clock_tree",
+   "params": {
+    "tree_masters": [
+     "BUF_X2"
+    ],
+    "root_master": "BUF_X8",
+    "require_legal": true
+   }
+  },
+  "reference_script": "reference_scripts/CT-04.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/CT-04.alt1.tcl",
+    "controls/CT-04.alt2.tcl",
+    "controls/CT-04.alt3.tcl",
+    "controls/CT-04.alt4.tcl",
+    "controls/CT-04.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/CT-04.neg1.tcl",
+    "controls/CT-04.neg2.tcl",
+    "controls/CT-04.neg3.tcl",
+    "controls/CT-04.neg4.tcl",
+    "controls/CT-04.neg5.tcl",
+    "controls/CT-04.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version-specific pitfall: in this build -root_buf also becomes the master of every H-tree buffer (and -tree_buf is ignored), so the obvious '-root_buf BUF_X8 -buf_list BUF_X2' silently produces an all-BUF_X8 tree. Valid solutions build the tree and then resize the root (replace_cell or dbInst swapMaster), or build it with BUF_X8 and downsize the non-root buffers; then legalize. The root is the clock-tree cell at level 1 below the clock source port; legality comes from the probe's check_placement. Labelled hard: the documented command silently builds the wrong tree, so the task needs a netlist edit after CTS, and upsizing after legalization leaves the wider BUF_X8 overlapping."
+ },
+ {
+  "id": "CT-05",
+  "category": "cts",
+  "difficulty": "hard",
+  "instruction": "Run clock tree synthesis for the clock defined by the loaded SDC constraints (core_clock), using BUF_X4 for the root clock buffer and for all other clock-tree buffers, and legalize the placement so that the new clock buffers are on legal sites. Then switch the clock to propagated mode, estimate placement parasitics for all nets (the clock-tree nets included) and write the clock-tree metrics to outputs/ct05_cts_metrics.txt in exactly this two-line format:\nclock_buffers <N>\nclock_skew_ns <S>\nwhere <N> is the number of buffer cells in the final clock network between the clk input port and the register clock pins, and <S> is the worst setup clock skew of core_clock reported by the static timing analyzer for the legalized design with these propagated clock latencies and parasitics, in ns with at least 4 digits after the decimal point.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis",
+   "detailed_placement",
+   "set_propagated_clock",
+   "estimate_parasitics",
+   "report_clock_skew",
+   "report_cts"
+  ],
+  "expected_outcome": "Legal all-BUF_X4 clock tree; outputs/ct05_cts_metrics.txt reports clock_buffers 5 and the setup skew of the legalized design with placement parasitics (about 0.0032 ns).",
+  "validator": {
+   "name": "ct_cts_metrics",
+   "params": {
+    "tree_masters": [
+     "BUF_X4"
+    ],
+    "root_master": "BUF_X4",
+    "require_legal": true,
+    "report": "outputs/ct05_cts_metrics.txt",
+    "skew_tol_ns": 0.0001
+   }
+  },
+  "reference_script": "reference_scripts/CT-05.tcl",
+  "required_outputs": [
+   "outputs/ct05_cts_metrics.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/CT-05.alt1.tcl",
+    "controls/CT-05.alt2.tcl",
+    "controls/CT-05.alt3.tcl",
+    "controls/CT-05.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/CT-05.neg1.tcl",
+    "controls/CT-05.neg2.tcl",
+    "controls/CT-05.neg3.tcl",
+    "controls/CT-05.neg4.tcl",
+    "controls/CT-05.neg5.tcl",
+    "controls/CT-05.neg6.tcl",
+    "controls/CT-05.neg7.tcl",
+    "controls/CT-05.neg8.tcl",
+    "controls/CT-05.neg9.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint task 5. Ground truth on the final database: clock-tree cells counted by tracing the clock network from the clock source port; skew recomputed after set_propagated_clock + estimate_parasitics -placement (sta::worst_clock_skew -setup). Tolerance 1e-4 ns covers 4-decimal rounding and the ~3.5e-5 ns stale value an agent gets when it estimated parasitics before legalizing. Version pitfall: parasitics estimated while the clock is still ideal leave the clock-tree nets without wire RC and propagating the clock afterwards does not add them (skew ~0.0018 instead of ~0.0032 ns); re-estimating after propagation repairs it only if no timing was computed with the propagated clock in between. Hence the instruction explicitly requires the clock-tree nets to carry estimated parasitics. Other pitfalls: report_cts must be called in the CTS session (a fresh session reports zeros); the skew report rounds to 2 digits unless more are requested; skipping estimation or assuming an ideal clock (skew 0) is rejected. Second order pitfall (neg7): estimating while the clock is ideal, then computing propagated-clock timing and only then re-estimating also leaves the clock nets without wire RC (0.0018 ns); the instruction's explicit 'clock-tree nets included' makes that output wrong, not just stale. Known blind spot: the hold skew equals the setup skew on this design, so a hold-skew value cannot be told apart."
+ },
+ {
+  "id": "CT-06",
+  "category": "cts",
+  "difficulty": "hard",
+  "instruction": "The clock tree has already been synthesized. Without modifying the design, write a description of the clock tree to outputs/ct06_clock_tree.txt with one line per clock-tree buffer and four whitespace-separated fields: <instance_name> <cell_name> <level> <register_sinks>. The level is 1 for the buffer driven directly by the clk input port, 2 for buffers driven by a level-1 buffer, and so on; register_sinks is the number of flip-flop clock pins driven directly by that buffer's output net (0 if it drives only other buffers). List every clock-tree buffer exactly once and write nothing else to the file.",
+  "start_state": "cts",
+  "expected_commands": [
+   "get_cells",
+   "get_nets",
+   "get_pins",
+   "ord::get_db_block"
+  ],
+  "expected_outcome": "Five lines: clkbuf_0_clk BUF_X4 1 0, and the four level-2 BUF_X4 leaf buffers with 10, 9, 7 and 9 register sinks.",
+  "validator": {
+   "name": "ct_tree_structure",
+   "params": {
+    "report": "outputs/ct06_clock_tree.txt"
+   }
+  },
+  "reference_script": "reference_scripts/CT-06.tcl",
+  "required_outputs": [
+   "outputs/ct06_clock_tree.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/CT-06.alt1.tcl",
+    "controls/CT-06.alt2.tcl",
+    "controls/CT-06.alt3.tcl",
+    "controls/CT-06.alt4.tcl",
+    "controls/CT-06.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/CT-06.neg1.tcl",
+    "controls/CT-06.neg2.tcl",
+    "controls/CT-06.neg3.tcl",
+    "controls/CT-06.neg4.tcl",
+    "controls/CT-06.neg5.tcl",
+    "controls/CT-06.neg6.tcl",
+    "controls/CT-06.neg7.tcl",
+    "controls/CT-06.neg8.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Exact comparison of the per-buffer (cell, level, register sinks) with the oracle trace of the final database; the design must be unchanged. Line order is free. Pitfall: report_cts in this session prints zeros (CTS metrics are not stored in the database), so the tree has to be inspected through the netlist; counting every pin on a buffer's output net includes the driver pin and the buffer loads. A library-qualified cell name (NangateOpenCellLibrary/BUF_X4) is accepted. design_unchanged also compares placement status counts and the traced clock-tree connectivity with the starting state (a rewired register clock pin keeps masters and positions unchanged)."
+ },
+ {
+  "id": "FP-01",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "The synthesized gcd netlist is loaded but has no floorplan yet. Initialize the floorplan with a target core utilization of 40%, a core aspect ratio (height/width) of 1.0 and 2 um of spacing between the core and the die boundary on all four sides, using standard-cell rows of site FreePDK45_38x28_10R_NP_162NW_34O. Do not modify the netlist. Then verify the resulting geometry by writing the file outputs/fp_geometry.txt with exactly three lines (all coordinates in microns with three decimals):\nDIE <llx> <lly> <urx> <ury>\nCORE <llx> <lly> <urx> <ury>\nUTIL <value>\nwhere DIE is the die area, CORE is the core area as stored in the design database after the rows are created (the bounding box of the placement rows), and UTIL is the achieved core utilization in percent (total standard-cell area divided by the CORE area, times 100).",
+  "start_state": "synth",
+  "expected_commands": [
+   "initialize_floorplan",
+   "ord::get_die_area",
+   "ord::get_core_area",
+   "rsz::utilization"
+  ],
+  "expected_outcome": "A square floorplan with ~2 um core margins and ~40% utilization (41.4% after row/site snapping), and a report whose die, core and utilization values match the database.",
+  "validator": {
+   "name": "fp_util_init_report",
+   "params": {
+    "site": "FreePDK45_38x28_10R_NP_162NW_34O",
+    "utilization": 0.4,
+    "util_tol": 0.02,
+    "aspect_ratio": 1.0,
+    "ar_tol": 0.06,
+    "margin_um": 2.0,
+    "margin_tol_low": 0.05,
+    "margin_tol_high_x": 0.2,
+    "margin_tol_high_y": 1.45,
+    "report": "outputs/fp_geometry.txt",
+    "coord_tol": 0.01,
+    "util_report_tol": 0.55
+   }
+  },
+  "reference_script": "reference_scripts/FP-01.tcl",
+  "required_outputs": [
+   "outputs/fp_geometry.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/FP-01.alt1.tcl",
+    "controls/FP-01.alt2.tcl",
+    "controls/FP-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/FP-01.neg1.tcl",
+    "controls/FP-01.neg2.tcl",
+    "controls/FP-01.neg3.tcl",
+    "controls/FP-01.neg4.tcl",
+    "controls/FP-01.neg5.tcl",
+    "controls/FP-01.neg6.tcl",
+    "controls/FP-01.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint Task 1. Rows snap the core inwards to the site grid (0.19 um) and row height (1.4 um), so the measured utilization of the reference is 41.35% (core 35.91 x 35.0 um): util_tol 0.02 accepts this while rejecting 35%/45%. Each margin grows by < 1 site (0.19 um) left/right and < 1 row (1.4 um) bottom/top, hence the per-axis upper tolerances (a 2.5 um spacing gives a 2.66 um left margin and fails). The report is compared with the probe (rows bounding box = ord::get_core_area / dbBlock::getCoreArea in this version); UTIL tolerance 0.55 points covers the integer rounding of report_design_area (41 vs 41.35). Pitfalls: -utilization is a percentage (0.4 means 0.4%), and the core reported by the tool is the snapped row area, not the requested box. Further pitfalls (negative control neg7): get_property <lib_cell> area returns 1 for every cell in this build (UTIL 28.8), and rsz::design_area crashes OpenROAD (exit -11) unless the resizer was initialised first (rsz::utilization and report_design_area are safe)."
+ },
+ {
+  "id": "FP-02",
+  "category": "floorplanning",
+  "difficulty": "easy",
+  "instruction": "The synthesized gcd netlist is loaded but has no floorplan yet. Create the floorplan with an explicit die area from (0, 0) to (120, 100) um and an explicit core area from (10, 10) to (110, 90) um, with standard-cell rows of site FreePDK45_38x28_10R_NP_162NW_34O. Then create the routing tracks for all ten routing layers (metal1 to metal10). Do not modify the netlist.",
+  "start_state": "synth",
+  "expected_commands": [
+   "initialize_floorplan",
+   "make_tracks"
+  ],
+  "expected_outcome": "Die (0,0)-(120,100) um, rows filling the requested core (snapped to (10.07,11.2)-(109.82,89.6)), and track grids on metal1-metal10.",
+  "validator": {
+   "name": "fp_explicit_die_core",
+   "params": {
+    "site": "FreePDK45_38x28_10R_NP_162NW_34O",
+    "die": [
+     0,
+     0,
+     120,
+     100
+    ],
+    "core": [
+     10,
+     10,
+     110,
+     90
+    ],
+    "die_tol": 0.005,
+    "site_width": 0.19,
+    "row_height": 1.4
+   }
+  },
+  "reference_script": "reference_scripts/FP-02.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-02.alt1.tcl",
+    "controls/FP-02.alt2.tcl",
+    "controls/FP-02.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/FP-02.neg1.tcl",
+    "controls/FP-02.neg2.tcl",
+    "controls/FP-02.neg3.tcl",
+    "controls/FP-02.neg4.tcl",
+    "controls/FP-02.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The core stored in the database is the bounding box of the rows, which the tool snaps inwards to the site grid (x) and to whole rows (y); each core edge may therefore move inwards by less than one site width (0.19 um) or one row height (1.4 um). Either make_tracks or sourcing platform/Nangate45.tracks is accepted."
+ },
+ {
+  "id": "FP-03",
+  "category": "floorplanning",
+  "difficulty": "easy",
+  "instruction": "The floorplan is initialized but the IO pins are not placed yet. Place all 54 IO pins on the die boundary: pins on the left and right edges must use metal5 and pins on the top and bottom edges must use metal4, and neighbouring pins on the same edge must be at least 4 um apart (center to center). Do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "place_pins"
+  ],
+  "expected_outcome": "All 54 pins on the boundary, metal5 on left/right, metal4 on top/bottom, >= 4 um apart along each edge.",
+  "validator": {
+   "name": "fp_io_layers_spacing",
+   "params": {
+    "hor_layer": "metal5",
+    "ver_layer": "metal4",
+    "min_distance_um": 4.0,
+    "spacing_tol_um": 0.005
+   }
+  },
+  "reference_script": "reference_scripts/FP-03.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-03.alt1.tcl",
+    "controls/FP-03.alt2.tcl",
+    "controls/FP-03.alt3.tcl",
+    "controls/FP-03.alt4.tcl",
+    "controls/FP-03.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/FP-03.neg1.tcl",
+    "controls/FP-03.neg2.tcl",
+    "controls/FP-03.neg3.tcl",
+    "controls/FP-03.neg4.tcl",
+    "controls/FP-03.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Pin shapes are read from the final database by an oracle query. A pin in a die corner touches two edges and is accepted on the layer of either. The pin placer rounds the minimum distance up to whole tracks (4 um -> 15 x 0.28 um = 4.2 um). With unplaced cells the placer clusters pins, so omitting the minimum distance gives 0.56 um spacing. Pitfall: -min_distance_in_tracks changes the unit of -min_distance. A pin counts as on an edge when its shape touches or straddles that edge from inside the die span (pin extensions beyond the die are accepted)."
+ },
+ {
+  "id": "FP-04",
+  "category": "floorplanning",
+  "difficulty": "easy",
+  "instruction": "The floorplan of gcd is complete (die/core, rows, routing tracks, placed IO pins, tap cells and the power grid). Save it as a DEF file at outputs/gcd_floorplan.def. The downstream tool only reads DEF version 5.7, so the file must be written in DEF 5.7 format (header line VERSION 5.7). Do not change the design.",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "write_def"
+  ],
+  "expected_outcome": "outputs/gcd_floorplan.def in DEF 5.7 with the floorplan's die area, 57 rows, tracks, 461 components, 54 placed pins and the VDD/VSS special nets.",
+  "validator": {
+   "name": "fp_def_export",
+   "params": {
+    "file": "outputs/gcd_floorplan.def",
+    "version": "5.7",
+    "tap_master": "TAPCELL_X1",
+    "supply_nets": [
+     "VDD",
+     "VSS"
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/FP-04.tcl",
+  "required_outputs": [
+   "outputs/gcd_floorplan.def"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/FP-04.alt1.tcl",
+    "controls/FP-04.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/FP-04.neg1.tcl",
+    "controls/FP-04.neg2.tcl",
+    "controls/FP-04.neg3.tcl",
+    "controls/FP-04.neg4.tcl",
+    "controls/FP-04.neg5.tcl",
+    "controls/FP-04.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The DEF content is compared with the starting-state probe (die area, row count, track layers, component and tap counts, every pin's layer and location, followpin rails = rows + 1, signal net count), so a hand-written or stale DEF fails. write_def defaults to DEF 5.8; odb::write_def <block> <file> 5.7 is an equivalent API. The final database must also equal the starting state (design_unchanged: die/core/rows/tracks, instances and their status, pin locations, nets, power-grid wires), as the instruction says. For this design the 5.7 and 5.8 files differ only in the VERSION line."
+ },
+ {
+  "id": "FP-05",
+  "category": "floorplanning",
+  "difficulty": "hard",
+  "instruction": "The floorplan is initialized but the IO pins are not placed yet. Place all IO pins on the die boundary, using metal3 for pins on the left and right edges and metal2 for pins on the top and bottom edges. All 32 pins of the input bus req_msg must be on the bottom edge and ordered by bit index from left to right: req_msg[0] is the leftmost and the x coordinate strictly increases with the bit index up to req_msg[31]. The remaining pins may be placed anywhere on the boundary. Do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "set_io_pin_constraint",
+   "place_pins"
+  ],
+  "expected_outcome": "All pins placed on metal3/metal2; req_msg[0..31] on the bottom edge with strictly increasing x.",
+  "validator": {
+   "name": "fp_io_bus_order",
+   "params": {
+    "hor_layer": "metal3",
+    "ver_layer": "metal2",
+    "bus": "req_msg",
+    "width": 32,
+    "edge": "bottom"
+   }
+  },
+  "reference_script": "reference_scripts/FP-05.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-05.alt1.tcl",
+    "controls/FP-05.alt2.tcl",
+    "controls/FP-05.alt3.tcl",
+    "controls/FP-05.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/FP-05.neg1.tcl",
+    "controls/FP-05.neg2.tcl",
+    "controls/FP-05.neg3.tcl",
+    "controls/FP-05.neg4.tcl",
+    "controls/FP-05.neg5.tcl",
+    "controls/FP-05.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version-specific pitfalls: in set_io_pin_constraint -group takes literal pin names, so a glob such as req_msg* only triggers warning PPL-0047 and the group/order is silently dropped; get_ports req_msg* returns the bits in descending order (req_msg[31] first) and passing port objects fails with PPL-0061. A bit-ordered list (loop or lsort -dictionary) with -group -order, or explicit place_pin calls, solve it. Constraints must be set before place_pins."
+ },
+ {
+  "id": "FP-06",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "The floorplan is initialized (placement rows exist) but there are no well-tap or endcap cells yet. Insert TAPCELL_X1 well-tap cells in a checkerboard pattern with a tap distance of 20 um: within a row the tap cells are 2 x 20 = 40 um apart (on the site grid) and the taps of adjacent rows are staggered by 20 um; the first and last rows may contain the taps of both phases. In addition, place a TAPCELL_X1 endcap at both ends of every row. Do not insert any other cells and do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "tapcell"
+  ],
+  "expected_outcome": "114 endcaps (two per row) and 118 checkerboard taps (row pitch 39.9 um, rows offset by 19.95 um).",
+  "validator": {
+   "name": "fp_tapcells",
+   "params": {
+    "tap_master": "TAPCELL_X1",
+    "tap_distance_um": 20.0,
+    "tap_tol_um": 0.4
+   }
+  },
+  "reference_script": "reference_scripts/FP-06.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-06.alt1.tcl",
+    "controls/FP-06.alt2.tcl",
+    "controls/FP-06.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/FP-06.neg1.tcl",
+    "controls/FP-06.neg2.tcl",
+    "controls/FP-06.neg3.tcl",
+    "controls/FP-06.neg4.tcl",
+    "controls/FP-06.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Tool semantics: tapcell -distance d puts taps 2d apart in a row and offsets alternate rows by d; the first/last rows get both phases. The validator checks the geometry, not the command: endcaps at both row ends, every in-row gap <= 2d + 0.4 um, interior taps >= 2d - 0.4 um apart (>= d - 0.4 in the first/last row), adjacent rows staggered by >= d - 0.4 um, no overlaps and no extra instances. 0.4 um = two sites of snapping. place_endcaps -endcap X also fills the first and last rows with boundary cells (rejected); -endcap_vertical plus place_tapcells reproduces tapcell exactly."
+ },
+ {
+  "id": "FP-07",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "The floorplan is initialized but there is no power grid yet. Build the VDD/VSS power distribution network exactly as defined by the platform PDN configuration file platform/Nangate45.pdn.tcl (metal1 standard-cell rails, metal4 and metal7 straps and the vias connecting them), and make sure the power and ground pins of every standard cell are connected to VDD and VSS respectively. Do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "source",
+   "pdngen"
+  ],
+  "expected_outcome": "VDD/VSS special nets with 58 metal1 followpin rails, three metal4 straps and two metal7 straps (what pdngen keeps after trimming) plus vias, and all 362 cells connected to VDD/VSS.",
+  "validator": {
+   "name": "fp_pdn_platform",
+   "params": {
+    "pdn_config": "platform/Nangate45.pdn.tcl",
+    "layer_widths_um": {
+     "metal1": 0.17,
+     "metal4": 0.48,
+     "metal7": 1.4
+    }
+   }
+  },
+  "reference_script": "reference_scripts/FP-07.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-07.alt1.tcl",
+    "controls/FP-07.alt2.tcl",
+    "controls/FP-07.alt3.tcl",
+    "controls/FP-07.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/FP-07.neg1.tcl",
+    "controls/FP-07.neg2.tcl",
+    "controls/FP-07.neg3.tcl",
+    "controls/FP-07.neg4.tcl",
+    "controls/FP-07.neg5.tcl",
+    "controls/FP-07.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The oracle removes the agent's VDD/VSS wires in its own session, rebuilds the grid from the platform file on the same floorplan and requires every reference shape to be present, all supply shapes to be on the configured layers/widths and at least as many vias. Untrimmed grids (pdngen -skip_trim keeps two extra configured metal7 VDD straps) are accepted. Pitfall: sourcing the file only defines the grid; pdngen must be run. Global connections (add_global_connection + global_connect) are part of the file. 'Exactly' is enforced in both directions: every agent VDD/VSS shape must lie inside a shape of the trimmed or the untrimmed reference build (grid_no_unconfigured_shapes), so extra straps fail. In this build add_global_connection connects the existing cells immediately (-defer_connection is deprecated), so an explicit global_connect is optional (alt4); cells created later stay unconnected."
+ },
+ {
+  "id": "FP-08",
+  "category": "floorplanning",
+  "difficulty": "hard",
+  "instruction": "Run the complete floorplan stage for the synthesized gcd netlist in one script, without modifying the netlist:\n1. initialize the floorplan with a target core utilization of 30%, a core aspect ratio of 1.0 and 4 um of core-to-die spacing on all four sides, with standard-cell rows of site FreePDK45_38x28_10R_NP_162NW_34O;\n2. create the routing tracks for all ten routing layers (metal1 to metal10);\n3. place all IO pins on the die boundary, using metal3 for pins on the left/right edges and metal2 for pins on the top/bottom edges;\n4. insert TAPCELL_X1 well-tap cells in a checkerboard with a tap distance of 15 um (taps 2 x 15 = 30 um apart within a row, adjacent rows staggered by 15 um; the first and last rows may contain both phases), a TAPCELL_X1 endcap at both ends of every row, and no other cells;\n5. build the VDD/VSS power grid exactly as defined by the platform PDN configuration file platform/Nangate45.pdn.tcl, with the power and ground pins of every cell, including the tap and endcap cells, connected to VDD and VSS.",
+  "start_state": "synth",
+  "expected_commands": [
+   "initialize_floorplan",
+   "make_tracks",
+   "place_pins",
+   "tapcell",
+   "pdngen"
+  ],
+  "expected_outcome": "~30% utilization square floorplan with 4 um margins, tracks on all layers, all pins placed on metal3/metal2, endcaps + 15 um checkerboard taps, and the platform grid with every cell connected.",
+  "validator": {
+   "name": "fp_full_flow",
+   "params": {
+    "site": "FreePDK45_38x28_10R_NP_162NW_34O",
+    "utilization": 0.3,
+    "util_tol": 0.02,
+    "aspect_ratio": 1.0,
+    "ar_tol": 0.06,
+    "margin_um": 4.0,
+    "margin_tol_low": 0.05,
+    "margin_tol_high_x": 0.2,
+    "margin_tol_high_y": 1.45,
+    "hor_layer": "metal3",
+    "ver_layer": "metal2",
+    "tap_master": "TAPCELL_X1",
+    "tap_distance_um": 15.0,
+    "tap_tol_um": 0.4,
+    "pdn_config": "platform/Nangate45.pdn.tcl",
+    "layer_widths_um": {
+     "metal1": 0.17,
+     "metal4": 0.48,
+     "metal7": 1.4
+    }
+   }
+  },
+  "reference_script": "reference_scripts/FP-08.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/FP-08.alt1.tcl",
+    "controls/FP-08.alt2.tcl",
+    "controls/FP-08.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/FP-08.neg1.tcl",
+    "controls/FP-08.neg2.tcl",
+    "controls/FP-08.neg3.tcl",
+    "controls/FP-08.neg4.tcl",
+    "controls/FP-08.neg5.tcl",
+    "controls/FP-08.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Combines the FP-01/03/06/07 checks on the agent's own floorplan (the reference grid is rebuilt by the oracle on that floorplan; on this small core pdngen trims all metal7 straps). Ordering pitfalls: initialize_floorplan deletes existing tracks and place_pins needs tracks; global_connect in the PDN file only connects cells that exist at that moment, so taps inserted after the grid stay unconnected unless global_connect is re-run. Measured utilization of the reference is 30.9% after snapping. The FP-07 grid exactness check (no unconfigured supply shapes) applies here too."
+ },
+ {
+  "id": "IN-01",
+  "category": "inspection",
+  "difficulty": "easy",
+  "instruction": "List all top-level IO ports of the gcd design together with their directions. Write them to outputs/io_ports.txt with one line per port in the form '<port_name> <direction>', where <direction> is either input or output. Multi-bit (bus) ports must be listed bit by bit, one line per bit in bit-select notation (for example, a 2-bit bus d gives one line for d[0] and one for d[1]). The order of the lines does not matter; write no header or other lines. Do not modify the design.",
+  "start_state": "synth",
+  "expected_commands": [
+   "get_ports",
+   "get_full_name",
+   "get_property"
+  ],
+  "expected_outcome": "outputs/io_ports.txt lists all 54 port bits (36 inputs including clk, 18 outputs) with their correct directions; the design is unchanged.",
+  "validator": {
+   "name": "in_io_ports",
+   "params": {
+    "file": "outputs/io_ports.txt"
+   }
+  },
+  "reference_script": "reference_scripts/IN-01.tcl",
+  "required_outputs": [
+   "outputs/io_ports.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-01.alt1.tcl",
+    "controls/IN-01.alt2.tcl",
+    "controls/IN-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-01.neg1.tcl",
+    "controls/IN-01.neg2.tcl",
+    "controls/IN-01.neg3.tcl",
+    "controls/IN-01.neg4.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth: the baseline probe io_pins (OpenDB BTerm names and IO types). Directions are case-insensitive (INPUT from OpenDB is fine; port names are case-sensitive); parsing is tolerant of Tcl list quoting ({req_msg[0]}, req_msg\\[0\\]), tabs, ':' separators, blank and '#' lines; columns after the direction are ignored. Every bit must appear exactly once. Version pitfall: all_inputs takes no options in this build (no -no_clocks; it errors with 'wrong # args'). Negatives: clock port filtered out of the inputs (the SDC non-clock-inputs idiom), signal type written instead of the direction, buses not expanded bit by bit, report written to the working directory instead of outputs/. Caveat: the gcd port interface is public and identical in every state, so a list reproduced from memory would also pass; that is accepted as a correct outcome (this easy task mainly exercises port/direction queries and file output)."
+ },
+ {
+  "id": "IN-02",
+  "category": "inspection",
+  "difficulty": "easy",
+  "instruction": "Export the current gate-level netlist of the design, which now includes the clock-tree buffers inserted by clock tree synthesis, as a structural Verilog file outputs/gcd_netlist.v. The file must define the top module gcd with all of its ports and contain every standard-cell instance of the current design with its instance name, cell type and pin connections exactly as they are in the database. Physical-only cells (the tap cells) may be included or omitted. Do not modify the design.",
+  "start_state": "cts",
+  "expected_commands": [
+   "write_verilog"
+  ],
+  "expected_outcome": "outputs/gcd_netlist.v is a structural Verilog netlist of module gcd with the 54 port bits and all 352 standard-cell instances (including the 5 BUF_X4 clock-tree buffers) connected exactly as in the database; the design is unchanged.",
+  "validator": {
+   "name": "in_verilog_netlist",
+   "params": {
+    "file": "outputs/gcd_netlist.v",
+    "top": "gcd"
+   }
+  },
+  "reference_script": "reference_scripts/IN-02.tcl",
+  "required_outputs": [
+   "outputs/gcd_netlist.v"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-02.alt1.tcl",
+    "controls/IN-02.alt2.tcl",
+    "controls/IN-02.alt3.tcl",
+    "controls/IN-02.alt4.tcl",
+    "controls/IN-02.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/IN-02.neg1.tcl",
+    "controls/IN-02.neg2.tcl",
+    "controls/IN-02.neg3.tcl",
+    "controls/IN-02.neg4.tcl",
+    "controls/IN-02.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Checked with a built-in structural-Verilog reader against an OpenDB connectivity oracle on the cts snapshot: port bits and directions, instance names and cell types (tap cells optional), and connectivity compared as a partition of instance pins and ports into nets, so net naming, pins on single-pin nets written as unconnected (.QN()), escaped bit-blasted ports, assign statements, instance order (-sort) and power pins (-include_pwr_gnd) do not matter (alt3 and alt5 are hand-written OpenDB and STA dumps with renamed nets / escaped names / unconnected dangling pins). Single mutations (two pins swapped, one CK pin moved, one cell resized or dropped, one port direction flipped) all fail. Version pitfall: read_verilog + link_design on the loaded design silently replaces the post-CTS netlist with the synthesized one (no error); together with copying design/gcd.v (stale netlist), writing DEF, remove_buffers before writing (drops the 5 clock-tree buffers) and a wrong file name this is rejected. In this build -remove_cells takes master names/patterns; passing get_lib_cells objects errors (STA-0467)."
+ },
+ {
+  "id": "IN-03",
+  "category": "inspection",
+  "difficulty": "medium",
+  "instruction": "Produce a cell-usage summary of the current design: the number of instances of each standard-cell type (library cell). Count only cells that have a logic function and exclude physical-only cells such as tap/endcap cells and filler cells. Write outputs/cell_usage.txt with one line per cell type used in the design (cell types with zero instances are not listed) in the form '<cell_type> <count>' (any order), followed by one final line 'total <count>' giving the total number of counted instances. Write no other lines and do not modify the design.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "get_cells",
+   "get_property"
+  ],
+  "expected_outcome": "26 cell types totalling 347 instances (e.g. NAND2_X1 103, DFF_X1 35, OAI21_X1 35); the 114 TAPCELL_X1 instances are excluded; the design is unchanged.",
+  "validator": {
+   "name": "in_cell_usage",
+   "params": {
+    "file": "outputs/cell_usage.txt"
+   }
+  },
+  "reference_script": "reference_scripts/IN-03.tcl",
+  "required_outputs": [
+   "outputs/cell_usage.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-03.alt1.tcl",
+    "controls/IN-03.alt2.tcl",
+    "controls/IN-03.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-03.neg1.tcl",
+    "controls/IN-03.neg2.tcl",
+    "controls/IN-03.neg3.tcl",
+    "controls/IN-03.neg4.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version pitfall: report_cell_usage does not exist in this build, so a solution has to iterate the instances (STA get_cells + ref_name, or OpenDB masters). Ground truth: OpenDB oracle on the gplaced snapshot; physical-only means filler or master class WELLTAP/SPACER/ANTENNACELL/ENDCAP (only TAPCELL_X1 here). Counts must match exactly. The synthesized netlist design/gcd.v is stale (it still has the 15 buffers removed during floorplanning), so counting cells in that file fails. Also rejected: a total that counts the tap cells while the per-type rows do not. Alternatives cover OpenDB masters, STA ref_name and a loop over liberty cells (tap cells have no liberty model)."
+ },
+ {
+  "id": "IN-04",
+  "category": "inspection",
+  "difficulty": "medium",
+  "instruction": "Find the five signal nets with the highest fanout in the current design, excluding the clock net and the power/ground nets. The fanout of a net is the number of sinks it drives: input pins of cell instances plus top-level output ports connected to the net (the driving pin is not counted). Write outputs/high_fanout_nets.txt with exactly five lines of the form '<net_name> <fanout>', sorted by decreasing fanout (nets with equal fanout may appear in any order). Do not modify the design.",
+  "start_state": "placed",
+  "expected_commands": [
+   "get_nets",
+   "get_pins",
+   "get_ports",
+   "get_property"
+  ],
+  "expected_outcome": "req_rdy 41, _188_ 32, then _233_, _236_ and _240_ with 16 each; the design is unchanged.",
+  "validator": {
+   "name": "in_high_fanout_nets",
+   "params": {
+    "file": "outputs/high_fanout_nets.txt",
+    "count": 5
+   }
+  },
+  "reference_script": "reference_scripts/IN-04.tcl",
+  "required_outputs": [
+   "outputs/high_fanout_nets.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-04.alt1.tcl",
+    "controls/IN-04.alt2.tcl",
+    "controls/IN-04.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-04.neg1.tcl",
+    "controls/IN-04.neg2.tcl",
+    "controls/IN-04.neg3.tcl",
+    "controls/IN-04.neg4.tcl",
+    "controls/IN-04.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth: OpenDB oracle counting INPUT ITerms (signal pins) plus OUTPUT BTerms per net; excluded are supply/special nets and clock nets (connected to a clock source port or of signal type CLOCK). Any top-5 selection consistent with ties is accepted (no tie at the 5th place here: the next net has 9). Distractors: the clock net clk (35 sinks) ranks 2nd if kept; VDD/VSS carry 461 ITerms in OpenDB; counting all pins of a net (driver included) gives _188_ 33; ignoring the port sink gives req_rdy 40 (neg5); increasing order fails sorted_decreasing (neg4). Exactly five lines and decreasing order are required, as instructed. Version pitfalls: get_nets -of_objects rejects port objects (STA-0467) and returns NULL for the top-level pin returned by a clock's sources property, so the clock net is easiest found from the register clock pins or by name."
+ },
+ {
+  "id": "IN-05",
+  "category": "inspection",
+  "difficulty": "hard",
+  "instruction": "Write a floorplan and area summary of the routed design to outputs/floorplan_summary.txt with exactly these four lines: 'die_area <llx> <lly> <urx> <ury>' giving the die boundary (lower-left and upper-right corner) in microns; 'core_area <llx> <lly> <urx> <ury>' giving the core area boundary in microns; 'cell_area <value>' giving the total area in square microns of all cell instances except filler cells (tap cells are included); 'utilization <value>' giving cell_area as a percentage of the core area (for example 12.34 for 12.34%). Write plain numbers without units, each with a precision of at least two decimal places. Do not modify the design.",
+  "start_state": "routed",
+  "expected_commands": [
+   "ord::get_db_block",
+   "getDieArea",
+   "getCoreArea",
+   "getInsts",
+   "getMaster",
+   "isFiller"
+  ],
+  "expected_outcome": "die_area 0 0 100.13 100.8, core_area 10.07 11.2 90.25 91.0, cell_area 578.82, utilization 9.05; the design is unchanged.",
+  "validator": {
+   "name": "in_floorplan_summary",
+   "params": {
+    "file": "outputs/floorplan_summary.txt",
+    "box_tol_um": 0.01,
+    "value_tol": 0.01
+   }
+  },
+  "reference_script": "reference_scripts/IN-05.tcl",
+  "required_outputs": [
+   "outputs/floorplan_summary.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-05.alt1.tcl",
+    "controls/IN-05.alt2.tcl",
+    "controls/IN-05.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-05.neg1.tcl",
+    "controls/IN-05.neg2.tcl",
+    "controls/IN-05.neg3.tcl",
+    "controls/IN-05.neg4.tcl",
+    "controls/IN-05.neg5.tcl",
+    "controls/IN-05.neg6.tcl",
+    "controls/IN-05.neg7.tcl",
+    "controls/IN-05.neg8.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version pitfalls: report_design_area prints only rounded integers ('Design area 579 u^2 9% utilization.') through the logger, and in this build that output can be neither redirected ('>' gives 'wrong # args') nor captured (with_output_to_variable, log_begin and sta::redirect_file_begin all yield nothing); get_property area on liberty cells is rounded to an integer and TAPCELL_X1 has no liberty model; the undocumented rsz::design_area returns square meters and crashes OpenROAD (segfault) unless rsz::utilization (a fraction) or report_design_area was called first. Summing every instance includes the 1387 filler cells (5819.55 um^2, i.e. 100% utilization); dropping the tap cells gives 548.49 / 8.57; a die-based utilization gives 5.73. remove_fillers followed by summing all instances gives the right numbers but modifies the design and fails design_unchanged (which also compares routed-net count and detailed wirelength). Ground truth: die/core from the baseline probe, cell area from an OpenDB oracle (non-filler masters). Tolerance 0.01 = one unit of the requested second decimal (accepts rounding or truncation); every wrong approach above misses by more than 0.4 (liberty areas, rounded to integers: 376.00 / 5.88; Tcl integer division of DBU values: 100 / 10 / 0 ...), and the integer report values (579 u^2, 9 %) miss by 0.18 and 0.046."
+ },
+ {
+  "id": "IN-06",
+  "category": "inspection",
+  "difficulty": "hard",
+  "instruction": "Analyze the flip-flops of the design and the cells that drive their clock pins. Write two files: (1) outputs/flop_types.txt with one line '<cell_type> <count>' for each flip-flop cell type used in the design (any order), followed by a final line 'total <count>' with the total number of flip-flops; (2) outputs/flop_clock_drivers.txt with one line '<instance_name> <count>' for every cell instance whose output directly drives the clock pin of at least one flip-flop, where <count> is the number of flip-flops whose clock pin it drives (any order). Write no other lines and do not modify the design.",
+  "start_state": "grouted",
+  "expected_commands": [
+   "all_registers",
+   "get_property",
+   "get_nets",
+   "get_pins",
+   "get_cells",
+   "get_full_name"
+  ],
+  "expected_outcome": "flop_types: DFF_X1 22, DFF_X2 13, total 35; flop_clock_drivers: clkbuf_2_0__f_clk 10, clkbuf_2_1__f_clk 9, clkbuf_2_2__f_clk 7, clkbuf_2_3__f_clk 9; the design is unchanged.",
+  "validator": {
+   "name": "in_flop_report",
+   "params": {
+    "types_file": "outputs/flop_types.txt",
+    "drivers_file": "outputs/flop_clock_drivers.txt"
+   }
+  },
+  "reference_script": "reference_scripts/IN-06.tcl",
+  "required_outputs": [
+   "outputs/flop_types.txt",
+   "outputs/flop_clock_drivers.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/IN-06.alt1.tcl",
+    "controls/IN-06.alt2.tcl",
+    "controls/IN-06.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/IN-06.neg1.tcl",
+    "controls/IN-06.neg2.tcl",
+    "controls/IN-06.neg3.tcl",
+    "controls/IN-06.neg4.tcl",
+    "controls/IN-06.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth: STA all_registers -edge_triggered identifies the flip-flops (liberty based), OpenDB gives the clock-pin connectivity. Version pitfall: dbMaster isSequential returns false for every master in this build (the harness probe's sequential_count is 0 as well), so OpenDB-only flop detection finds nothing; all_fanin / all_fanout do not exist in this build. Rejected: tracing the clock path back to the port (transitive drivers, root buffer listed) and get_cells -of_objects on the clock net (returns the flip-flops too). The CTS root buffer clkbuf_0_clk drives only the four leaf buffers and must not be listed; clock net names are not instance names. A harmless extra 'total' line in the drivers file is ignored; counts are exact."
+ },
+ {
+  "id": "OP-01",
+  "category": "optimization",
+  "difficulty": "easy",
+  "instruction": "Insert input buffers for this placed block: every primary input port except the clock port clk must drive exactly one buffer, and that buffer must drive all the loads the port drove before. Do not buffer the clock input or any output port. Every new buffer must be placed inside the core area; legalizing the placement is not required in this step (detailed placement will be rerun later in the flow).",
+  "start_state": "placed",
+  "expected_commands": [
+   "buffer_ports -inputs"
+  ],
+  "expected_outcome": "Each of the 35 data input ports drives a single buffer that drives the port's original loads; clk and the 18 output ports keep their original connections; all buffers are placed inside the core.",
+  "validator": {
+   "name": "op_buffer_inputs",
+   "params": {
+    "clock_port": "clk"
+   }
+  },
+  "reference_script": "reference_scripts/OP-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/OP-01.alt1.tcl",
+    "controls/OP-01.alt2.tcl",
+    "controls/OP-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/OP-01.neg1.tcl",
+    "controls/OP-01.neg2.tcl",
+    "controls/OP-01.neg3.tcl",
+    "controls/OP-01.neg4.tcl",
+    "controls/OP-01.neg5.tcl",
+    "controls/OP-01.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Structural ground truth from a buffer-transparent connectivity oracle on the final and starting databases: every data input port net has exactly one sink and it is a buffer (master *BUF_X*, so a CLKBUF_X* also counts), every original driver (ports included) still reaches exactly its original sink pins, every output port keeps its original driver instance, and the clock path of every register is unchanged. Any buffer size and any insertion method pass (buffer_ports, or hand-made ODB buffers placed anywhere inside the core, legalized or not). Rejected: also buffering clk (clock path changes), buffers placed on the IO pins outside the core, one buffer per load pin instead of per port. buffer_ports places the new buffers at the core boundary next to the ports without legalizing them, which is why legality is explicitly not required (an extra legalization is accepted). Pitfall: buffer_ports without -inputs also buffers all outputs. In this build buffer_ports silently ignores a -buffer_cell option."
+ },
+ {
+  "id": "OP-02",
+  "category": "optimization",
+  "difficulty": "medium",
+  "instruction": "The clock tree is built, and hold timing currently passes with only about 53 ps of worst-case slack. Before routing we want more hold margin: repair hold timing so that every hold check has at least 80 ps (0.080 ns) of slack. The fix must not degrade setup timing: the worst setup slack may drop by at most 5 ps from its current value. Evaluate both with propagated clocks and placement-based parasitic estimates against the original timing constraints. Do not modify the clock tree, keep the logic function unchanged and leave the design legally placed.",
+  "start_state": "cts",
+  "expected_commands": [
+   "estimate_parasitics -placement",
+   "repair_timing -hold -hold_margin 0.08",
+   "detailed_placement"
+  ],
+  "expected_outcome": "About 20 hold buffers raise the worst hold slack from 0.053 ns to at least 0.080 ns while the worst setup slack stays at about -0.098 ns; clock tree, logic and legality intact.",
+  "validator": {
+   "name": "op_hold_margin",
+   "params": {
+    "min_hold_slack": 0.08,
+    "hold_tol": 0.0005,
+    "max_setup_degradation": 0.005
+   }
+  },
+  "reference_script": "reference_scripts/OP-02.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/OP-02.alt1.tcl",
+    "controls/OP-02.alt2.tcl",
+    "controls/OP-02.alt3.tcl",
+    "controls/OP-02.alt4.tcl",
+    "controls/OP-02.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/OP-02.neg1.tcl",
+    "controls/OP-02.neg2.tcl",
+    "controls/OP-02.neg3.tcl",
+    "controls/OP-02.neg4.tcl",
+    "controls/OP-02.neg5.tcl",
+    "controls/OP-02.neg6.tcl",
+    "controls/OP-02.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Hold and setup slack are measured by an oracle session on the final database that reloads the original SDC (with propagated clocks) and re-runs estimate_parasitics -placement, so SDC tricks such as a hold uncertainty only count through the netlist they produce (that route is a valid alternative). The reference reaches 0.0827 ns; hold_tol (0.5 ps) only absorbs rounding of the 1 ps-resolution target. Setup floor = starting oracle WNS (-0.0975 ns) - 5 ps. The netlist guard (buffer-transparent connectivity, clock path of every register clock pin, constrained hold endpoints) rejects delay obtained by disconnecting paths or retiming the clock. Pitfalls: the margin is in ns (-hold_margin 80 asks for 80 ns and the repair gives up), plain repair_timing -hold does nothing because hold is already met, and hold buffers leave the placement illegal until detailed_placement is rerun. Accepted variants: hold uncertainty + repair to zero, setup repair (-repair_tns 100) followed by hold repair, margins 0.085-0.15 ns. Rejected: an oversized margin with -allow_setup_violations (0.15 ns gives setup -0.117 ns), constraint-only changes in the agent session, delaying the clock by resizing clock-tree buffers. -hold_margin 0.08 with -allow_setup_violations, or without estimate_parasitics, still gives 0.0827 ns and passes."
+ },
+ {
+  "id": "OP-03",
+  "category": "optimization",
+  "difficulty": "medium",
+  "instruction": "Run post-CTS setup timing repair on this design. The repair must work on every violating endpoint, not only the most critical one: afterwards the worst setup slack must be -0.060 ns or better and the total negative setup slack -0.400 ns or better (currently about -0.098 ns and -0.481 ns), both evaluated with propagated clocks and placement-based parasitic estimates against the original timing constraints. Do not modify the clock tree, keep the logic function unchanged and leave the design legally placed.",
+  "start_state": "cts",
+  "expected_commands": [
+   "estimate_parasitics -placement",
+   "repair_timing -setup -repair_tns 100",
+   "detailed_placement"
+  ],
+  "expected_outcome": "Setup repair across all violating endpoints brings WNS to about -0.048 ns and TNS to about -0.22 to -0.34 ns (oracle) with a legal placement and an unchanged clock tree.",
+  "validator": {
+   "name": "op_setup_repair",
+   "params": {
+    "min_wns": -0.06,
+    "min_tns": -0.4,
+    "slack_tol": 0.0001
+   }
+  },
+  "reference_script": "reference_scripts/OP-03.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/OP-03.alt1.tcl",
+    "controls/OP-03.alt2.tcl",
+    "controls/OP-03.alt3.tcl",
+    "controls/OP-03.alt4.tcl",
+    "controls/OP-03.alt5.tcl",
+    "controls/OP-03.alt6.tcl"
+   ],
+   "negatives": [
+    "controls/OP-03.neg1.tcl",
+    "controls/OP-03.neg2.tcl",
+    "controls/OP-03.neg3.tcl",
+    "controls/OP-03.neg4.tcl",
+    "controls/OP-03.neg5.tcl",
+    "controls/OP-03.neg6.tcl",
+    "controls/OP-03.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version-specific pitfall: in this build repair_timing defaults to -repair_tns 0, i.e. only the worst endpoint is repaired; that alone gives WNS -0.048 ns but TNS -0.636 ns (worse than the start), and repeated runs, a setup margin without -repair_tns, or -repair_tns 1..30 do not help (TNS -0.62 to -0.64 ns). Repair on all endpoints (-repair_tns 50..100, with or without pin swapping / gate cloning, a preceding repair_design, a second pass or setup margins 0.01-0.2 ns) gives WNS -0.045 to -0.057 ns and TNS -0.17 to -0.34 ns (setup margins of 0.04-0.06 ns land at -0.31 to -0.34 ns, which is why the TNS bound is -0.400 and not tighter). Thresholds sit between these groups: WNS -0.060 vs start -0.0975 (and -0.071 when the repair is cut to -max_passes 5); TNS -0.400 vs the valid cluster (>= -0.34), the start (-0.481), repair_design only (-0.52) and worst-endpoint-only repair (-0.62/-0.64). Timing is measured by an oracle that reloads the original SDC and re-estimates parasitics, so relaxing the clock in the agent session cannot fake success. Logic guard is tolerant to pin swapping and gate cloning (per-instance sinks, clones allowed, no change of cell function family) and also requires an unchanged number of constrained setup endpoints; the clock-tree guard compares every register's clock driver chain (names and masters), so resizing clock buffers fails."
+ },
+ {
+  "id": "OP-04",
+  "category": "optimization",
+  "difficulty": "hard",
+  "instruction": "This block will be integrated under stricter electrical design rules than the library defaults: a maximum transition time of 0.05 ns, a maximum load capacitance of 10 fF and a maximum fanout of 10, applied to the whole design on top of the existing constraints. Apply these rules, count the pins that violate each of them on the current design, fix the violations by buffering and gate sizing, legalize the placement, and count again on the final design. Count with placement-based parasitic estimates that match the placement being measured. After the fix no transition or fanout violations may remain and at most 10 pins may still violate the capacitance limit; the logic function must not change. Write outputs/drv_summary.txt with exactly three lines, in this order: \"max_slew <before> <after>\", \"max_capacitance <before> <after>\" and \"max_fanout <before> <after>\", where <before> and <after> are the numbers of violating pins before and after the fix.",
+  "start_state": "placed",
+  "expected_commands": [
+   "set_max_transition",
+   "set_max_capacitance",
+   "set_max_fanout",
+   "estimate_parasitics -placement",
+   "report_check_types -max_slew -max_capacitance -max_fanout -violators",
+   "repair_design",
+   "detailed_placement"
+  ],
+  "expected_outcome": "76/22/5 slew/capacitance/fanout violators before; after repair_design, legalization and re-estimation 0/5/0 remain; outputs/drv_summary.txt reports exactly these counts.",
+  "validator": {
+   "name": "op_drv_repair_report",
+   "params": {
+    "report": "outputs/drv_summary.txt",
+    "max_transition": 0.05,
+    "max_capacitance": 10,
+    "max_fanout": 10,
+    "max_cap_violations_after": 10
+   }
+  },
+  "reference_script": "reference_scripts/OP-04.tcl",
+  "required_outputs": [
+   "outputs/drv_summary.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/OP-04.alt1.tcl",
+    "controls/OP-04.alt2.tcl",
+    "controls/OP-04.alt3.tcl",
+    "controls/OP-04.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/OP-04.neg1.tcl",
+    "controls/OP-04.neg2.tcl",
+    "controls/OP-04.neg3.tcl",
+    "controls/OP-04.neg4.tcl",
+    "controls/OP-04.neg5.tcl",
+    "controls/OP-04.neg6.tcl",
+    "controls/OP-04.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth: an oracle reloads the original SDC, applies the three stated rules with set_max_transition/set_max_capacitance/set_max_fanout on the design, runs estimate_parasitics -placement and counts violating pins with the same STA checks report_check_types uses (sta::check_slew_limits / check_capacitance_limits / check_fanout_limits, all violators); 'before' on the starting state, 'after' on the final database. Counts are integers and must match exactly. Plain repair_design leaves 5 capacitance violators (on its own buffers), margins or a second pass leave 1-4; repairing without parasitics leaves 18, hence the limit of 10. Pitfalls: counting without estimate_parasitics gives 42/11/5 before; counting after legalization without re-estimating gives 6 capacitance violators instead of 5; limits are in ns/fF (library units). Report parsing accepts any order and ':' ',' '=' separators but needs one line per check. Logic guard: buffer-transparent connectivity identical to the start (repair_design only buffers and resizes). Counting with sta::max_slew/max_capacitance/max_fanout_violation_count, sta::check_*_limits or '(VIOLATED)' rows of report_check_types -violators gives identical numbers. Rejected: capacitance limit written in pF (0.01 = 0.01 fF), counting report_check_types without -violators (only the worst pin, 1 per check), counting 'before' prior to applying the rules (0/0/0). A report with hard-coded but correct numbers cannot be told apart from a measured one."
+ },
+ {
+  "id": "PL-01",
+  "category": "placement",
+  "difficulty": "easy",
+  "instruction": "The floorplan of the gcd design is complete (die and core area, placement rows, IO pins, tap cells and power grid exist), but none of its standard cells has been placed yet. Run global placement so that the standard cells are spread over the core area with short total wirelength. When the script finishes, every standard cell must have a placed status and must lie completely inside the core area. Keep the existing tap cells. Legalization (detailed placement) is not required in this step.",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "global_placement"
+  ],
+  "expected_outcome": "All 347 standard cells are placed inside the core by a wirelength-driven global placement (cells spread, not stacked).",
+  "validator": {
+   "name": "pl_global_placement",
+   "params": {
+    "bin_um": 4.0,
+    "max_bin_density": 1.2,
+    "hpwl_ratio_max": 1.5,
+    "reference_script": "global_placement"
+   }
+  },
+  "reference_script": "reference_scripts/PL-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-01.alt1.tcl",
+    "controls/PL-01.alt2.tcl",
+    "controls/PL-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-01.neg1.tcl",
+    "controls/PL-01.neg2.tcl",
+    "controls/PL-01.neg3.tcl",
+    "controls/PL-01.neg4.tcl",
+    "controls/PL-01.neg5.tcl",
+    "controls/PL-01.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint task 2. Tap cells are fixed and are not part of the placement. 'Spread' is measured as the area-weighted mean density of the non-empty 4x4 um bins (core aligned): any real global placement gives 0.18 (uniform density) to 0.90 (density 1.0); stacking every cell at one point gives ~21 and initial placement only (-skip_nesterov_place) ~9, hence the 1.2 bound. Wirelength sanity bound: 1.5x the HPWL of a default global placement computed by the oracle (4741 um); target densities 0.3-1.0 give 4630-5150 um, -density uniform 6208 um. Hand-written placers pass the spread bound but not the wirelength bound (row packing in netlist order: density 0.86, HPWL 11536 um = 2.4x; random scatter: 27165 um = 5.7x). The legalizer alone (detailed_placement) leaves unplaced cells unplaced in this build. Re-running tapcell keeps the tap-cell count (passes); '-overflow 0.9' (stopping criterion mistaken for a density) stops with density 6.4 and fails."
+ },
+ {
+  "id": "PL-02",
+  "category": "placement",
+  "difficulty": "easy",
+  "instruction": "Global placement has been run on the gcd design, but the standard cells are not legalized yet (they overlap and are not aligned to the placement sites). Legalize the existing global placement so that every standard cell sits on a legal site of a placement row, in the orientation of that row, without overlaps. The cells must stay close to their current global-placement locations: do not re-run global placement, no cell may move by more than 10 um and the average movement must not exceed 2 um.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "detailed_placement",
+   "check_placement"
+  ],
+  "expected_outcome": "A legal placement (check_placement passes, row orientations respected) with every cell within a few microns of its global-placement location.",
+  "validator": {
+   "name": "pl_legalize",
+   "params": {
+    "max_disp_um": 10.0,
+    "mean_disp_um": 2.0
+   }
+  },
+  "reference_script": "reference_scripts/PL-02.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-02.alt1.tcl",
+    "controls/PL-02.alt2.tcl",
+    "controls/PL-02.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-02.neg1.tcl",
+    "controls/PL-02.neg2.tcl",
+    "controls/PL-02.neg3.tcl",
+    "controls/PL-02.neg4.tcl",
+    "controls/PL-02.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Displacement is Euclidean, measured on the probe positions (lower-left corners). Default legalization moves cells by at most 2.0 um (mean 0.55 um); padded variants up to 3.4 um; incremental global placement + legalization max 2.7 um. Re-running global placement before legalizing moves cells by ~15 um on average (max ~40 um). Legality = probe check_placement (in the agent's session, so it also honours padding the agent set) plus a row-orientation check, which check_placement does not perform in this build. improve_placement on an unlegalized placement leaves overlaps and site-alignment errors. An extra improve_placement pass after legalization moves cells up to ~25-40 um and therefore violates 'stay close'. The numeric bounds are stated in the instruction because the ORFS detail_place recipe (legalize + improve_placement + mirroring) is a plausible reading of 'legalize'; it moves cells up to 38.8 um (mean 2.11) and fails. Legal variants: max 1.98-3.57 um, mean 0.63-0.89 um. A hand-written snap-to-site legalizer leaves overlaps (check_placement fails)."
+ },
+ {
+  "id": "PL-03",
+  "category": "placement",
+  "difficulty": "medium",
+  "instruction": "Inspect the current placement utilization of the gcd design without modifying the design. For this check, utilization is defined as the total area of all placed standard-cell instances (logic cells and tap cells) divided by the core area. Write the file outputs/utilization.txt with exactly two lines:\nutilization_percent: <utilization in percent, with two decimals>\nabove_target: <yes or no>\nwhere above_target states whether the utilization is above our target utilization of 70%.",
+  "start_state": "placed",
+  "expected_commands": [
+   "report_design_area",
+   "rsz::utilization (or an odb area sum)",
+   "open/puts/close"
+  ],
+  "expected_outcome": "outputs/utilization.txt reports utilization_percent: 8.18 and above_target: no; the design is unchanged.",
+  "validator": {
+   "name": "pl_utilization_report",
+   "params": {
+    "file": "utilization.txt",
+    "target_percent": 70.0,
+    "tol_percent": 0.02
+   }
+  },
+  "reference_script": "reference_scripts/PL-03.tcl",
+  "required_outputs": [
+   "outputs/utilization.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/PL-03.alt1.tcl",
+    "controls/PL-03.alt2.tcl",
+    "controls/PL-03.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-03.neg1.tcl",
+    "controls/PL-03.neg2.tcl",
+    "controls/PL-03.neg3.tcl",
+    "controls/PL-03.neg4.tcl",
+    "controls/PL-03.neg5.tcl",
+    "controls/PL-03.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint task 4. Ground truth = baseline probe utilization_with_taps (logic + TAPCELL area / core area) = 8.18 %. The design-area report prints the same quantity but rounded to an integer (8 %), and logger output cannot be captured from Tcl in this build, so an exact value needs rsz::utilization or an odb area sum. Logic-only utilization (7.71 %) fails. Tolerance 0.02 percentage points covers two-decimal rounding/truncation. The design must stay unchanged (no cell moved, no instance added). Die area instead of core area gives 5.19 %; a fraction instead of a percentage gives 0.08; both fail. A percent sign or upper-case YES/NO is accepted. rsz::design_area crashed OpenROAD (SIGSEGV) in one exploratory script on this state."
+ },
+ {
+  "id": "PL-04",
+  "category": "placement",
+  "difficulty": "easy",
+  "instruction": "Run (wirelength-driven) global placement on the floorplanned gcd design with a target placement density of 0.5 instead of the tool's default target density, so that in the placed region the standard cells themselves occupy about 50% of the local area (do not add cell padding to the global placement). Every standard cell must end up placed inside the core area. Legalization is not required in this step.",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "global_placement -density"
+  ],
+  "expected_outcome": "All standard cells placed inside the core by a global placement whose local cell density is about 0.5.",
+  "validator": {
+   "name": "pl_global_placement",
+   "params": {
+    "bin_um": 4.0,
+    "max_bin_density": 1.2,
+    "density_min": 0.44,
+    "density_max": 0.55,
+    "hpwl_ratio_max": 1.5,
+    "reference_script": "global_placement -density 0.5"
+   }
+  },
+  "reference_script": "reference_scripts/PL-04.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-04.alt1.tcl",
+    "controls/PL-04.alt2.tcl",
+    "controls/PL-04.alt3.tcl",
+    "controls/PL-04.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/PL-04.neg1.tcl",
+    "controls/PL-04.neg2.tcl",
+    "controls/PL-04.neg3.tcl",
+    "controls/PL-04.neg4.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Measured density = area-weighted mean density of the non-empty 4x4 um bins (core aligned), which tracks the global-placement target closely. Target 0.5 gives 0.497-0.523 (plain, timing-driven, routability-driven, -skip_initial_place, -overflow / -init_density_penalty tweaks, IO pins re-placed before or after) and 0.464-0.492 after an optional legalization with 0-2 sites of padding. Neighbouring values: target 0.4 -> 0.40-0.41, 0.45 -> 0.46, 0.55 -> 0.58, 0.6 -> 0.55-0.60, default 0.7 -> 0.61-0.70, 0.3 -> 0.31. Global-placement padding (-pad_left/-pad_right) lowers the measured density (0.375 at density 0.5 with 1 site) and therefore fails. -routability_max_density does not change the target density (measured 0.68). The instruction excludes global-placement padding explicitly ('the standard cells themselves'), since -density 0.5 with -pad_left/-pad_right 2 measures 0.305. Relabelled easy (one well-known option)."
+ },
+ {
+  "id": "PL-05",
+  "category": "placement",
+  "difficulty": "medium",
+  "instruction": "Legalize the existing global placement of the gcd design while reserving routing space around the standard cells: every standard cell needs 2 placement sites of padding on its left side and 2 placement sites of padding on its right side. In the final legal placement, horizontally adjacent standard cells in a row must therefore be at least 4 sites apart, and no standard cell may be closer than 2 sites to a tap cell. The cells must stay close to their current global-placement locations (do not re-run global placement; no cell may move by more than 10 um and the average movement must not exceed 2 um), and every cell must sit on a legal row site in the orientation of its row, without overlaps.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "set_placement_padding",
+   "detailed_placement"
+  ],
+  "expected_outcome": "Legal placement with >= 4 empty sites between adjacent standard cells and >= 2 sites to tap cells, close to the global placement.",
+  "validator": {
+   "name": "pl_legalize",
+   "params": {
+    "max_disp_um": 10.0,
+    "mean_disp_um": 2.0,
+    "min_gap_ll_sites": 4,
+    "min_gap_lt_sites": 2
+   }
+  },
+  "reference_script": "reference_scripts/PL-05.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-05.alt1.tcl",
+    "controls/PL-05.alt2.tcl",
+    "controls/PL-05.alt3.tcl",
+    "controls/PL-05.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/PL-05.neg1.tcl",
+    "controls/PL-05.neg2.tcl",
+    "controls/PL-05.neg3.tcl",
+    "controls/PL-05.neg4.tcl",
+    "controls/PL-05.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Padding is not stored in the database, so the gaps are measured directly on final.odb (oracle): the reference gives a minimum of 4.0 sites between adjacent standard cells and 8 sites to tap cells; one site of padding per side gives 2.0. Padding applied only during global placement (-pad_left/-pad_right) is ignored by the legalizer. check_placement in the agent's session honours the padding, so setting padding without re-legalizing makes the placement illegal. Max displacement with 2-site padding 3.4 um (Euclidean). Right-side-only padding of 2 sites gives 2-site gaps and fails; padding on the CORE masters only (tap cells unpadded) passes."
+ },
+ {
+  "id": "PL-06",
+  "category": "placement",
+  "difficulty": "easy",
+  "instruction": "The gcd design is placed, clock-tree synthesized and globally routed. Before detailed routing, insert filler cells so that every empty placement site in every row is filled, using the platform filler cells (FILLCELL_X1 ... FILLCELL_X32). Name the inserted filler instances with the prefix FILL_ (for example FILL_17). Existing cells must not be moved and the placement must remain legal.",
+  "start_state": "grouted",
+  "expected_commands": [
+   "filler_placement -prefix"
+  ],
+  "expected_outcome": "About 1387 filler instances named FILL_* cover every remaining row site; no existing cell moved; placement legal.",
+  "validator": {
+   "name": "pl_fillers",
+   "params": {
+    "prefix": "FILL_"
+   }
+  },
+  "reference_script": "reference_scripts/PL-06.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-06.alt1.tcl",
+    "controls/PL-06.alt2.tcl",
+    "controls/PL-06.alt3.tcl",
+    "controls/PL-06.alt4.tcl",
+    "controls/PL-06.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/PL-06.neg1.tcl",
+    "controls/PL-06.neg2.tcl",
+    "controls/PL-06.neg3.tcl",
+    "controls/PL-06.neg4.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Coverage is computed on final.odb per row as the union of all placed instance boxes (0 uncovered sites of 24054 expected). The default filler prefix is FILLER_. Wide fillers only cannot fill narrow gaps: FILLCELL_X4 on 'placed' raises DPL-0002, while {X8 X16 X32} on this state crashes OpenROAD (SIGSEGV in dpl::Opendp::gridInstName while reporting the unfillable gap); there are no FILLER* masters on this platform (DPL-0039). The global route guides are untouched by filler insertion."
+ },
+ {
+  "id": "PL-07",
+  "category": "placement",
+  "difficulty": "medium",
+  "instruction": "Reduce the wirelength of the legally placed gcd design using cell mirroring only: you may flip standard cells about their vertical (Y) axis, but no standard cell may change its location, the IO pins must not be changed, and the placement must remain legal (every cell in an orientation allowed for its row). The total half-perimeter wirelength (HPWL) over all nets except power and ground (the clock net included), measured on the pin locations, must decrease by at least 1%.",
+  "start_state": "placed",
+  "expected_commands": [
+   "optimize_mirroring"
+  ],
+  "expected_outcome": "About 150-160 cells mirrored about the Y axis, no cell moved, placement legal, HPWL reduced by ~1.4%.",
+  "validator": {
+   "name": "pl_mirror",
+   "params": {
+    "min_flipped": 10,
+    "min_hpwl_reduction": 0.01
+   }
+  },
+  "reference_script": "reference_scripts/PL-07.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-07.alt1.tcl",
+    "controls/PL-07.alt2.tcl",
+    "controls/PL-07.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-07.neg1.tcl",
+    "controls/PL-07.neg2.tcl",
+    "controls/PL-07.neg3.tcl",
+    "controls/PL-07.neg4.tcl",
+    "controls/PL-07.neg5.tcl",
+    "controls/PL-07.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "optimize_mirroring flips 161 cells: HPWL 4554.6 -> 4492.0 um (-1.37%); the greedy odb alternative flips 149 cells for the same result. Mirroring every cell blindly raises HPWL by 1.85%. HPWL is pin based (getAvgXY, identical to the DPL report), because mirroring does not move instance centres. Allowed orientation changes: R0<->MY and MX<->R180; check_placement in this build does not flag X-axis flips, so the validator checks orientation pairs explicitly (and row orientation on final.odb). Pitfall for custom scripts: odb setOrient keeps the transform origin and shifts the cell bbox, so the location must be restored. IO pins must stay unchanged (probe locations/layers): optimize_mirroring + place_pins moves 31 pins and fails. The HPWL definition (all nets except power/ground; the clk net has sig type CLOCK) is stated as in PL-08."
+ },
+ {
+  "id": "PL-08",
+  "category": "placement",
+  "difficulty": "hard",
+  "instruction": "Run detailed-placement optimization on the legally placed gcd design to reduce wirelength by moving or swapping cells within the placement rows. Refine the existing placement: do not re-run global placement and do not move the IO pins. The placement must remain legal (cells on row sites, in the orientation of their row, without overlaps) and the total HPWL must decrease by at least 3%. Report the total HPWL before and after the optimization in outputs/hpwl.txt with exactly two lines:\nhpwl_before_um: <value>\nhpwl_after_um: <value>\n(values in microns, with two decimals). Compute the total HPWL over all nets except the power and ground nets (the clock net is included) that connect at least two pins, as the sum over these nets of the half-perimeter of the bounding box of the net's pin locations, where the location of an instance pin or an IO pin is the center of its pin shapes.",
+  "start_state": "placed",
+  "expected_commands": [
+   "improve_placement",
+   "odb net/ITerm/BPin iteration (getAvgXY or getBBox)",
+   "open/puts/close"
+  ],
+  "expected_outcome": "Legal placement with HPWL reduced from ~4554.6 um to ~4263 um (-6.4%), both values reported in outputs/hpwl.txt.",
+  "validator": {
+   "name": "pl_improve_hpwl",
+   "params": {
+    "file": "hpwl.txt",
+    "min_reduction": 0.03,
+    "report_rtol": 0.005,
+    "max_mean_disp_um": 5.0
+   }
+  },
+  "reference_script": "reference_scripts/PL-08.tcl",
+  "required_outputs": [
+   "outputs/hpwl.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/PL-08.alt1.tcl",
+    "controls/PL-08.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/PL-08.neg1.tcl",
+    "controls/PL-08.neg2.tcl",
+    "controls/PL-08.neg3.tcl",
+    "controls/PL-08.neg4.tcl",
+    "controls/PL-08.neg5.tcl",
+    "controls/PL-08.neg6.tcl",
+    "controls/PL-08.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "improve_placement reduces HPWL by 6.4% (4554.6 -> 4263.2 um); optimize_mirroring alone only 1.4%. The DPO/DPL HPWL reports go through the logger and cannot be captured from Tcl in this build (log_begin and sta::redirect_* do not capture them), so the values must be computed. Pin-centre conventions (getAvgXY vs ITerm bbox centre) differ by < 0.2%; instance-centre HPWL differs by 1.7% after optimization (cell flips) and instance-bbox HPWL by ~20%, both outside the 0.5% tolerance. Ground truth is recomputed by the oracle on the starting state and on final.odb. The clk net has sig type CLOCK; excluding it (a common getSigType eq SIGNAL filter) lowers the HPWL by 2.5 % (4438.6/4149.8 um), so the instruction states that the clock net is included. 'Refine the existing placement' is checked as mean cell movement <= 5 um: improve_placement with seeds 1/7/42/1000 and the ORFS recipe move 1.93-2.10 um on average (max 28-35 um), a global re-placement + legalization + improve_placement 12.2 um (it would otherwise pass with -3 % HPWL). IO pins must stay unchanged (place_pins after the optimization moves 42 pins). improve_placement seeds give 6.0-6.4 % reduction."
+ },
+ {
+  "id": "PL-09",
+  "category": "placement",
+  "difficulty": "hard",
+  "instruction": "Legalize the existing global placement of the gcd design (every standard cell on a legal row site, in the orientation of its row, without overlaps; keep the cells close to their global-placement locations: do not re-run global placement, no cell may move by more than 10 um and the average movement must not exceed 2 um). Then find the standard cells that were displaced the most by the legalization, where the displacement of a cell is the Manhattan distance |dx| + |dy|, in microns, between the lower-left corner of the cell before and after legalization. Write the 5 most displaced cells to outputs/top_displaced.txt, one cell per line with the largest displacement first, formatted as:\n<instance_name> <displacement_um>\nwith the displacement printed with three decimals.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "odb getLocation/getBBox",
+   "detailed_placement",
+   "lsort",
+   "open/puts/close"
+  ],
+  "expected_outcome": "Legal placement and a 5-line report of the most displaced cells (default legalization: _597_ 2.381 or 2.380, _542_ 2.271, _443_ 2.244, _509_ 2.232, _554_ 2.208).",
+  "validator": {
+   "name": "pl_displacement_report",
+   "params": {
+    "file": "top_displaced.txt",
+    "top_n": 5,
+    "value_tol_um": 0.002,
+    "max_disp_um": 10.0,
+    "mean_disp_um": 2.0
+   }
+  },
+  "reference_script": "reference_scripts/PL-09.tcl",
+  "required_outputs": [
+   "outputs/top_displaced.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/PL-09.alt1.tcl",
+    "controls/PL-09.alt2.tcl",
+    "controls/PL-09.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/PL-09.neg1.tcl",
+    "controls/PL-09.neg2.tcl",
+    "controls/PL-09.neg3.tcl",
+    "controls/PL-09.neg4.tcl",
+    "controls/PL-09.neg5.tcl",
+    "controls/PL-09.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "True displacements are computed from the probe positions (bbox lower-left corners) of the starting state and of the final state, so any legalization variant (e.g. with padding) is scored against its own result; ties at the 5th place are accepted. Value tolerance 0.002 um covers three-decimal rounding (positions are multiples of 0.0005 um). Euclidean distances give different values (and a different ranking), DBU values are 2000x too large. The DPL legalization report prints only aggregate statistics (and its 'average displacement' divides by all instances including tap cells). getOrigin (transform origin) instead of the lower-left corner is wrong for cells legalized into MX rows and fails; a header line in the file is ignored."
+ },
+ {
+  "id": "PL-10",
+  "category": "placement",
+  "difficulty": "hard",
+  "instruction": "Take the floorplanned gcd design through the complete placement step: (1) wirelength-driven global placement of the standard cells; (2) re-placement of all IO pins so that they minimize the wirelength to the placed cells, with the pins on the left and right die edges on metal3 and the pins on the top and bottom die edges on metal2; (3) legalization of the standard cells with 1 placement site of padding on the left and on the right of every standard cell, so that horizontally adjacent standard cells end up at least 2 sites apart. At the end every standard cell must be legally placed inside the core (on a row site, in the orientation of its row, without overlaps).",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "global_placement",
+   "place_pins",
+   "set_placement_padding",
+   "detailed_placement"
+  ],
+  "expected_outcome": "Legal, padded placement inside the core with all 54 IO pins re-placed next to their cells (IO-net HPWL ~1870 um instead of ~2820 um with the random floorplan pins).",
+  "validator": {
+   "name": "pl_full_placement",
+   "params": {
+    "min_gap_ll_sites": 2,
+    "min_pins_moved_frac": 0.5,
+    "edge_tol_um": 1.0,
+    "hor_layer": "metal3",
+    "ver_layer": "metal2",
+    "io_hpwl_ratio_max": 1.25,
+    "hpwl_ratio_max": 1.3,
+    "reference_flow": "global_placement\nplace_pins -hor_layers metal3 -ver_layers metal2\nset_placement_padding -global -left 1 -right 1\ndetailed_placement"
+   }
+  },
+  "reference_script": "reference_scripts/PL-10.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/PL-10.alt1.tcl",
+    "controls/PL-10.alt2.tcl",
+    "controls/PL-10.alt3.tcl",
+    "controls/PL-10.alt4.tcl",
+    "controls/PL-10.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/PL-10.neg1.tcl",
+    "controls/PL-10.neg2.tcl",
+    "controls/PL-10.neg3.tcl",
+    "controls/PL-10.neg4.tcl",
+    "controls/PL-10.neg5.tcl",
+    "controls/PL-10.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Reference flow (oracle, starting state): total HPWL 4471 um, IO-net HPWL 1871 um. Valid orders/variants give IO-net HPWL 1481-2041 um and total HPWL 4054-4546 um (pins placed before global placement, global placement repeated, flow recipe, density 0.5); without pin re-placement it is 2822 um. place_pins -random uses the same default seed as the floorplan step and reproduces the original random assignment (0 pins move). Swapped layers fail with PPL-0045 (metal2 is vertical). Pins are classified by their nearest die edge; at least 50% must move from their starting positions. Padding is checked as the minimum gap between adjacent standard cells on final.odb. improve_placement + optimize_mirroring after the padded legalization keeps the 2-site gaps and passes; metal4 on the top/bottom edges fails the layer check; forgetting the final legalization fails legality."
+ },
+ {
+  "id": "RT-01",
+  "category": "routing",
+  "difficulty": "easy",
+  "instruction": "Run global routing for the whole design and save the resulting route guides to outputs/gcd.guide so that they can be handed to the detailed router.",
+  "start_state": "cts",
+  "expected_commands": [
+   "global_route",
+   "write_guides"
+  ],
+  "expected_outcome": "Every routable net has global-route guides in the database and outputs/gcd.guide contains exactly those guides.",
+  "validator": {
+   "name": "rt_global_route_guides",
+   "params": {
+    "guide_file": "outputs/gcd.guide"
+   }
+  },
+  "reference_script": "reference_scripts/RT-01.tcl",
+  "required_outputs": [
+   "outputs/gcd.guide"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/RT-01.alt1.tcl",
+    "controls/RT-01.alt2.tcl",
+    "controls/RT-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/RT-01.neg1.tcl",
+    "controls/RT-01.neg2.tcl",
+    "controls/RT-01.neg3.tcl",
+    "controls/RT-01.neg4.tcl",
+    "controls/RT-01.neg5.tcl",
+    "controls/RT-01.neg6.tcl",
+    "controls/RT-01.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Any routing-layer settings are accepted. The guide file is compared box by box with the guides stored in the final database (a trusted query rebuilds the guide list from dbGuide objects); the file written by the router and write_guides after routing are identical to it. Pitfalls: write_guides before global routing silently writes an empty file; global_route prints nothing without -verbose; the congestion report file is empty when there is no congestion."
+ },
+ {
+  "id": "RT-02",
+  "category": "routing",
+  "difficulty": "hard",
+  "instruction": "Run global routing for the design. Then write the total global-routing wirelength of the design, i.e. the sum of the global-route wirelength of every routed net as reported by the global router, in micrometers, to outputs/grt_wirelength.txt; the file must contain that value and no other number.",
+  "start_state": "cts",
+  "expected_commands": [
+   "global_route",
+   "report_wire_length -net * -global_route -file"
+  ],
+  "expected_outcome": "All routable nets are globally routed and outputs/grt_wirelength.txt holds their summed global-route wirelength (about 7.7 mm for default settings).",
+  "validator": {
+   "name": "rt_global_route_wirelength",
+   "params": {
+    "report": "outputs/grt_wirelength.txt",
+    "rtol": 0.005
+   }
+  },
+  "reference_script": "reference_scripts/RT-02.tcl",
+  "required_outputs": [
+   "outputs/grt_wirelength.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/RT-02.alt1.tcl",
+    "controls/RT-02.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/RT-02.neg1.tcl",
+    "controls/RT-02.neg2.tcl",
+    "controls/RT-02.neg3.tcl",
+    "controls/RT-02.neg4.tcl",
+    "controls/RT-02.neg5.tcl",
+    "controls/RT-02.neg6.tcl",
+    "controls/RT-02.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth is measured on the agent's own result: a trusted query reloads the guides from final.odb (grt::have_routes) and sums report_wire_length -global_route over all nets. Rebuilding routes from guides shifts the total by <0.1% (default settings: 7730.1 um reloaded vs 7736.4 um in-session; GRT log 'Total wirelength: 7736 um'), hence rtol 0.5%. Layer settings change the total by only ~0.25%, so they are not constrained here. Rejected: HPWL (~4728 um), guide-box lengths, signal-only totals (~7.2k um), no routing (0). In this build global_route prints no summary without -verbose and the log cannot be captured, so the per-net report (-file) has to be summed in Tcl; the report file is space-separated ('grt: <net> <wl> <pins>'). Capturing the verbose global_route log with sta::redirect_file_begin does not work in this build (the router's logger output is not redirected)."
+ },
+ {
+  "id": "RT-03",
+  "category": "routing",
+  "difficulty": "medium",
+  "instruction": "Run global routing for the design with signal-net routing restricted to metal2 through metal6 and clock-net routing restricted to metal4 through metal6. The resulting route guides only need to be kept in the design database.",
+  "start_state": "cts",
+  "expected_commands": [
+   "set_routing_layers -signal metal2-metal6 -clock metal4-metal6",
+   "global_route"
+  ],
+  "expected_outcome": "All nets are globally routed without wires on metal1 or above metal6, and the clock-tree trunk net (clknet_0_clk) is routed on metal4/metal5.",
+  "validator": {
+   "name": "rt_routing_layers",
+   "params": {
+    "signal_layers": [
+     "metal2",
+     "metal6"
+    ],
+    "clock_layers": [
+     "metal4",
+     "metal6"
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/RT-03.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/RT-03.alt1.tcl",
+    "controls/RT-03.alt2.tcl",
+    "controls/RT-03.alt3.tcl",
+    "controls/RT-03.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/RT-03.neg1.tcl",
+    "controls/RT-03.neg2.tcl",
+    "controls/RT-03.neg3.tcl",
+    "controls/RT-03.neg4.tcl",
+    "controls/RT-03.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Layer usage comes from the guides in final.odb: a guide box spanning more than one GCell on a layer is a wire on that layer, single-GCell boxes are pin-access/via stacks (this matches the per-layer split of report_wire_length -verbose exactly). Tool behavior the validator follows: this build applies the clock range only to non-leaf clock nets (clk, clknet_0_clk); leaf clock nets driving register clock pins follow the signal range, and a net with an IO pin may also use that pin's layer (clk runs on metal3/metal4). Checks: signal nets within metal2-metal6; non-leaf clock nets within metal4-metal6; leaf clock nets within either range (both extended down to the net's IO-pin layer). Known blind spot: the signal max layer is not observable on this design -- signals stay on metal2-metal4 even with -signal metal2-metal10, so that mistake passes. Making the bound observable by asking for metal2-metal3 was tried and rejected: the signal range is soft in this build (with a 0.5 layer adjustment 8 signal nets spill onto metal4/metal5 up to the clock max layer). Default routing puts wires on metal1; forgetting the clock range leaves clknet_0_clk on metal2/metal3; the platform clock range metal6-metal10 puts it on metal7."
+ },
+ {
+  "id": "RT-04",
+  "category": "routing",
+  "difficulty": "medium",
+  "instruction": "The design is already globally routed. Without re-running global routing or changing the design, estimate the wire parasitics from the existing global routing and write the resulting worst setup slack, in ns rounded to 4 decimal places, to outputs/wns_grt.txt; the file must contain that value and no other number.",
+  "start_state": "grouted",
+  "expected_commands": [
+   "estimate_parasitics -global_routing",
+   "report_worst_slack -max -digits 4"
+  ],
+  "expected_outcome": "outputs/wns_grt.txt contains the worst setup slack with global-route parasitics (about -0.0594 ns); the stored global routing is unchanged.",
+  "validator": {
+   "name": "rt_grt_parasitics_slack",
+   "params": {
+    "report": "outputs/wns_grt.txt",
+    "atol_ns": 0.0005
+   }
+  },
+  "reference_script": "reference_scripts/RT-04.tcl",
+  "required_outputs": [
+   "outputs/wns_grt.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/RT-04.alt1.tcl",
+    "controls/RT-04.alt2.tcl",
+    "controls/RT-04.alt3.tcl",
+    "controls/RT-04.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/RT-04.neg1.tcl",
+    "controls/RT-04.neg2.tcl",
+    "controls/RT-04.neg3.tcl",
+    "controls/RT-04.neg4.tcl",
+    "controls/RT-04.neg5.tcl",
+    "controls/RT-04.neg6.tcl",
+    "controls/RT-04.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth from a trusted query on the starting state (estimate_parasitics -global_routing; sta::worst_slack -max) = -0.0594 ns. Plausible wrong values: placement parasitics -0.0518, no parasitics -0.0377, re-routed with default layers -0.0602, worst hold slack +0.0514; atol 0.0005 ns (4-decimal rounding) rejects all of them. The guides in final.odb must equal the starting ones. In this build estimate_parasitics -global_routing rebuilds the routes from the guides stored in the database, so no re-routing is needed. Also rejected: default 2-digit report (-0.06), clocks made ideal (-0.0585), relaxed clock period (+0.4556)."
+ },
+ {
+  "id": "RT-05",
+  "category": "routing",
+  "difficulty": "easy",
+  "instruction": "The design is already globally routed. Run detailed routing so that every net is completely routed and no DRC violations remain, and save the detailed router's DRC violation report to outputs/route_drc.rpt.",
+  "start_state": "grouted",
+  "expected_commands": [
+   "detailed_route -output_drc"
+  ],
+  "expected_outcome": "All 413 routable nets have detailed routes, the router reports 0 violations and outputs/route_drc.rpt exists (empty for a clean result).",
+  "validator": {
+   "name": "rt_detailed_route_drc",
+   "params": {
+    "report": "outputs/route_drc.rpt"
+   }
+  },
+  "reference_script": "reference_scripts/RT-05.tcl",
+  "required_outputs": [
+   "outputs/route_drc.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/RT-05.alt1.tcl",
+    "controls/RT-05.alt2.tcl",
+    "controls/RT-05.alt3.tcl",
+    "controls/RT-05.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/RT-05.neg1.tcl",
+    "controls/RT-05.neg2.tcl",
+    "controls/RT-05.neg3.tcl",
+    "controls/RT-05.neg4.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The DRC count is the detailed router's own final count (probe drv_count = detailed_route_num_drvs in the agent session); the number of 'violation type:' entries in the report must equal it. A clean run writes an empty report. check_drc in a fresh session reports thousands of false shorts on the clean routed database, so it cannot be used as an independent oracle; inside the routing session it agrees with the router (0). Stopping after one iteration (-droute_end_iter 1) leaves 1 violation. Runtime ~6 s. Known limitation: the report content is only checked for its violation count, so a clean route followed by a hand-created empty file is indistinguishable from the router's own (empty) report and passes."
+ },
+ {
+  "id": "RT-06",
+  "category": "routing",
+  "difficulty": "medium",
+  "instruction": "The design is already globally routed; do not re-run global routing. Using the existing global routing, report the global-route wirelength of every clock net (the net driven by the clock input port clk and every net of the clock tree) to outputs/clock_gr_wirelength.txt, one line per net in the format '<net name> <wirelength in um>'.",
+  "start_state": "grouted",
+  "expected_commands": [
+   "report_wire_length -net {clk clknet_*} -file"
+  ],
+  "expected_outcome": "outputs/clock_gr_wirelength.txt lists clk, clknet_0_clk and the four clknet_2_*__leaf_clk nets with their global-route wirelengths (e.g. clk 67.2).",
+  "validator": {
+   "name": "rt_clock_net_gr_wirelength",
+   "params": {
+    "report": "outputs/clock_gr_wirelength.txt",
+    "atol_um": 0.05
+   }
+  },
+  "reference_script": "reference_scripts/RT-06.tcl",
+  "required_outputs": [
+   "outputs/clock_gr_wirelength.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/RT-06.alt1.tcl",
+    "controls/RT-06.alt2.tcl",
+    "controls/RT-06.alt3.tcl",
+    "controls/RT-06.alt4.tcl",
+    "controls/RT-06.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/RT-06.neg1.tcl",
+    "controls/RT-06.neg2.tcl",
+    "controls/RT-06.neg3.tcl",
+    "controls/RT-06.neg4.tcl",
+    "controls/RT-06.neg5.tcl",
+    "controls/RT-06.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version pitfall: after a database is loaded, report_wire_length -global_route only warns 'Net ... does not have global route' (no error, no numbers) because the routes are rebuilt from the stored guides only by grt::have_routes, which runs inside report_wire_length when neither -global_route nor -detailed_route is given, and inside estimate_parasitics -global_routing. report_wire_length -net also needs net names or patterns: STA net objects (e.g. from get_nets) are rejected with 'STA-0333 net ... not found'. Ground truth (trusted query on the starting state): the six nets with sigType CLOCK and their global-route wirelength. Lines are parsed leniently (first known net name on a line, then the first number after it), so the router's own report format also passes; non-clock nets are rejected. Values are multiples of the 2.1 um GCell; atol 0.05 um covers 1-2 decimal rounding. Re-routing changes the stored guides and is rejected."
+ },
+ {
+  "id": "RT-07",
+  "category": "routing",
+  "difficulty": "hard",
+  "instruction": "The design is fully routed. Without modifying it, extract the parasitics of the routed wires using the platform's RC extraction rules file platform/Nangate45.rcx_rules and write them in SPEF format to outputs/gcd.spef. Then run static timing analysis using these extracted parasitics and write the worst setup slack, in ns rounded to 4 decimal places, to outputs/wns_rcx.txt; that file must contain this value and no other number.",
+  "start_state": "routed",
+  "expected_commands": [
+   "extract_parasitics -ext_model_file",
+   "write_spef",
+   "read_spef",
+   "report_worst_slack -max -digits 4"
+  ],
+  "expected_outcome": "outputs/gcd.spef holds RC parasitics for all 413 routed nets and outputs/wns_rcx.txt the worst setup slack with them (about -0.0536 ns).",
+  "validator": {
+   "name": "rt_rcx_spef_slack",
+   "params": {
+    "spef": "outputs/gcd.spef",
+    "report": "outputs/wns_rcx.txt",
+    "atol_ns": 0.0005,
+    "cap_rtol": 0.01,
+    "net_cap_rtol": 0.1,
+    "net_cap_frac": 0.95
+   }
+  },
+  "reference_script": "reference_scripts/RT-07.tcl",
+  "required_outputs": [
+   "outputs/gcd.spef",
+   "outputs/wns_rcx.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/RT-07.alt1.tcl",
+    "controls/RT-07.alt2.tcl",
+    "controls/RT-07.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/RT-07.neg1.tcl",
+    "controls/RT-07.neg2.tcl",
+    "controls/RT-07.neg3.tcl",
+    "controls/RT-07.neg4.tcl",
+    "controls/RT-07.neg5.tcl",
+    "controls/RT-07.neg6.tcl",
+    "controls/RT-07.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version pitfall: extract_parasitics stores the RC network in the database only; timing does not see it until the SPEF is read back with read_spef (write_spef without a prior extraction prints RCX-0134 and writes nothing, without an error). Ground truth (trusted query on the starting state: extract, write, read): WNS -0.0536 ns; wrong pipelines give -0.0377 (no parasitics), -0.0518 (placement estimate), -0.0594 (global-route estimate), +0.0512 (hold). SPEF check: same *D_NET net set as the reference extraction, >=95% of nets within 10% total capacitance and the summed capacitance within 1%; non-default extraction options (-max_res, -coupling_threshold, -cc_model, -context_depth, -lef_res) change WNS by <3e-5 ns and per-net caps by <6%. define_process_corner is optional in this build. Routing must stay unchanged. Re-running detailed_route on the routed design adds wiring (5753 -> 11529 um) and is rejected by the routing-unchanged check."
+ },
+ {
+  "id": "RT-08",
+  "category": "routing",
+  "difficulty": "easy",
+  "instruction": "The design is fully routed. Without modifying the design, write the final placed-and-routed design to a DEF file at outputs/gcd_route.def.",
+  "start_state": "routed",
+  "expected_commands": [
+   "write_def"
+  ],
+  "expected_outcome": "outputs/gcd_route.def is a DEF of gcd with all 1877 components, 54 pins and the routed wiring of all 413 signal nets.",
+  "validator": {
+   "name": "rt_routed_def",
+   "params": {
+    "def": "outputs/gcd_route.def",
+    "wl_rtol": 0.001
+   }
+  },
+  "reference_script": "reference_scripts/RT-08.tcl",
+  "required_outputs": [
+   "outputs/gcd_route.def"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/RT-08.alt1.tcl",
+    "controls/RT-08.alt2.tcl",
+    "controls/RT-08.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/RT-08.neg1.tcl",
+    "controls/RT-08.neg2.tcl",
+    "controls/RT-08.neg3.tcl",
+    "controls/RT-08.neg4.tcl",
+    "controls/RT-08.neg5.tcl",
+    "controls/RT-08.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The DEF is parsed and compared with the routed starting state (baseline probe, so a design modified before the export fails): DESIGN name, COMPONENTS count (incl. 1387 fillers and tap cells), PINS count, number of regular nets with wiring and the summed length of all routed path segments, which equals the dbWire length (5753.4 um) exactly; wl_rtol 0.1% only absorbs DEF rounding. DEF 5.6/5.7/5.8 and odb::write_def pass. Rejected: a hand-written DEF skeleton, a Verilog netlist, a guide file or the binary database under the DEF name, fillers removed before writing, wiring stripped."
+ },
+ {
+  "id": "TA-01",
+  "category": "timing",
+  "difficulty": "easy",
+  "instruction": "Post-CTS hold check: write a timing report of the 3 worst hold (min-delay) timing paths of the design to outputs/hold_paths.rpt, reporting only the worst path to each endpoint (so the 3 paths end at 3 different endpoints). Report each path in full detail (startpoint, endpoint, every pin along the path with its arrival time, and the slack), with times printed in ns with 4 decimal places. Analyze the design exactly as it is loaded in the session (propagated clock, no wire parasitics): do not estimate, extract or load any parasitics. This is an analysis-only task: do not modify the design.",
+  "start_state": "cts",
+  "expected_commands": [
+   "report_checks"
+  ],
+  "expected_outcome": "outputs/hold_paths.rpt holds full reports of the 3 worst hold paths (endpoints _674_, _672_, _693_) with slacks matching STA on the as-loaded cts state.",
+  "validator": {
+   "name": "ta_path_report",
+   "params": {
+    "file": "outputs/hold_paths.rpt",
+    "path_delay": "min",
+    "count": 3,
+    "parasitics": "none",
+    "min_digits": 4
+   }
+  },
+  "reference_script": "reference_scripts/TA-01.tcl",
+  "required_outputs": [
+   "outputs/hold_paths.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-01.alt1.tcl",
+    "controls/TA-01.alt2.tcl",
+    "controls/TA-01.alt3.tcl",
+    "controls/TA-01.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/TA-01.neg1.tcl",
+    "controls/TA-01.neg2.tcl",
+    "controls/TA-01.neg3.tcl",
+    "controls/TA-01.neg4.tcl",
+    "controls/TA-01.neg5.tcl",
+    "controls/TA-01.neg6.tcl",
+    "controls/TA-01.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth: per-endpoint worst min-delay slack from find_timing_paths on the untouched cts snapshot (propagated clock, no RC). Worst hold slacks 0.0594/0.0608/0.0682 ns; the 4th endpoint is 0.24 ps worse than the 3rd, above the tie tolerance (0.5e-4 ns + 1e-6), and endpoint sets are compared tie-aware anyway. Estimating placement RC (a plausible but forbidden extra step) moves the worst hold slack to 0.0531 ns. Slack tolerance = half a unit of the printed last decimal. The instruction states ns because the validator compares slacks in ns: a report printed after set_cmd_units -time ps (4 decimals, values x1000) is a different answer."
+ },
+ {
+  "id": "TA-02",
+  "category": "timing",
+  "difficulty": "easy",
+  "instruction": "Write the full timing report of the worst setup (max-delay) timing path that starts at the input port reset to outputs/reset_setup_path.rpt: exactly one path, reported in full detail (startpoint, endpoint, every pin along the path with its arrival time, and the slack), with times printed in ns with 4 decimal places. Analyze the design exactly as it is loaded in the session (ideal clock, no wire parasitics): do not estimate, extract or load any parasitics. This is an analysis-only task: do not modify the design.",
+  "start_state": "placed",
+  "expected_commands": [
+   "report_checks -from"
+  ],
+  "expected_outcome": "outputs/reset_setup_path.rpt holds one full setup path report from port reset to register _674_ with slack 0.2734 ns.",
+  "validator": {
+   "name": "ta_path_report",
+   "params": {
+    "file": "outputs/reset_setup_path.rpt",
+    "path_delay": "max",
+    "count": 1,
+    "from_port": "reset",
+    "parasitics": "none",
+    "min_digits": 4
+   }
+  },
+  "reference_script": "reference_scripts/TA-02.tcl",
+  "required_outputs": [
+   "outputs/reset_setup_path.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-02.alt1.tcl",
+    "controls/TA-02.alt2.tcl",
+    "controls/TA-02.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/TA-02.neg1.tcl",
+    "controls/TA-02.neg2.tcl",
+    "controls/TA-02.neg3.tcl",
+    "controls/TA-02.neg4.tcl",
+    "controls/TA-02.neg5.tcl",
+    "controls/TA-02.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "reset fans out to 3 register endpoints (_674_ 0.2734, _673_ 0.2756, _672_ 0.2808 ns setup slack, no RC); the report's startpoint must be reset and its endpoint/slack must be the worst of those. Paths through the port pin are equivalent to paths from it. Common mistakes: -to instead of -from (no paths), the design's overall worst path, hold instead of setup, default 2-decimal precision. The instruction states ns because the validator compares slacks in ns: a report printed after set_cmd_units -time ps (4 decimals, values x1000) is a different answer."
+ },
+ {
+  "id": "TA-03",
+  "category": "timing",
+  "difficulty": "easy",
+  "instruction": "Report the clock skew of the clock core_clock for setup checks (the largest difference in clock arrival time between a launching and a capturing register that have a timing path between them) and write the report to outputs/clock_skew.rpt with delays in ns printed with 4 decimal places; the report must state the skew value. Analyze the design exactly as it is loaded in the session (propagated clock, no wire parasitics): do not estimate, extract or load any parasitics. This is an analysis-only task: do not modify the design.",
+  "start_state": "cts",
+  "expected_commands": [
+   "report_clock_skew"
+  ],
+  "expected_outcome": "outputs/clock_skew.rpt states the setup skew of core_clock, 0.0018 ns, on the as-loaded cts state.",
+  "validator": {
+   "name": "ta_clock_skew",
+   "params": {
+    "file": "outputs/clock_skew.rpt",
+    "check": "setup",
+    "parasitics": "none",
+    "min_digits": 4
+   }
+  },
+  "reference_script": "reference_scripts/TA-03.tcl",
+  "required_outputs": [
+   "outputs/clock_skew.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-03.alt1.tcl",
+    "controls/TA-03.alt2.tcl",
+    "controls/TA-03.alt3.tcl",
+    "controls/TA-03.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/TA-03.neg1.tcl",
+    "controls/TA-03.neg2.tcl",
+    "controls/TA-03.neg3.tcl",
+    "controls/TA-03.neg4.tcl",
+    "controls/TA-03.neg5.tcl",
+    "controls/TA-03.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth is worst_clock_skew -setup on the untouched cts snapshot (0.00182 ns). Stated skew values are (a) the last non-integer number on a line that names the skew and (b) the last number of a numbers-only row under a header naming the skew (the native 'Latency CRPR Skew' table); every stated value must match to half a unit of its last printed digit with >= 4 decimals (at the default 2 decimals the skew prints as 0.00), so hedged lists fail. Integers (e.g. '4 decimal places') and unrelated tables appended to the report (clock properties) are ignored. Setup and hold skew are equal on this design, so -hold is not a discriminating mistake; neither is unset_propagated_clock (report_clock_skew still reports the propagated latencies, 0.0018). Placement-estimated RC changes the skew to 0.0032 ns."
+ },
+ {
+  "id": "TA-04",
+  "category": "timing",
+  "difficulty": "medium",
+  "instruction": "Estimate the wire parasitics (resistance and capacitance) from the current cell placement, then write a timing report of the 10 worst setup (max-delay) timing paths of the design to outputs/setup_top10.rpt, reporting only the worst path to each endpoint (so the 10 paths end at 10 different endpoints). Report each path in full detail (startpoint, endpoint, every pin along the path with its arrival time, and the slack), with times printed in ns with 4 decimal places. All delays and slacks must be computed with the placement-estimated parasitics. This is an analysis-only task: do not modify the design.",
+  "start_state": "placed",
+  "expected_commands": [
+   "estimate_parasitics -placement",
+   "report_checks"
+  ],
+  "expected_outcome": "outputs/setup_top10.rpt holds full reports of the 10 worst setup paths (10 distinct endpoints, worst slack -0.0429 ns) computed with placement-estimated RC.",
+  "validator": {
+   "name": "ta_path_report",
+   "params": {
+    "file": "outputs/setup_top10.rpt",
+    "path_delay": "max",
+    "count": 10,
+    "parasitics": "placement",
+    "min_digits": 4
+   }
+  },
+  "reference_script": "reference_scripts/TA-04.tcl",
+  "required_outputs": [
+   "outputs/setup_top10.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-04.alt1.tcl",
+    "controls/TA-04.alt2.tcl",
+    "controls/TA-04.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/TA-04.neg1.tcl",
+    "controls/TA-04.neg2.tcl",
+    "controls/TA-04.neg3.tcl",
+    "controls/TA-04.neg4.tcl",
+    "controls/TA-04.neg5.tcl",
+    "controls/TA-04.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint Task 3. Ground truth: per-endpoint worst max-delay slack after estimate_parasitics -placement on the untouched placed snapshot (slacks -0.0429 ... -0.0080 ns; the 11th endpoint is at -0.0047 ns, a clear boundary). Without RC the worst slack is -0.0111 ns and the top-10 endpoint set differs. Every path needs pin-by-pin detail; -endpoint_count > 1 repeats resp_msg[15] and fails the one-path-per-endpoint check. Fabricated reports fail the slack comparison. The instruction states ns because the validator compares slacks in ns: a report printed after set_cmd_units -time ps (4 decimals, values x1000) is a different answer."
+ },
+ {
+  "id": "TA-05",
+  "category": "timing",
+  "difficulty": "medium",
+  "instruction": "Estimate the wire parasitics from the existing global routing result stored in the database (do not re-run global routing), then write the setup timing summary to outputs/wns_tns.txt as exactly one line of the form WNS=<value> TNS=<value>, where WNS is the worst (most negative) setup slack over all timing endpoints and TNS is the sum of the negative setup slacks over all timing endpoints, both in ns with 4 decimal places (for example: WNS=-0.1234 TNS=-1.2345). This is an analysis-only task: do not modify the design.",
+  "start_state": "grouted",
+  "expected_commands": [
+   "estimate_parasitics -global_routing",
+   "report_wns",
+   "report_tns"
+  ],
+  "expected_outcome": "outputs/wns_tns.txt reads WNS=-0.0594 TNS=-0.8829 (global-route parasitics).",
+  "validator": {
+   "name": "ta_timing_summary",
+   "params": {
+    "file": "outputs/wns_tns.txt",
+    "parasitics": "global_routing",
+    "layout": "one_line",
+    "min_decimals": 4,
+    "fields": [
+     {
+      "label": "WNS",
+      "gt": "worst_setup_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "TNS",
+      "gt": "total_negative_setup_slack",
+      "tol": 0.003
+     }
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/TA-05.tcl",
+  "required_outputs": [
+   "outputs/wns_tns.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-05.alt1.tcl",
+    "controls/TA-05.alt2.tcl",
+    "controls/TA-05.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/TA-05.neg1.tcl",
+    "controls/TA-05.neg2.tcl",
+    "controls/TA-05.neg3.tcl",
+    "controls/TA-05.neg4.tcl",
+    "controls/TA-05.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Route guides are in the snapshot, so estimating from global routing works directly after read_db. WNS/TNS: global-route RC -0.0594/-0.8829, placement RC -0.0518/-0.6325, no RC -0.0377/-0.0772 ns; re-running global_route changes the routes (TNS -1.08 to -1.14 ns). Tolerances: WNS 1e-4 ns (4-decimal rounding), TNS 3e-3 ns (sum of <= 60 endpoint slacks each rounded to 4 decimals)."
+ },
+ {
+  "id": "TA-06",
+  "category": "timing",
+  "difficulty": "medium",
+  "instruction": "Check the design rules after clock tree synthesis using wire parasitics estimated from the current cell placement. Apply a design-wide maximum transition (slew) limit of 0.05 ns and a design-wide maximum capacitance limit of 10 fF, then write every pin that violates the transition limit to outputs/max_transition_violations.rpt and every pin that violates the capacitance limit to outputs/max_capacitance_violations.rpt. Each file must name every violating pin of its kind by its full name (instance/pin, or the port name for a top-level port) and no other pins; the standard design-rule violation report is an acceptable format. This is an analysis-only task: do not repair the violations or modify the design.",
+  "start_state": "cts",
+  "expected_commands": [
+   "estimate_parasitics -placement",
+   "set_max_transition",
+   "set_max_capacitance",
+   "report_check_types -max_slew -max_capacitance -violators"
+  ],
+  "expected_outcome": "The two files list exactly the 76 max-transition and 27 max-capacitance violating pins under placement-estimated RC.",
+  "validator": {
+   "name": "ta_drv_violations",
+   "params": {
+    "parasitics": "placement",
+    "max_transition": 0.05,
+    "max_capacitance": 10,
+    "files": {
+     "max_transition": "outputs/max_transition_violations.rpt",
+     "max_capacitance": "outputs/max_capacitance_violations.rpt"
+    }
+   }
+  },
+  "reference_script": "reference_scripts/TA-06.tcl",
+  "required_outputs": [
+   "outputs/max_transition_violations.rpt",
+   "outputs/max_capacitance_violations.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-06.alt1.tcl",
+    "controls/TA-06.alt2.tcl",
+    "controls/TA-06.alt3.tcl",
+    "controls/TA-06.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/TA-06.neg1.tcl",
+    "controls/TA-06.neg2.tcl",
+    "controls/TA-06.neg3.tcl",
+    "controls/TA-06.neg4.tcl",
+    "controls/TA-06.neg5.tcl",
+    "controls/TA-06.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth from sta::check_slew_limits / check_capacitance_limits with the same design-level limits and placement RC on the untouched cts snapshot: 76 slew and 27 capacitance violators (without RC: 42 and 12). Command units come from the liberty (ns, fF): 0.01 for the capacitance limit means 0.01 fF and flags every driver. Pin names are extracted as tokens <known instance>/<pin> or port names and compared as exact sets, so any listing format works. Switching the command units (set_cmd_units -capacitance pF, limit 0.010) is the same limit and passes (alt4); without any set_max_* the library limits flag nothing."
+ },
+ {
+  "id": "TA-07",
+  "category": "timing",
+  "difficulty": "hard",
+  "instruction": "Run post-route sign-off timing with parasitics extracted from the detailed routing. Run RC extraction with the OpenRCX extraction rules file platform/Nangate45.rcx_rules using the default extraction settings, save the extracted parasitics in SPEF format to outputs/gcd.spef, and time the design using these extracted parasitics. Then write outputs/signoff_summary.txt with exactly these four lines:\nworst_setup_slack <value>\ntotal_negative_setup_slack <value>\nworst_hold_slack <value>\nsetup_violating_endpoints <count>\nwhere total_negative_setup_slack is the sum of the negative setup slacks over all timing endpoints, worst_hold_slack is the smallest hold slack (it may be positive) and setup_violating_endpoints is the number of timing endpoints with negative setup slack. Slack values are in ns with 4 decimal places; the count is an integer. This is an analysis-only task: do not modify the design.",
+  "start_state": "routed",
+  "expected_commands": [
+   "define_process_corner",
+   "extract_parasitics -ext_model_file",
+   "write_spef",
+   "read_spef",
+   "report_worst_slack",
+   "report_tns"
+  ],
+  "expected_outcome": "outputs/gcd.spef holds the extracted RC of all 413 routable nets and the summary reads -0.0536 / -0.8160 / 0.0512 / 40 (extracted parasitics).",
+  "validator": {
+   "name": "ta_timing_summary",
+   "params": {
+    "file": "outputs/signoff_summary.txt",
+    "parasitics": "rcx",
+    "layout": "lines",
+    "min_decimals": 4,
+    "spef": "outputs/gcd.spef",
+    "spef_min_fraction": 0.95,
+    "fields": [
+     {
+      "label": "worst_setup_slack",
+      "gt": "worst_setup_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "total_negative_setup_slack",
+      "gt": "total_negative_setup_slack",
+      "tol": 0.003
+     },
+     {
+      "label": "worst_hold_slack",
+      "gt": "worst_hold_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "setup_violating_endpoints",
+      "gt": "setup_violating_endpoints",
+      "integer": true
+     }
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/TA-07.tcl",
+  "required_outputs": [
+   "outputs/gcd.spef",
+   "outputs/signoff_summary.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-07.alt1.tcl",
+    "controls/TA-07.alt2.tcl",
+    "controls/TA-07.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/TA-07.neg1.tcl",
+    "controls/TA-07.neg2.tcl",
+    "controls/TA-07.neg3.tcl",
+    "controls/TA-07.neg4.tcl",
+    "controls/TA-07.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version pitfall: in this build extract_parasitics only stores the RC network in the database; STA keeps timing without wire parasitics (WNS -0.0377, 5 violators) until the SPEF is read back with read_spef (WNS -0.0536, TNS -0.8160, worst hold 0.0512, 40 violators). The oracle runs the same extraction on the untouched routed snapshot. Extraction-option variants (no process corner, -max_res 0, -lef_res) move WNS by < 1e-5 ns and TNS by < 3e-4 ns, inside the tolerances; global-route estimates (WNS -0.0594) do not. The SPEF must start with *SPEF and hold >= 95% of the reference *D_NET sections (413, one per routable net; the design has 447 signal nets but only 413 have routing)."
+ },
+ {
+  "id": "TA-08",
+  "category": "timing",
+  "difficulty": "hard",
+  "instruction": "Check setup timing at the slow process corner. The setup (max-delay) analysis must use the cell timing of the slow-corner library platform/Nangate45_slow.lib for every cell instead of the typical library, and the wire parasitics must be estimated from the current cell placement while the slow library is in effect. Write outputs/slow_corner.txt with exactly these three lines:\nworst_setup_slack <value>\ntotal_negative_setup_slack <value>\nmin_clock_period <value>\nwhere the first two values are for the current clock period (0.485 ns), total_negative_setup_slack is the sum of the negative setup slacks over all timing endpoints, and min_clock_period is the smallest core_clock period at which no setup violation would remain at the slow corner with every other constraint (including the absolute input and output delay values) unchanged. All values in ns with 4 decimal places. This is an analysis-only task: do not modify the design.",
+  "start_state": "placed",
+  "expected_commands": [
+   "read_liberty -max",
+   "estimate_parasitics -placement",
+   "report_worst_slack",
+   "report_tns",
+   "report_clock_min_period"
+  ],
+  "expected_outcome": "outputs/slow_corner.txt reads worst_setup_slack -1.2186, total_negative_setup_slack -49.5953, min_clock_period 1.7036.",
+  "validator": {
+   "name": "ta_timing_summary",
+   "params": {
+    "file": "outputs/slow_corner.txt",
+    "parasitics": "placement",
+    "liberty_max": "platform/Nangate45_slow.lib",
+    "layout": "lines",
+    "min_decimals": 4,
+    "fields": [
+     {
+      "label": "worst_setup_slack",
+      "gt": "worst_setup_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "total_negative_setup_slack",
+      "gt": "total_negative_setup_slack",
+      "tol": 0.003
+     },
+     {
+      "label": "min_clock_period",
+      "gt": "min_clock_period",
+      "tol": 0.0002
+     }
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/TA-08.tcl",
+  "required_outputs": [
+   "outputs/slow_corner.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-08.alt1.tcl",
+    "controls/TA-08.alt2.tcl",
+    "controls/TA-08.alt3.tcl",
+    "controls/TA-08.alt4.tcl",
+    "controls/TA-08.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/TA-08.neg1.tcl",
+    "controls/TA-08.neg2.tcl",
+    "controls/TA-08.neg3.tcl",
+    "controls/TA-08.neg4.tcl",
+    "controls/TA-08.neg5.tcl",
+    "controls/TA-08.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version behaviour: define_corners is rejected once a liberty is loaded, but read_liberty of the slow library (plain, -max or -corner default) remaps the cells used for setup timing. A liberty read does not invalidate timing that was already computed, and RC estimated before the switch keeps reduced parasitics built with typical pin data (WNS -1.2333, TNS -50.2453 instead of -1.2186, -49.5953), hence the explicit ordering requirement; estimating after the switch refreshes both. Ground truth (read_liberty -max, then estimate) equals a session that loads only the slow library. min_clock_period = period - WNS = 1.7036 ns (single clock, single-cycle paths, absolute IO delays; equals sta::find_clk_min_period with port paths and a bisection on the clock period); the minimum-period report prints only 2 decimals (1.70). Tolerances: 1e-4 ns slack, 3e-3 ns TNS (sum of <= 60 rounded endpoint slacks), 2e-4 ns period. On this design the minimum period without port paths (sta::find_clk_min_period ... 0) also equals 1.7036 ns, so leaving out the IO paths is not a discriminating mistake. Querying typical timing before the library switch is harmless as long as the RC is estimated after it (alt4); estimating before it is not (neg2, neg5)."
+ }
+]

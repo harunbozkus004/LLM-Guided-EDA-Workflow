@@ -1,0 +1,2 @@
+configs,k,n_tasks,df,solved_by_majority,statistic,p,note
+A_baseline;B_rag;C_feedback;D_full;E_vector_only;F_single_repair,6,50,5,"{""A_baseline"": 1, ""B_rag"": 17, ""C_feedback"": 8, ""D_full"": 25, ""E_vector_only"": 23, ""F_single_repair"": 22}",65.76923076923077,7.760704199683491e-13,

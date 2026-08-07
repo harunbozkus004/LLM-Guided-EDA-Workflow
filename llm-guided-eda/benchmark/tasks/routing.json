@@ -1,0 +1,164 @@
+[
+ {
+  "id": "RT-01",
+  "category": "routing",
+  "difficulty": "easy",
+  "instruction": "Run global routing for the whole design and save the resulting route guides to outputs/gcd.guide so that they can be handed to the detailed router.",
+  "start_state": "cts",
+  "expected_commands": ["global_route", "write_guides"],
+  "expected_outcome": "Every routable net has global-route guides in the database and outputs/gcd.guide contains exactly those guides.",
+  "validator": {"name": "rt_global_route_guides", "params": {"guide_file": "outputs/gcd.guide"}},
+  "reference_script": "reference_scripts/RT-01.tcl",
+  "required_outputs": ["outputs/gcd.guide"],
+  "controls": {
+   "alternatives": ["controls/RT-01.alt1.tcl", "controls/RT-01.alt2.tcl", "controls/RT-01.alt3.tcl"],
+   "negatives": ["controls/RT-01.neg1.tcl", "controls/RT-01.neg2.tcl", "controls/RT-01.neg3.tcl", "controls/RT-01.neg4.tcl", "controls/RT-01.neg5.tcl", "controls/RT-01.neg6.tcl", "controls/RT-01.neg7.tcl"]
+  },
+  "split": "test",
+  "notes": "Any routing-layer settings are accepted. The guide file is compared box by box with the guides stored in the final database (a trusted query rebuilds the guide list from dbGuide objects); the file written by the router and write_guides after routing are identical to it. Pitfalls: write_guides before global routing silently writes an empty file; global_route prints nothing without -verbose; the congestion report file is empty when there is no congestion."
+ },
+ {
+  "id": "RT-02",
+  "category": "routing",
+  "difficulty": "hard",
+  "instruction": "Run global routing for the design. Then write the total global-routing wirelength of the design, i.e. the sum of the global-route wirelength of every routed net as reported by the global router, in micrometers, to outputs/grt_wirelength.txt; the file must contain that value and no other number.",
+  "start_state": "cts",
+  "expected_commands": ["global_route", "report_wire_length -net * -global_route -file"],
+  "expected_outcome": "All routable nets are globally routed and outputs/grt_wirelength.txt holds their summed global-route wirelength (about 7.7 mm for default settings).",
+  "validator": {"name": "rt_global_route_wirelength", "params": {"report": "outputs/grt_wirelength.txt", "rtol": 0.005}},
+  "reference_script": "reference_scripts/RT-02.tcl",
+  "required_outputs": ["outputs/grt_wirelength.txt"],
+  "controls": {
+   "alternatives": ["controls/RT-02.alt1.tcl", "controls/RT-02.alt2.tcl"],
+   "negatives": ["controls/RT-02.neg1.tcl", "controls/RT-02.neg2.tcl", "controls/RT-02.neg3.tcl", "controls/RT-02.neg4.tcl", "controls/RT-02.neg5.tcl", "controls/RT-02.neg6.tcl", "controls/RT-02.neg7.tcl"]
+  },
+  "split": "test",
+  "notes": "Ground truth is measured on the agent's own result: a trusted query reloads the guides from final.odb (grt::have_routes) and sums report_wire_length -global_route over all nets. Rebuilding routes from guides shifts the total by <0.1% (default settings: 7730.1 um reloaded vs 7736.4 um in-session; GRT log 'Total wirelength: 7736 um'), hence rtol 0.5%. Layer settings change the total by only ~0.25%, so they are not constrained here. Rejected: HPWL (~4728 um), guide-box lengths, signal-only totals (~7.2k um), no routing (0). In this build global_route prints no summary without -verbose and the log cannot be captured, so the per-net report (-file) has to be summed in Tcl; the report file is space-separated ('grt: <net> <wl> <pins>'). Capturing the verbose global_route log with sta::redirect_file_begin does not work in this build (the router's logger output is not redirected)."
+ },
+ {
+  "id": "RT-03",
+  "category": "routing",
+  "difficulty": "medium",
+  "instruction": "Run global routing for the design with signal-net routing restricted to metal2 through metal6 and clock-net routing restricted to metal4 through metal6. The resulting route guides only need to be kept in the design database.",
+  "start_state": "cts",
+  "expected_commands": ["set_routing_layers -signal metal2-metal6 -clock metal4-metal6", "global_route"],
+  "expected_outcome": "All nets are globally routed without wires on metal1 or above metal6, and the clock-tree trunk net (clknet_0_clk) is routed on metal4/metal5.",
+  "validator": {"name": "rt_routing_layers", "params": {"signal_layers": ["metal2", "metal6"], "clock_layers": ["metal4", "metal6"]}},
+  "reference_script": "reference_scripts/RT-03.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": ["controls/RT-03.alt1.tcl", "controls/RT-03.alt2.tcl", "controls/RT-03.alt3.tcl", "controls/RT-03.alt4.tcl"],
+   "negatives": ["controls/RT-03.neg1.tcl", "controls/RT-03.neg2.tcl", "controls/RT-03.neg3.tcl", "controls/RT-03.neg4.tcl", "controls/RT-03.neg5.tcl"]
+  },
+  "split": "test",
+  "notes": "Layer usage comes from the guides in final.odb: a guide box spanning more than one GCell on a layer is a wire on that layer, single-GCell boxes are pin-access/via stacks (this matches the per-layer split of report_wire_length -verbose exactly). Tool behavior the validator follows: this build applies the clock range only to non-leaf clock nets (clk, clknet_0_clk); leaf clock nets driving register clock pins follow the signal range, and a net with an IO pin may also use that pin's layer (clk runs on metal3/metal4). Checks: signal nets within metal2-metal6; non-leaf clock nets within metal4-metal6; leaf clock nets within either range (both extended down to the net's IO-pin layer). Known blind spot: the signal max layer is not observable on this design -- signals stay on metal2-metal4 even with -signal metal2-metal10, so that mistake passes. Making the bound observable by asking for metal2-metal3 was tried and rejected: the signal range is soft in this build (with a 0.5 layer adjustment 8 signal nets spill onto metal4/metal5 up to the clock max layer). Default routing puts wires on metal1; forgetting the clock range leaves clknet_0_clk on metal2/metal3; the platform clock range metal6-metal10 puts it on metal7."
+ },
+ {
+  "id": "RT-04",
+  "category": "routing",
+  "difficulty": "medium",
+  "instruction": "The design is already globally routed. Without re-running global routing or changing the design, estimate the wire parasitics from the existing global routing and write the resulting worst setup slack, in ns rounded to 4 decimal places, to outputs/wns_grt.txt; the file must contain that value and no other number.",
+  "start_state": "grouted",
+  "expected_commands": ["estimate_parasitics -global_routing", "report_worst_slack -max -digits 4"],
+  "expected_outcome": "outputs/wns_grt.txt contains the worst setup slack with global-route parasitics (about -0.0594 ns); the stored global routing is unchanged.",
+  "validator": {"name": "rt_grt_parasitics_slack", "params": {"report": "outputs/wns_grt.txt", "atol_ns": 0.0005}},
+  "reference_script": "reference_scripts/RT-04.tcl",
+  "required_outputs": ["outputs/wns_grt.txt"],
+  "controls": {
+   "alternatives": ["controls/RT-04.alt1.tcl", "controls/RT-04.alt2.tcl", "controls/RT-04.alt3.tcl", "controls/RT-04.alt4.tcl"],
+   "negatives": ["controls/RT-04.neg1.tcl", "controls/RT-04.neg2.tcl", "controls/RT-04.neg3.tcl", "controls/RT-04.neg4.tcl", "controls/RT-04.neg5.tcl", "controls/RT-04.neg6.tcl", "controls/RT-04.neg7.tcl"]
+  },
+  "split": "test",
+  "notes": "Ground truth from a trusted query on the starting state (estimate_parasitics -global_routing; sta::worst_slack -max) = -0.0594 ns. Plausible wrong values: placement parasitics -0.0518, no parasitics -0.0377, re-routed with default layers -0.0602, worst hold slack +0.0514; atol 0.0005 ns (4-decimal rounding) rejects all of them. The guides in final.odb must equal the starting ones. In this build estimate_parasitics -global_routing rebuilds the routes from the guides stored in the database, so no re-routing is needed. Also rejected: default 2-digit report (-0.06), clocks made ideal (-0.0585), relaxed clock period (+0.4556)."
+ },
+ {
+  "id": "RT-05",
+  "category": "routing",
+  "difficulty": "easy",
+  "instruction": "The design is already globally routed. Run detailed routing so that every net is completely routed and no DRC violations remain, and save the detailed router's DRC violation report to outputs/route_drc.rpt.",
+  "start_state": "grouted",
+  "expected_commands": ["detailed_route -output_drc"],
+  "expected_outcome": "All 413 routable nets have detailed routes, the router reports 0 violations and outputs/route_drc.rpt exists (empty for a clean result).",
+  "validator": {"name": "rt_detailed_route_drc", "params": {"report": "outputs/route_drc.rpt"}},
+  "reference_script": "reference_scripts/RT-05.tcl",
+  "required_outputs": ["outputs/route_drc.rpt"],
+  "controls": {
+   "alternatives": ["controls/RT-05.alt1.tcl", "controls/RT-05.alt2.tcl", "controls/RT-05.alt3.tcl", "controls/RT-05.alt4.tcl"],
+   "negatives": ["controls/RT-05.neg1.tcl", "controls/RT-05.neg2.tcl", "controls/RT-05.neg3.tcl", "controls/RT-05.neg4.tcl"]
+  },
+  "split": "test",
+  "notes": "The DRC count is the detailed router's own final count (probe drv_count = detailed_route_num_drvs in the agent session); the number of 'violation type:' entries in the report must equal it. A clean run writes an empty report. check_drc in a fresh session reports thousands of false shorts on the clean routed database, so it cannot be used as an independent oracle; inside the routing session it agrees with the router (0). Stopping after one iteration (-droute_end_iter 1) leaves 1 violation. Runtime ~6 s. Known limitation: the report content is only checked for its violation count, so a clean route followed by a hand-created empty file is indistinguishable from the router's own (empty) report and passes."
+ },
+ {
+  "id": "RT-06",
+  "category": "routing",
+  "difficulty": "medium",
+  "instruction": "The design is already globally routed; do not re-run global routing. Using the existing global routing, report the global-route wirelength of every clock net (the net driven by the clock input port clk and every net of the clock tree) to outputs/clock_gr_wirelength.txt, one line per net in the format '<net name> <wirelength in um>'.",
+  "start_state": "grouted",
+  "expected_commands": ["report_wire_length -net {clk clknet_*} -file"],
+  "expected_outcome": "outputs/clock_gr_wirelength.txt lists clk, clknet_0_clk and the four clknet_2_*__leaf_clk nets with their global-route wirelengths (e.g. clk 67.2).",
+  "validator": {"name": "rt_clock_net_gr_wirelength", "params": {"report": "outputs/clock_gr_wirelength.txt", "atol_um": 0.05}},
+  "reference_script": "reference_scripts/RT-06.tcl",
+  "required_outputs": ["outputs/clock_gr_wirelength.txt"],
+  "controls": {
+   "alternatives": ["controls/RT-06.alt1.tcl", "controls/RT-06.alt2.tcl", "controls/RT-06.alt3.tcl", "controls/RT-06.alt4.tcl", "controls/RT-06.alt5.tcl"],
+   "negatives": ["controls/RT-06.neg1.tcl", "controls/RT-06.neg2.tcl", "controls/RT-06.neg3.tcl", "controls/RT-06.neg4.tcl", "controls/RT-06.neg5.tcl", "controls/RT-06.neg6.tcl"]
+  },
+  "split": "test",
+  "notes": "Version pitfall: after a database is loaded, report_wire_length -global_route only warns 'Net ... does not have global route' (no error, no numbers) because the routes are rebuilt from the stored guides only by grt::have_routes, which runs inside report_wire_length when neither -global_route nor -detailed_route is given, and inside estimate_parasitics -global_routing. report_wire_length -net also needs net names or patterns: STA net objects (e.g. from get_nets) are rejected with 'STA-0333 net ... not found'. Ground truth (trusted query on the starting state): the six nets with sigType CLOCK and their global-route wirelength. Lines are parsed leniently (first known net name on a line, then the first number after it), so the router's own report format also passes; non-clock nets are rejected. Values are multiples of the 2.1 um GCell; atol 0.05 um covers 1-2 decimal rounding. Re-routing changes the stored guides and is rejected."
+ },
+ {
+  "id": "RT-07",
+  "category": "routing",
+  "difficulty": "hard",
+  "instruction": "The design is fully routed. Without modifying it, extract the parasitics of the routed wires using the platform's RC extraction rules file platform/Nangate45.rcx_rules and write them in SPEF format to outputs/gcd.spef. Then run static timing analysis using these extracted parasitics and write the worst setup slack, in ns rounded to 4 decimal places, to outputs/wns_rcx.txt; that file must contain this value and no other number.",
+  "start_state": "routed",
+  "expected_commands": ["extract_parasitics -ext_model_file", "write_spef", "read_spef", "report_worst_slack -max -digits 4"],
+  "expected_outcome": "outputs/gcd.spef holds RC parasitics for all 413 routed nets and outputs/wns_rcx.txt the worst setup slack with them (about -0.0536 ns).",
+  "validator": {"name": "rt_rcx_spef_slack", "params": {"spef": "outputs/gcd.spef", "report": "outputs/wns_rcx.txt", "atol_ns": 0.0005, "cap_rtol": 0.01, "net_cap_rtol": 0.1, "net_cap_frac": 0.95}},
+  "reference_script": "reference_scripts/RT-07.tcl",
+  "required_outputs": ["outputs/gcd.spef", "outputs/wns_rcx.txt"],
+  "controls": {
+   "alternatives": ["controls/RT-07.alt1.tcl", "controls/RT-07.alt2.tcl", "controls/RT-07.alt3.tcl"],
+   "negatives": ["controls/RT-07.neg1.tcl", "controls/RT-07.neg2.tcl", "controls/RT-07.neg3.tcl", "controls/RT-07.neg4.tcl", "controls/RT-07.neg5.tcl", "controls/RT-07.neg6.tcl", "controls/RT-07.neg7.tcl"]
+  },
+  "split": "test",
+  "notes": "Version pitfall: extract_parasitics stores the RC network in the database only; timing does not see it until the SPEF is read back with read_spef (write_spef without a prior extraction prints RCX-0134 and writes nothing, without an error). Ground truth (trusted query on the starting state: extract, write, read): WNS -0.0536 ns; wrong pipelines give -0.0377 (no parasitics), -0.0518 (placement estimate), -0.0594 (global-route estimate), +0.0512 (hold). SPEF check: same *D_NET net set as the reference extraction, >=95% of nets within 10% total capacitance and the summed capacitance within 1%; non-default extraction options (-max_res, -coupling_threshold, -cc_model, -context_depth, -lef_res) change WNS by <3e-5 ns and per-net caps by <6%. define_process_corner is optional in this build. Routing must stay unchanged. Re-running detailed_route on the routed design adds wiring (5753 -> 11529 um) and is rejected by the routing-unchanged check."
+ },
+ {
+  "id": "RT-08",
+  "category": "routing",
+  "difficulty": "easy",
+  "instruction": "The design is fully routed. Without modifying the design, write the final placed-and-routed design to a DEF file at outputs/gcd_route.def.",
+  "start_state": "routed",
+  "expected_commands": ["write_def"],
+  "expected_outcome": "outputs/gcd_route.def is a DEF of gcd with all 1877 components, 54 pins and the routed wiring of all 413 signal nets.",
+  "validator": {"name": "rt_routed_def", "params": {"def": "outputs/gcd_route.def", "wl_rtol": 0.001}},
+  "reference_script": "reference_scripts/RT-08.tcl",
+  "required_outputs": ["outputs/gcd_route.def"],
+  "controls": {
+   "alternatives": ["controls/RT-08.alt1.tcl", "controls/RT-08.alt2.tcl", "controls/RT-08.alt3.tcl"],
+   "negatives": ["controls/RT-08.neg1.tcl", "controls/RT-08.neg2.tcl", "controls/RT-08.neg3.tcl", "controls/RT-08.neg4.tcl", "controls/RT-08.neg5.tcl", "controls/RT-08.neg6.tcl"]
+  },
+  "split": "test",
+  "notes": "The DEF is parsed and compared with the routed starting state (baseline probe, so a design modified before the export fails): DESIGN name, COMPONENTS count (incl. 1387 fillers and tap cells), PINS count, number of regular nets with wiring and the summed length of all routed path segments, which equals the dbWire length (5753.4 um) exactly; wl_rtol 0.1% only absorbs DEF rounding. DEF 5.6/5.7/5.8 and odb::write_def pass. Rejected: a hand-written DEF skeleton, a Verilog netlist, a guide file or the binary database under the DEF name, fillers removed before writing, wiring stripped."
+ },
+ {
+  "id": "DEV-RT-01",
+  "category": "routing",
+  "difficulty": "hard",
+  "instruction": "The design is already globally routed. Run detailed routing for the whole design with metal2 as the lowest and metal10 as the highest routing layer, so that no routing wire is placed on metal1. Then write the total detailed-routing wirelength of the design in micrometers to outputs/dr_wirelength.txt; the file must contain that value and no other number.",
+  "start_state": "grouted",
+  "expected_commands": ["detailed_route -bottom_routing_layer metal2 -top_routing_layer metal10", "report_wire_length -net * -detailed_route -file"],
+  "expected_outcome": "All nets are detail-routed on metal2-metal10 only and outputs/dr_wirelength.txt holds the routed wirelength (about 5753 um).",
+  "validator": {"name": "rt_detailed_route_wirelength", "params": {"report": "outputs/dr_wirelength.txt", "bottom_layer": "metal2", "top_layer": "metal10", "rtol": 0.005}},
+  "reference_script": "reference_scripts/DEV-RT-01.tcl",
+  "required_outputs": ["outputs/dr_wirelength.txt"],
+  "controls": {
+   "alternatives": ["controls/DEV-RT-01.alt1.tcl", "controls/DEV-RT-01.alt2.tcl"],
+   "negatives": ["controls/DEV-RT-01.neg1.tcl", "controls/DEV-RT-01.neg2.tcl", "controls/DEV-RT-01.neg3.tcl", "controls/DEV-RT-01.neg4.tcl"]
+  },
+  "split": "dev",
+  "notes": "Layer use is measured by walking every dbWire in final.odb (dbWireDecoder). Without the layer options the router puts ~28 um of wire on metal1. Truth: probe detailed_wirelength_um (sum of dbWire lengths = report_wire_length -detailed_route); the router's own log total (5755 um, path-based) differs by <0.05%, hence rtol 0.5%. The global-route total (~7.7k um) is rejected. Runtime ~6 s. set_routing_layers does not affect detailed_route in this build (metal1 wires remain), so it is rejected."
+ }
+]

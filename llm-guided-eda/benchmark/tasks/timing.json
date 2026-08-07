@@ -1,0 +1,465 @@
+[
+ {
+  "id": "TA-01",
+  "category": "timing",
+  "difficulty": "easy",
+  "start_state": "cts",
+  "instruction": "Post-CTS hold check: write a timing report of the 3 worst hold (min-delay) timing paths of the design to outputs/hold_paths.rpt, reporting only the worst path to each endpoint (so the 3 paths end at 3 different endpoints). Report each path in full detail (startpoint, endpoint, every pin along the path with its arrival time, and the slack), with times printed in ns with 4 decimal places. Analyze the design exactly as it is loaded in the session (propagated clock, no wire parasitics): do not estimate, extract or load any parasitics. This is an analysis-only task: do not modify the design.",
+  "expected_commands": [
+   "report_checks"
+  ],
+  "expected_outcome": "outputs/hold_paths.rpt holds full reports of the 3 worst hold paths (endpoints _674_, _672_, _693_) with slacks matching STA on the as-loaded cts state.",
+  "validator": {
+   "name": "ta_path_report",
+   "params": {
+    "file": "outputs/hold_paths.rpt",
+    "path_delay": "min",
+    "count": 3,
+    "parasitics": "none",
+    "min_digits": 4
+   }
+  },
+  "reference_script": "reference_scripts/TA-01.tcl",
+  "required_outputs": [
+   "outputs/hold_paths.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-01.alt1.tcl",
+    "controls/TA-01.alt2.tcl",
+    "controls/TA-01.alt3.tcl",
+    "controls/TA-01.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/TA-01.neg1.tcl",
+    "controls/TA-01.neg2.tcl",
+    "controls/TA-01.neg3.tcl",
+    "controls/TA-01.neg4.tcl",
+    "controls/TA-01.neg5.tcl",
+    "controls/TA-01.neg6.tcl",
+    "controls/TA-01.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth: per-endpoint worst min-delay slack from find_timing_paths on the untouched cts snapshot (propagated clock, no RC). Worst hold slacks 0.0594/0.0608/0.0682 ns; the 4th endpoint is 0.24 ps worse than the 3rd, above the tie tolerance (0.5e-4 ns + 1e-6), and endpoint sets are compared tie-aware anyway. Estimating placement RC (a plausible but forbidden extra step) moves the worst hold slack to 0.0531 ns. Slack tolerance = half a unit of the printed last decimal. The instruction states ns because the validator compares slacks in ns: a report printed after set_cmd_units -time ps (4 decimals, values x1000) is a different answer."
+ },
+ {
+  "id": "TA-02",
+  "category": "timing",
+  "difficulty": "easy",
+  "start_state": "placed",
+  "instruction": "Write the full timing report of the worst setup (max-delay) timing path that starts at the input port reset to outputs/reset_setup_path.rpt: exactly one path, reported in full detail (startpoint, endpoint, every pin along the path with its arrival time, and the slack), with times printed in ns with 4 decimal places. Analyze the design exactly as it is loaded in the session (ideal clock, no wire parasitics): do not estimate, extract or load any parasitics. This is an analysis-only task: do not modify the design.",
+  "expected_commands": [
+   "report_checks -from"
+  ],
+  "expected_outcome": "outputs/reset_setup_path.rpt holds one full setup path report from port reset to register _674_ with slack 0.2734 ns.",
+  "validator": {
+   "name": "ta_path_report",
+   "params": {
+    "file": "outputs/reset_setup_path.rpt",
+    "path_delay": "max",
+    "count": 1,
+    "from_port": "reset",
+    "parasitics": "none",
+    "min_digits": 4
+   }
+  },
+  "reference_script": "reference_scripts/TA-02.tcl",
+  "required_outputs": [
+   "outputs/reset_setup_path.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-02.alt1.tcl",
+    "controls/TA-02.alt2.tcl",
+    "controls/TA-02.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/TA-02.neg1.tcl",
+    "controls/TA-02.neg2.tcl",
+    "controls/TA-02.neg3.tcl",
+    "controls/TA-02.neg4.tcl",
+    "controls/TA-02.neg5.tcl",
+    "controls/TA-02.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "reset fans out to 3 register endpoints (_674_ 0.2734, _673_ 0.2756, _672_ 0.2808 ns setup slack, no RC); the report's startpoint must be reset and its endpoint/slack must be the worst of those. Paths through the port pin are equivalent to paths from it. Common mistakes: -to instead of -from (no paths), the design's overall worst path, hold instead of setup, default 2-decimal precision. The instruction states ns because the validator compares slacks in ns: a report printed after set_cmd_units -time ps (4 decimals, values x1000) is a different answer."
+ },
+ {
+  "id": "TA-03",
+  "category": "timing",
+  "difficulty": "easy",
+  "start_state": "cts",
+  "instruction": "Report the clock skew of the clock core_clock for setup checks (the largest difference in clock arrival time between a launching and a capturing register that have a timing path between them) and write the report to outputs/clock_skew.rpt with delays in ns printed with 4 decimal places; the report must state the skew value. Analyze the design exactly as it is loaded in the session (propagated clock, no wire parasitics): do not estimate, extract or load any parasitics. This is an analysis-only task: do not modify the design.",
+  "expected_commands": [
+   "report_clock_skew"
+  ],
+  "expected_outcome": "outputs/clock_skew.rpt states the setup skew of core_clock, 0.0018 ns, on the as-loaded cts state.",
+  "validator": {
+   "name": "ta_clock_skew",
+   "params": {
+    "file": "outputs/clock_skew.rpt",
+    "check": "setup",
+    "parasitics": "none",
+    "min_digits": 4
+   }
+  },
+  "reference_script": "reference_scripts/TA-03.tcl",
+  "required_outputs": [
+   "outputs/clock_skew.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-03.alt1.tcl",
+    "controls/TA-03.alt2.tcl",
+    "controls/TA-03.alt3.tcl",
+    "controls/TA-03.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/TA-03.neg1.tcl",
+    "controls/TA-03.neg2.tcl",
+    "controls/TA-03.neg3.tcl",
+    "controls/TA-03.neg4.tcl",
+    "controls/TA-03.neg5.tcl",
+    "controls/TA-03.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth is worst_clock_skew -setup on the untouched cts snapshot (0.00182 ns). Stated skew values are (a) the last non-integer number on a line that names the skew and (b) the last number of a numbers-only row under a header naming the skew (the native 'Latency CRPR Skew' table); every stated value must match to half a unit of its last printed digit with >= 4 decimals (at the default 2 decimals the skew prints as 0.00), so hedged lists fail. Integers (e.g. '4 decimal places') and unrelated tables appended to the report (clock properties) are ignored. Setup and hold skew are equal on this design, so -hold is not a discriminating mistake; neither is unset_propagated_clock (report_clock_skew still reports the propagated latencies, 0.0018). Placement-estimated RC changes the skew to 0.0032 ns."
+ },
+ {
+  "id": "TA-04",
+  "category": "timing",
+  "difficulty": "medium",
+  "start_state": "placed",
+  "instruction": "Estimate the wire parasitics (resistance and capacitance) from the current cell placement, then write a timing report of the 10 worst setup (max-delay) timing paths of the design to outputs/setup_top10.rpt, reporting only the worst path to each endpoint (so the 10 paths end at 10 different endpoints). Report each path in full detail (startpoint, endpoint, every pin along the path with its arrival time, and the slack), with times printed in ns with 4 decimal places. All delays and slacks must be computed with the placement-estimated parasitics. This is an analysis-only task: do not modify the design.",
+  "expected_commands": [
+   "estimate_parasitics -placement",
+   "report_checks"
+  ],
+  "expected_outcome": "outputs/setup_top10.rpt holds full reports of the 10 worst setup paths (10 distinct endpoints, worst slack -0.0429 ns) computed with placement-estimated RC.",
+  "validator": {
+   "name": "ta_path_report",
+   "params": {
+    "file": "outputs/setup_top10.rpt",
+    "path_delay": "max",
+    "count": 10,
+    "parasitics": "placement",
+    "min_digits": 4
+   }
+  },
+  "reference_script": "reference_scripts/TA-04.tcl",
+  "required_outputs": [
+   "outputs/setup_top10.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-04.alt1.tcl",
+    "controls/TA-04.alt2.tcl",
+    "controls/TA-04.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/TA-04.neg1.tcl",
+    "controls/TA-04.neg2.tcl",
+    "controls/TA-04.neg3.tcl",
+    "controls/TA-04.neg4.tcl",
+    "controls/TA-04.neg5.tcl",
+    "controls/TA-04.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint Task 3. Ground truth: per-endpoint worst max-delay slack after estimate_parasitics -placement on the untouched placed snapshot (slacks -0.0429 ... -0.0080 ns; the 11th endpoint is at -0.0047 ns, a clear boundary). Without RC the worst slack is -0.0111 ns and the top-10 endpoint set differs. Every path needs pin-by-pin detail; -endpoint_count > 1 repeats resp_msg[15] and fails the one-path-per-endpoint check. Fabricated reports fail the slack comparison. The instruction states ns because the validator compares slacks in ns: a report printed after set_cmd_units -time ps (4 decimals, values x1000) is a different answer."
+ },
+ {
+  "id": "TA-05",
+  "category": "timing",
+  "difficulty": "medium",
+  "start_state": "grouted",
+  "instruction": "Estimate the wire parasitics from the existing global routing result stored in the database (do not re-run global routing), then write the setup timing summary to outputs/wns_tns.txt as exactly one line of the form WNS=<value> TNS=<value>, where WNS is the worst (most negative) setup slack over all timing endpoints and TNS is the sum of the negative setup slacks over all timing endpoints, both in ns with 4 decimal places (for example: WNS=-0.1234 TNS=-1.2345). This is an analysis-only task: do not modify the design.",
+  "expected_commands": [
+   "estimate_parasitics -global_routing",
+   "report_wns",
+   "report_tns"
+  ],
+  "expected_outcome": "outputs/wns_tns.txt reads WNS=-0.0594 TNS=-0.8829 (global-route parasitics).",
+  "validator": {
+   "name": "ta_timing_summary",
+   "params": {
+    "file": "outputs/wns_tns.txt",
+    "parasitics": "global_routing",
+    "layout": "one_line",
+    "min_decimals": 4,
+    "fields": [
+     {
+      "label": "WNS",
+      "gt": "worst_setup_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "TNS",
+      "gt": "total_negative_setup_slack",
+      "tol": 0.003
+     }
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/TA-05.tcl",
+  "required_outputs": [
+   "outputs/wns_tns.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-05.alt1.tcl",
+    "controls/TA-05.alt2.tcl",
+    "controls/TA-05.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/TA-05.neg1.tcl",
+    "controls/TA-05.neg2.tcl",
+    "controls/TA-05.neg3.tcl",
+    "controls/TA-05.neg4.tcl",
+    "controls/TA-05.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Route guides are in the snapshot, so estimating from global routing works directly after read_db. WNS/TNS: global-route RC -0.0594/-0.8829, placement RC -0.0518/-0.6325, no RC -0.0377/-0.0772 ns; re-running global_route changes the routes (TNS -1.08 to -1.14 ns). Tolerances: WNS 1e-4 ns (4-decimal rounding), TNS 3e-3 ns (sum of <= 60 endpoint slacks each rounded to 4 decimals)."
+ },
+ {
+  "id": "TA-06",
+  "category": "timing",
+  "difficulty": "medium",
+  "start_state": "cts",
+  "instruction": "Check the design rules after clock tree synthesis using wire parasitics estimated from the current cell placement. Apply a design-wide maximum transition (slew) limit of 0.05 ns and a design-wide maximum capacitance limit of 10 fF, then write every pin that violates the transition limit to outputs/max_transition_violations.rpt and every pin that violates the capacitance limit to outputs/max_capacitance_violations.rpt. Each file must name every violating pin of its kind by its full name (instance/pin, or the port name for a top-level port) and no other pins; the standard design-rule violation report is an acceptable format. This is an analysis-only task: do not repair the violations or modify the design.",
+  "expected_commands": [
+   "estimate_parasitics -placement",
+   "set_max_transition",
+   "set_max_capacitance",
+   "report_check_types -max_slew -max_capacitance -violators"
+  ],
+  "expected_outcome": "The two files list exactly the 76 max-transition and 27 max-capacitance violating pins under placement-estimated RC.",
+  "validator": {
+   "name": "ta_drv_violations",
+   "params": {
+    "parasitics": "placement",
+    "max_transition": 0.05,
+    "max_capacitance": 10,
+    "files": {
+     "max_transition": "outputs/max_transition_violations.rpt",
+     "max_capacitance": "outputs/max_capacitance_violations.rpt"
+    }
+   }
+  },
+  "reference_script": "reference_scripts/TA-06.tcl",
+  "required_outputs": [
+   "outputs/max_transition_violations.rpt",
+   "outputs/max_capacitance_violations.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-06.alt1.tcl",
+    "controls/TA-06.alt2.tcl",
+    "controls/TA-06.alt3.tcl",
+    "controls/TA-06.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/TA-06.neg1.tcl",
+    "controls/TA-06.neg2.tcl",
+    "controls/TA-06.neg3.tcl",
+    "controls/TA-06.neg4.tcl",
+    "controls/TA-06.neg5.tcl",
+    "controls/TA-06.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Ground truth from sta::check_slew_limits / check_capacitance_limits with the same design-level limits and placement RC on the untouched cts snapshot: 76 slew and 27 capacitance violators (without RC: 42 and 12). Command units come from the liberty (ns, fF): 0.01 for the capacitance limit means 0.01 fF and flags every driver. Pin names are extracted as tokens <known instance>/<pin> or port names and compared as exact sets, so any listing format works. Switching the command units (set_cmd_units -capacitance pF, limit 0.010) is the same limit and passes (alt4); without any set_max_* the library limits flag nothing."
+ },
+ {
+  "id": "TA-07",
+  "category": "timing",
+  "difficulty": "hard",
+  "start_state": "routed",
+  "instruction": "Run post-route sign-off timing with parasitics extracted from the detailed routing. Run RC extraction with the OpenRCX extraction rules file platform/Nangate45.rcx_rules using the default extraction settings, save the extracted parasitics in SPEF format to outputs/gcd.spef, and time the design using these extracted parasitics. Then write outputs/signoff_summary.txt with exactly these four lines:\nworst_setup_slack <value>\ntotal_negative_setup_slack <value>\nworst_hold_slack <value>\nsetup_violating_endpoints <count>\nwhere total_negative_setup_slack is the sum of the negative setup slacks over all timing endpoints, worst_hold_slack is the smallest hold slack (it may be positive) and setup_violating_endpoints is the number of timing endpoints with negative setup slack. Slack values are in ns with 4 decimal places; the count is an integer. This is an analysis-only task: do not modify the design.",
+  "expected_commands": [
+   "define_process_corner",
+   "extract_parasitics -ext_model_file",
+   "write_spef",
+   "read_spef",
+   "report_worst_slack",
+   "report_tns"
+  ],
+  "expected_outcome": "outputs/gcd.spef holds the extracted RC of all 413 routable nets and the summary reads -0.0536 / -0.8160 / 0.0512 / 40 (extracted parasitics).",
+  "validator": {
+   "name": "ta_timing_summary",
+   "params": {
+    "file": "outputs/signoff_summary.txt",
+    "parasitics": "rcx",
+    "layout": "lines",
+    "min_decimals": 4,
+    "spef": "outputs/gcd.spef",
+    "spef_min_fraction": 0.95,
+    "fields": [
+     {
+      "label": "worst_setup_slack",
+      "gt": "worst_setup_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "total_negative_setup_slack",
+      "gt": "total_negative_setup_slack",
+      "tol": 0.003
+     },
+     {
+      "label": "worst_hold_slack",
+      "gt": "worst_hold_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "setup_violating_endpoints",
+      "gt": "setup_violating_endpoints",
+      "integer": true
+     }
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/TA-07.tcl",
+  "required_outputs": [
+   "outputs/gcd.spef",
+   "outputs/signoff_summary.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-07.alt1.tcl",
+    "controls/TA-07.alt2.tcl",
+    "controls/TA-07.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/TA-07.neg1.tcl",
+    "controls/TA-07.neg2.tcl",
+    "controls/TA-07.neg3.tcl",
+    "controls/TA-07.neg4.tcl",
+    "controls/TA-07.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version pitfall: in this build extract_parasitics only stores the RC network in the database; STA keeps timing without wire parasitics (WNS -0.0377, 5 violators) until the SPEF is read back with read_spef (WNS -0.0536, TNS -0.8160, worst hold 0.0512, 40 violators). The oracle runs the same extraction on the untouched routed snapshot. Extraction-option variants (no process corner, -max_res 0, -lef_res) move WNS by < 1e-5 ns and TNS by < 3e-4 ns, inside the tolerances; global-route estimates (WNS -0.0594) do not. The SPEF must start with *SPEF and hold >= 95% of the reference *D_NET sections (413, one per routable net; the design has 447 signal nets but only 413 have routing)."
+ },
+ {
+  "id": "TA-08",
+  "category": "timing",
+  "difficulty": "hard",
+  "start_state": "placed",
+  "instruction": "Check setup timing at the slow process corner. The setup (max-delay) analysis must use the cell timing of the slow-corner library platform/Nangate45_slow.lib for every cell instead of the typical library, and the wire parasitics must be estimated from the current cell placement while the slow library is in effect. Write outputs/slow_corner.txt with exactly these three lines:\nworst_setup_slack <value>\ntotal_negative_setup_slack <value>\nmin_clock_period <value>\nwhere the first two values are for the current clock period (0.485 ns), total_negative_setup_slack is the sum of the negative setup slacks over all timing endpoints, and min_clock_period is the smallest core_clock period at which no setup violation would remain at the slow corner with every other constraint (including the absolute input and output delay values) unchanged. All values in ns with 4 decimal places. This is an analysis-only task: do not modify the design.",
+  "expected_commands": [
+   "read_liberty -max",
+   "estimate_parasitics -placement",
+   "report_worst_slack",
+   "report_tns",
+   "report_clock_min_period"
+  ],
+  "expected_outcome": "outputs/slow_corner.txt reads worst_setup_slack -1.2186, total_negative_setup_slack -49.5953, min_clock_period 1.7036.",
+  "validator": {
+   "name": "ta_timing_summary",
+   "params": {
+    "file": "outputs/slow_corner.txt",
+    "parasitics": "placement",
+    "liberty_max": "platform/Nangate45_slow.lib",
+    "layout": "lines",
+    "min_decimals": 4,
+    "fields": [
+     {
+      "label": "worst_setup_slack",
+      "gt": "worst_setup_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "total_negative_setup_slack",
+      "gt": "total_negative_setup_slack",
+      "tol": 0.003
+     },
+     {
+      "label": "min_clock_period",
+      "gt": "min_clock_period",
+      "tol": 0.0002
+     }
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/TA-08.tcl",
+  "required_outputs": [
+   "outputs/slow_corner.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/TA-08.alt1.tcl",
+    "controls/TA-08.alt2.tcl",
+    "controls/TA-08.alt3.tcl",
+    "controls/TA-08.alt4.tcl",
+    "controls/TA-08.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/TA-08.neg1.tcl",
+    "controls/TA-08.neg2.tcl",
+    "controls/TA-08.neg3.tcl",
+    "controls/TA-08.neg4.tcl",
+    "controls/TA-08.neg5.tcl",
+    "controls/TA-08.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version behaviour: define_corners is rejected once a liberty is loaded, but read_liberty of the slow library (plain, -max or -corner default) remaps the cells used for setup timing. A liberty read does not invalidate timing that was already computed, and RC estimated before the switch keeps reduced parasitics built with typical pin data (WNS -1.2333, TNS -50.2453 instead of -1.2186, -49.5953), hence the explicit ordering requirement; estimating after the switch refreshes both. Ground truth (read_liberty -max, then estimate) equals a session that loads only the slow library. min_clock_period = period - WNS = 1.7036 ns (single clock, single-cycle paths, absolute IO delays; equals sta::find_clk_min_period with port paths and a bisection on the clock period); the minimum-period report prints only 2 decimals (1.70). Tolerances: 1e-4 ns slack, 3e-3 ns TNS (sum of <= 60 rounded endpoint slacks), 2e-4 ns period. On this design the minimum period without port paths (sta::find_clk_min_period ... 0) also equals 1.7036 ns, so leaving out the IO paths is not a discriminating mistake. Querying typical timing before the library switch is harmless as long as the RC is estimated after it (alt4); estimating before it is not (neg2, neg5)."
+ },
+ {
+  "id": "DEV-TA-01",
+  "category": "timing",
+  "difficulty": "medium",
+  "start_state": "placed",
+  "instruction": "What-if analysis: re-time the design with the period of the clock core_clock changed to 0.40 ns (same clock name and source port), keeping every input and output delay at its current absolute value. Analyze the design exactly as it is loaded in the session (ideal clock, no wire parasitics): do not estimate, extract or load any parasitics. Write outputs/period_0p40.txt with exactly these two lines:\nworst_setup_slack <value>\nsetup_violating_endpoints <count>\nwith the worst setup slack in ns with 4 decimal places and the number of timing endpoints with negative setup slack as an integer. Do not modify the design netlist or placement.",
+  "expected_commands": [
+   "create_clock",
+   "report_worst_slack"
+  ],
+  "expected_outcome": "outputs/period_0p40.txt reads worst_setup_slack -0.0961 and setup_violating_endpoints 41.",
+  "validator": {
+   "name": "ta_timing_summary",
+   "params": {
+    "file": "outputs/period_0p40.txt",
+    "parasitics": "none",
+    "clock_period": 0.4,
+    "layout": "lines",
+    "min_decimals": 4,
+    "fields": [
+     {
+      "label": "worst_setup_slack",
+      "gt": "worst_setup_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "setup_violating_endpoints",
+      "gt": "setup_violating_endpoints",
+      "integer": true
+     }
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/DEV-TA-01.tcl",
+  "required_outputs": [
+   "outputs/period_0p40.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-TA-01.alt1.tcl",
+    "controls/DEV-TA-01.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-TA-01.neg1.tcl",
+    "controls/DEV-TA-01.neg2.tcl",
+    "controls/DEV-TA-01.neg3.tcl",
+    "controls/DEV-TA-01.neg4.tcl",
+    "controls/DEV-TA-01.neg5.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Redefining core_clock with create_clock keeps the input/output delays that reference it (0.097 ns), so WNS drops by exactly 0.085 ns to -0.0961 ns with 41 violating endpoints. Rescaling the IO delays to 20% of the new period (0.08 ns) is a plausible mistake that changes both numbers. Deleting the clock before re-creating it, or creating the new clock under another name on clk (which replaces core_clock), drops the IO delays that referenced it (WNS -0.0692, 32 violators)."
+ }
+]

@@ -1,0 +1,313 @@
+[
+ {
+  "id": "CT-01",
+  "category": "cts",
+  "difficulty": "easy",
+  "instruction": "Synthesize the clock tree for the placed gcd design. Use BUF_X4 as the root clock buffer and as the buffer cell for the rest of the clock tree. After the run, every flip-flop clock pin must be driven through the new clock-tree buffers instead of directly by the clk input port.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis"
+  ],
+  "expected_outcome": "A buffered clock tree (TritonCTS builds 5 BUF_X4 buffers in two levels) drives all 35 register clock pins from the clk port.",
+  "validator": {
+   "name": "ct_clock_tree",
+   "params": {
+    "tree_masters": [
+     "BUF_X4"
+    ],
+    "root_master": "BUF_X4",
+    "require_legal": false
+   }
+  },
+  "reference_script": "reference_scripts/CT-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/CT-01.alt1.tcl",
+    "controls/CT-01.alt2.tcl",
+    "controls/CT-01.alt3.tcl",
+    "controls/CT-01.alt4.tcl",
+    "controls/CT-01.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/CT-01.neg1.tcl",
+    "controls/CT-01.neg2.tcl",
+    "controls/CT-01.neg3.tcl",
+    "controls/CT-01.neg4.tcl",
+    "controls/CT-01.neg5.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The validator traces the clock network on the final database from the clock source port to the STA register clock pins: all 35 must be reached through at least one clock-tree cell and every clock-tree cell must be BUF_X4. Legalization is not required (not asked), so extra legalization passes too. Pitfalls in this build: -buf_list is mandatory (CTS-0055) and the CTS regression examples use CLKBUF_X3; when -root_buf is omitted the FIRST cell of -buf_list becomes the master of every H-tree buffer, so '-buf_list {BUF_X2 BUF_X4}' yields an all-BUF_X2 tree."
+ },
+ {
+  "id": "CT-02",
+  "category": "cts",
+  "difficulty": "easy",
+  "instruction": "Run clock tree synthesis on the placed design using BUF_X8 for the root clock buffer and for all other clock-tree buffers. Then save the CTS summary metrics to outputs/ct02_cts_summary.txt: the number of clock roots, the number of clock buffers inserted, the number of clock subnets (nets driven by the inserted clock buffers) and the number of clock sinks (register clock pins). Put each metric on its own line, containing the metric name (roots, buffers, subnets or sinks) and its integer value.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis",
+   "report_cts"
+  ],
+  "expected_outcome": "An all-BUF_X8 clock tree (5 buffers) is built and the summary file reports 1 root, 5 buffers, 5 subnets and 35 sinks.",
+  "validator": {
+   "name": "ct_cts_summary",
+   "params": {
+    "tree_masters": [
+     "BUF_X8"
+    ],
+    "root_master": "BUF_X8",
+    "report": "outputs/ct02_cts_summary.txt"
+   }
+  },
+  "reference_script": "reference_scripts/CT-02.tcl",
+  "required_outputs": [
+   "outputs/ct02_cts_summary.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/CT-02.alt1.tcl",
+    "controls/CT-02.alt2.tcl",
+    "controls/CT-02.alt3.tcl",
+    "controls/CT-02.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/CT-02.neg1.tcl",
+    "controls/CT-02.neg2.tcl",
+    "controls/CT-02.neg3.tcl",
+    "controls/CT-02.neg4.tcl",
+    "controls/CT-02.neg5.tcl",
+    "controls/CT-02.neg6.tcl",
+    "controls/CT-02.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Each line's metric is the keyword (subnet/root/sink/buffer) that appears first in it, and its value is the first integer after that keyword (the last integer of the line when none follows, e.g. '5 buffers'), so remarks such as 'buffers: 5 (1 root + 4 leaf)' are read correctly; the value is compared with the oracle: roots = clock source ports whose net drives a clock-tree cell, buffers = clock-tree cells, subnets = nets driven by clock-tree cells, sinks = register clock pins reached. Pitfalls in this build: report_cts only accepts -out_file (the README example 'report_cts \"file.txt\"' and 'report_cts > file' fail with STA-0406), and report_cts in a session that did not run CTS prints zeros. Metric lines may use 'name value', 'name: value' or 'name=value'; capturing report_cts with with_output_to_variable yields an empty string (it prints through the logger)."
+ },
+ {
+  "id": "CT-03",
+  "category": "cts",
+  "difficulty": "medium",
+  "instruction": "The clock tree of the design has already been synthesized and the clock is propagated. Without modifying the design, estimate the parasitics from the current placement and then write the static timing analyzer's clock-skew report for setup checks of core_clock, with 4 digits after the decimal point, to outputs/ct03_clock_skew.rpt. The report must name the two register clock pins that define the worst skew and must end with the skew value (in ns).",
+  "start_state": "cts",
+  "expected_commands": [
+   "estimate_parasitics",
+   "report_clock_skew"
+  ],
+  "expected_outcome": "outputs/ct03_clock_skew.rpt names _675_/CK and _679_/CK and ends with the setup skew 0.0032 ns (placement parasitics).",
+  "validator": {
+   "name": "ct_skew_report",
+   "params": {
+    "report": "outputs/ct03_clock_skew.rpt",
+    "skew_tol_ns": 0.0001
+   }
+  },
+  "reference_script": "reference_scripts/CT-03.tcl",
+  "required_outputs": [
+   "outputs/ct03_clock_skew.rpt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/CT-03.alt1.tcl",
+    "controls/CT-03.alt2.tcl",
+    "controls/CT-03.alt3.tcl",
+    "controls/CT-03.alt4.tcl",
+    "controls/CT-03.alt5.tcl",
+    "controls/CT-03.alt6.tcl"
+   ],
+   "negatives": [
+    "controls/CT-03.neg1.tcl",
+    "controls/CT-03.neg2.tcl",
+    "controls/CT-03.neg3.tcl",
+    "controls/CT-03.neg4.tcl",
+    "controls/CT-03.neg5.tcl",
+    "controls/CT-03.neg6.tcl",
+    "controls/CT-03.neg7.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "The oracle re-establishes placement parasitics on the final database and takes sta::worst_clock_skew -setup plus the pin pair from its own report_clock_skew. The reported skew is the last standalone number in the file. Tolerance 1e-4 ns covers rounding to 4 decimals (+/-5e-5); the wrong-parasitics value (no estimation, 0.0018 ns) and the default 2-digit report (0.00) are both more than 1e-3 ns away. In this build the skew does not depend on ideal/propagated mode, so parasitics are the discriminating prerequisite; setup and hold skew are identical for this single-corner design. A unit suffix glued to the number (0.0032ns) is accepted. design_unchanged also compares the placement status counts and the traced clock-tree connectivity with the starting state. Known blind spot: in this build report_clock_skew gives the same pins and value for -hold as for -setup and the same value with an ideal clock (unset_propagated_clock), so neither mistake can be detected on this design. More than 4 digits (-digits 5/6) is accepted because only the value is checked."
+ },
+ {
+  "id": "CT-04",
+  "category": "cts",
+  "difficulty": "hard",
+  "instruction": "Build the clock tree for the placed design so that the root clock buffer (the buffer driven directly by the clk input port) is a BUF_X8 and every other clock-tree buffer is a BUF_X2. Afterwards legalize the placement so that all cells, including the new clock buffers, are on legal sites without overlaps.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis",
+   "replace_cell",
+   "detailed_placement"
+  ],
+  "expected_outcome": "Clock tree with one BUF_X8 root buffer and four BUF_X2 leaf buffers driving all 35 register clock pins; legal placement.",
+  "validator": {
+   "name": "ct_clock_tree",
+   "params": {
+    "tree_masters": [
+     "BUF_X2"
+    ],
+    "root_master": "BUF_X8",
+    "require_legal": true
+   }
+  },
+  "reference_script": "reference_scripts/CT-04.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/CT-04.alt1.tcl",
+    "controls/CT-04.alt2.tcl",
+    "controls/CT-04.alt3.tcl",
+    "controls/CT-04.alt4.tcl",
+    "controls/CT-04.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/CT-04.neg1.tcl",
+    "controls/CT-04.neg2.tcl",
+    "controls/CT-04.neg3.tcl",
+    "controls/CT-04.neg4.tcl",
+    "controls/CT-04.neg5.tcl",
+    "controls/CT-04.neg6.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Version-specific pitfall: in this build -root_buf also becomes the master of every H-tree buffer (and -tree_buf is ignored), so the obvious '-root_buf BUF_X8 -buf_list BUF_X2' silently produces an all-BUF_X8 tree. Valid solutions build the tree and then resize the root (replace_cell or dbInst swapMaster), or build it with BUF_X8 and downsize the non-root buffers; then legalize. The root is the clock-tree cell at level 1 below the clock source port; legality comes from the probe's check_placement. Labelled hard: the documented command silently builds the wrong tree, so the task needs a netlist edit after CTS, and upsizing after legalization leaves the wider BUF_X8 overlapping."
+ },
+ {
+  "id": "CT-05",
+  "category": "cts",
+  "difficulty": "hard",
+  "instruction": "Run clock tree synthesis for the clock defined by the loaded SDC constraints (core_clock), using BUF_X4 for the root clock buffer and for all other clock-tree buffers, and legalize the placement so that the new clock buffers are on legal sites. Then switch the clock to propagated mode, estimate placement parasitics for all nets (the clock-tree nets included) and write the clock-tree metrics to outputs/ct05_cts_metrics.txt in exactly this two-line format:\nclock_buffers <N>\nclock_skew_ns <S>\nwhere <N> is the number of buffer cells in the final clock network between the clk input port and the register clock pins, and <S> is the worst setup clock skew of core_clock reported by the static timing analyzer for the legalized design with these propagated clock latencies and parasitics, in ns with at least 4 digits after the decimal point.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis",
+   "detailed_placement",
+   "set_propagated_clock",
+   "estimate_parasitics",
+   "report_clock_skew",
+   "report_cts"
+  ],
+  "expected_outcome": "Legal all-BUF_X4 clock tree; outputs/ct05_cts_metrics.txt reports clock_buffers 5 and the setup skew of the legalized design with placement parasitics (about 0.0032 ns).",
+  "validator": {
+   "name": "ct_cts_metrics",
+   "params": {
+    "tree_masters": [
+     "BUF_X4"
+    ],
+    "root_master": "BUF_X4",
+    "require_legal": true,
+    "report": "outputs/ct05_cts_metrics.txt",
+    "skew_tol_ns": 0.0001
+   }
+  },
+  "reference_script": "reference_scripts/CT-05.tcl",
+  "required_outputs": [
+   "outputs/ct05_cts_metrics.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/CT-05.alt1.tcl",
+    "controls/CT-05.alt2.tcl",
+    "controls/CT-05.alt3.tcl",
+    "controls/CT-05.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/CT-05.neg1.tcl",
+    "controls/CT-05.neg2.tcl",
+    "controls/CT-05.neg3.tcl",
+    "controls/CT-05.neg4.tcl",
+    "controls/CT-05.neg5.tcl",
+    "controls/CT-05.neg6.tcl",
+    "controls/CT-05.neg7.tcl",
+    "controls/CT-05.neg8.tcl",
+    "controls/CT-05.neg9.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Blueprint task 5. Ground truth on the final database: clock-tree cells counted by tracing the clock network from the clock source port; skew recomputed after set_propagated_clock + estimate_parasitics -placement (sta::worst_clock_skew -setup). Tolerance 1e-4 ns covers 4-decimal rounding and the ~3.5e-5 ns stale value an agent gets when it estimated parasitics before legalizing. Version pitfall: parasitics estimated while the clock is still ideal leave the clock-tree nets without wire RC and propagating the clock afterwards does not add them (skew ~0.0018 instead of ~0.0032 ns); re-estimating after propagation repairs it only if no timing was computed with the propagated clock in between. Hence the instruction explicitly requires the clock-tree nets to carry estimated parasitics. Other pitfalls: report_cts must be called in the CTS session (a fresh session reports zeros); the skew report rounds to 2 digits unless more are requested; skipping estimation or assuming an ideal clock (skew 0) is rejected. Second order pitfall (neg7): estimating while the clock is ideal, then computing propagated-clock timing and only then re-estimating also leaves the clock nets without wire RC (0.0018 ns); the instruction's explicit 'clock-tree nets included' makes that output wrong, not just stale. Known blind spot: the hold skew equals the setup skew on this design, so a hold-skew value cannot be told apart."
+ },
+ {
+  "id": "CT-06",
+  "category": "cts",
+  "difficulty": "hard",
+  "instruction": "The clock tree has already been synthesized. Without modifying the design, write a description of the clock tree to outputs/ct06_clock_tree.txt with one line per clock-tree buffer and four whitespace-separated fields: <instance_name> <cell_name> <level> <register_sinks>. The level is 1 for the buffer driven directly by the clk input port, 2 for buffers driven by a level-1 buffer, and so on; register_sinks is the number of flip-flop clock pins driven directly by that buffer's output net (0 if it drives only other buffers). List every clock-tree buffer exactly once and write nothing else to the file.",
+  "start_state": "cts",
+  "expected_commands": [
+   "get_cells",
+   "get_nets",
+   "get_pins",
+   "ord::get_db_block"
+  ],
+  "expected_outcome": "Five lines: clkbuf_0_clk BUF_X4 1 0, and the four level-2 BUF_X4 leaf buffers with 10, 9, 7 and 9 register sinks.",
+  "validator": {
+   "name": "ct_tree_structure",
+   "params": {
+    "report": "outputs/ct06_clock_tree.txt"
+   }
+  },
+  "reference_script": "reference_scripts/CT-06.tcl",
+  "required_outputs": [
+   "outputs/ct06_clock_tree.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/CT-06.alt1.tcl",
+    "controls/CT-06.alt2.tcl",
+    "controls/CT-06.alt3.tcl",
+    "controls/CT-06.alt4.tcl",
+    "controls/CT-06.alt5.tcl"
+   ],
+   "negatives": [
+    "controls/CT-06.neg1.tcl",
+    "controls/CT-06.neg2.tcl",
+    "controls/CT-06.neg3.tcl",
+    "controls/CT-06.neg4.tcl",
+    "controls/CT-06.neg5.tcl",
+    "controls/CT-06.neg6.tcl",
+    "controls/CT-06.neg7.tcl",
+    "controls/CT-06.neg8.tcl"
+   ]
+  },
+  "split": "test",
+  "notes": "Exact comparison of the per-buffer (cell, level, register sinks) with the oracle trace of the final database; the design must be unchanged. Line order is free. Pitfall: report_cts in this session prints zeros (CTS metrics are not stored in the database), so the tree has to be inspected through the netlist; counting every pin on a buffer's output net includes the driver pin and the buffer loads. A library-qualified cell name (NangateOpenCellLibrary/BUF_X4) is accepted. design_unchanged also compares placement status counts and the traced clock-tree connectivity with the starting state (a rewired register clock pin keeps masters and positions unchanged)."
+ },
+ {
+  "id": "DEV-CT-01",
+  "category": "cts",
+  "difficulty": "medium",
+  "instruction": "Synthesize the clock tree of the placed design with BUF_X2 as the root clock buffer and as the clock-tree buffer cell, then legalize the placement so that the inserted clock buffers are on legal sites without overlaps.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis",
+   "detailed_placement"
+  ],
+  "expected_outcome": "All-BUF_X2 clock tree driving the 35 register clock pins; legal placement.",
+  "validator": {
+   "name": "ct_clock_tree",
+   "params": {
+    "tree_masters": [
+     "BUF_X2"
+    ],
+    "root_master": "BUF_X2",
+    "require_legal": true
+   }
+  },
+  "reference_script": "reference_scripts/DEV-CT-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-CT-01.alt1.tcl",
+    "controls/DEV-CT-01.alt2.tcl",
+    "controls/DEV-CT-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-CT-01.neg1.tcl",
+    "controls/DEV-CT-01.neg2.tcl",
+    "controls/DEV-CT-01.neg3.tcl",
+    "controls/DEV-CT-01.neg4.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Development task (prompt/debug work only). CTS leaves the clock buffers on unaligned, overlapping locations; legality comes from the probe's check_placement."
+ }
+]

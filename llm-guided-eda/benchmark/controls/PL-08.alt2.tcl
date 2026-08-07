@@ -1,0 +1,34 @@
+# Alternative: ORFS detail_place recipe (legalize, improve_placement, mirroring); values written with a unit.
+proc total_hpwl {} {
+  set block [ord::get_db_block]
+  set total 0.0
+  foreach net [$block getNets] {
+    if {[$net getSigType] in {POWER GROUND}} continue
+    set xs {}; set ys {}
+    foreach iterm [$net getITerms] {
+      lassign [$iterm getAvgXY] ok x y
+      if {$ok} { lappend xs $x; lappend ys $y }
+    }
+    foreach bterm [$net getBTerms] {
+      foreach bpin [$bterm getBPins] {
+        set box [$bpin getBBox]
+        lappend xs [expr {([$box xMin] + [$box xMax]) / 2.0}]
+        lappend ys [expr {([$box yMin] + [$box yMax]) / 2.0}]
+      }
+    }
+    if {[llength $xs] < 2} continue
+    set xs [lsort -real $xs]; set ys [lsort -real $ys]
+    set total [expr {$total + [lindex $xs end] - [lindex $xs 0] + [lindex $ys end] - [lindex $ys 0]}]
+  }
+  return [expr {$total / [$block getDefUnits]}]
+}
+set before [total_hpwl]
+detailed_placement
+improve_placement
+optimize_mirroring
+check_placement -verbose
+set after [total_hpwl]
+set f [open outputs/hpwl.txt w]
+puts $f "hpwl_before_um: [format %.2f $before] um"
+puts $f "hpwl_after_um: [format %.2f $after] um"
+close $f

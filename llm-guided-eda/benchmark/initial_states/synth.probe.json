@@ -1,0 +1,525 @@
+{
+ "buffer_count": 15,
+ "clkbuf_named_count": 0,
+ "clock_sink_net_count": 1,
+ "clock_sink_net_drivers": {
+  "PORT": 1
+ },
+ "clocks": [
+  "core_clock"
+ ],
+ "core": null,
+ "core_area_um2": 0.0,
+ "dbu": 2000,
+ "design_loaded": true,
+ "detailed_wirelength_um": 0.0,
+ "die": null,
+ "die_area_um2": 0.0,
+ "drv_count": null,
+ "filler_count": 0,
+ "guided_net_count": 0,
+ "have_global_routes": null,
+ "inst_count": 362,
+ "inverter_count": 48,
+ "io_pin_count": 54,
+ "io_pins": {
+  "clk": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[0]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[10]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[11]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[12]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[13]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[14]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[15]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[16]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[17]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[18]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[19]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[1]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[20]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[21]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[22]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[23]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[24]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[25]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[26]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[27]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[28]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[29]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[2]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[30]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[31]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[3]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[4]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[5]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[6]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[7]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[8]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_msg[9]": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_rdy": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "req_val": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "reset": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[0]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[10]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[11]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[12]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[13]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[14]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[15]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[1]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[2]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[3]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[4]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[5]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[6]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[7]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[8]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_msg[9]": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_rdy": {
+   "io": "INPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  },
+  "resp_val": {
+   "io": "OUTPUT",
+   "layer": "",
+   "placed": false,
+   "sig": "SIGNAL",
+   "x": null,
+   "y": null
+  }
+ },
+ "io_pins_placed": 0,
+ "logic_area_um2": 519.7640000000005,
+ "logic_inst_count": 362,
+ "logic_outside_core_count": 0,
+ "logic_placed_count": 0,
+ "master_counts": {
+  "AND2_X1": 7,
+  "AND3_X1": 1,
+  "AOI21_X1": 7,
+  "AOI21_X2": 3,
+  "BUF_X1": 4,
+  "BUF_X2": 4,
+  "BUF_X4": 5,
+  "CLKBUF_X1": 2,
+  "DFF_X1": 35,
+  "INV_X1": 39,
+  "INV_X2": 8,
+  "INV_X8": 1,
+  "MUX2_X1": 12,
+  "NAND2_X1": 103,
+  "NAND2_X2": 14,
+  "NAND2_X4": 4,
+  "NAND3_X1": 16,
+  "NAND3_X4": 2,
+  "NAND4_X1": 3,
+  "NAND4_X4": 1,
+  "NOR2_X1": 7,
+  "NOR2_X2": 7,
+  "NOR3_X1": 1,
+  "OAI21_X1": 35,
+  "OAI21_X2": 2,
+  "OAI22_X1": 9,
+  "OR2_X1": 2,
+  "XNOR2_X1": 17,
+  "XNOR2_X2": 10,
+  "XOR2_X1": 1
+ },
+ "net_count": 433,
+ "physical_only_area_um2": 0.0,
+ "placement_legal": null,
+ "positions": {},
+ "register_clock_pin_count": 35,
+ "routable_net_count": 399,
+ "routed_net_count": 0,
+ "row_count": 0,
+ "row_height_um": 0,
+ "script_status": "ok",
+ "sequential_count": 0,
+ "signal_net_count": 433,
+ "site": "",
+ "special_net_swires": {},
+ "status_counts": {
+  "NONE": 362
+ },
+ "tapcell_count": 0,
+ "tns_hold": 0.0,
+ "tns_setup": 0.0,
+ "top": "gcd",
+ "track_grid_layers": [],
+ "type_counts": {
+  "CORE": 362
+ },
+ "utilization": null,
+ "utilization_with_taps": null,
+ "wns_hold": 0.10471344226989988,
+ "wns_setup": 0.019043572813257484
+}

@@ -1,0 +1,17 @@
+[
+ {
+  "id": "DEV-EX-01",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "Initialize the floorplan for the loaded gcd netlist with a target core utilization of 35%, a core aspect ratio of 1.0 and 5 um of spacing between the core and the die boundary on every side. Then create the routing tracks for all metal layers.",
+  "start_state": "synth",
+  "expected_commands": ["initialize_floorplan", "make_tracks"],
+  "expected_outcome": "Die and core defined with ~35% core utilization, a square core, ~5 um core-to-die margins, placement rows, and routing tracks on metal1-metal10.",
+  "validator": {"name": "example_floorplan_init", "params": {"utilization": 0.35, "util_tol": 0.03, "aspect_ratio": 1.0, "ar_tol": 0.06, "margin_um": 5.0, "margin_tol_low": 0.05, "margin_tol_high": 1.5}},
+  "reference_script": "reference_scripts/DEV-EX-01.tcl",
+  "required_outputs": [],
+  "controls": {"alternatives": ["controls/DEV-EX-01.alt1.tcl"], "negatives": ["controls/DEV-EX-01.neg1.tcl", "controls/DEV-EX-01.neg2.tcl"]},
+  "split": "dev",
+  "notes": "Worked example of the task / validator / control format. Utilization is measured on the resulting core (logic cell area / core area), so any construction method that achieves it passes."
+ }
+]

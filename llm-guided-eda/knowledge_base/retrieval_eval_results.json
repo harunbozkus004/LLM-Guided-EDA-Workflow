@@ -1,0 +1,1620 @@
+{
+  "n_questions": 40,
+  "modes": {
+    "vector": {
+      "metrics": {
+        "recall@1": 0.45,
+        "recall@3": 0.7,
+        "recall@6": 0.875,
+        "mrr@10": 0.6083630952380952,
+        "command_hit@6": 0.975,
+        "mean_latency_ms": 12.921053171157837
+      },
+      "questions": [
+        {
+          "id": "q01",
+          "first_relevant_rank": 8,
+          "first_command_rank": 8,
+          "top": [
+            "OpenROAD-flow-scripts/flow/scripts/global_place.tcl > global_place.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/global_place_skip_io.tcl > global_place_skip_io.tcl",
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Check Placement",
+            "OpenROAD/src/gpl/src/replace.tcl > global_placement",
+            "OpenROAD/src/gpl/README.md > RePlAce (gpl: RePlAce Global Placer) > Commands > Tuning Parameters",
+            "OpenROAD/src/gpl/README.md > RePlAce (gpl: RePlAce Global Placer)"
+          ]
+        },
+        {
+          "id": "q02",
+          "first_relevant_rank": 4,
+          "first_command_rank": 3,
+          "top": [
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Placement",
+            "OpenROAD-flow-scripts/flow/scripts/global_place.tcl > global_place.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/global_place_skip_io.tcl > global_place_skip_io.tcl",
+            "OpenROAD/src/gpl/src/replace.tcl > global_placement",
+            "OpenROAD/src/mpl2/README.md > Hierarchical Macro Placement (mpl2: Hierarchical Automatic Macro Placer) > Commands > Hier-RTLMP algorithm > Generic Parameters",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Macro or Standard Cell Placement > Defining Placement Density"
+          ]
+        },
+        {
+          "id": "q03",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/mpl/README.md > Macro Placement (mpl: Triton Macro Placer) > Commands",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Floorplan",
+            "OpenROAD/src/mpl/src/MacroPlacer.tcl > macro_placement",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Macro or Standard Cell Placement > Macro Placement",
+            "OpenROAD/src/mpl/README.md > Macro Placement (mpl: Triton Macro Placer)",
+            "OpenROAD-flow-scripts/flow/scripts/macro_place_util.tcl > macro_place_util.tcl"
+          ]
+        },
+        {
+          "id": "q04",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/ifp/src/InitFloorplan.tcl > initialize_floorplan",
+            "OpenROAD/src/ifp/README.md > Initialize Floorplan (ifp: Floorplan Initialization) > Commands > Initialize Floorplan > Method 1: Automatic die size calculation",
+            "OpenROAD/src/ifp/test/init_floorplan2.tcl > init_floorplan2.tcl",
+            "OpenROAD/src/ifp/test/init_floorplan6.tcl > init_floorplan6.tcl",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Design Specific Configuration Variables > Optional Variables > Floorplan",
+            "OpenROAD/src/ifp/README.md > Initialize Floorplan (ifp: Floorplan Initialization) > Commands > Initialize Floorplan"
+          ]
+        },
+        {
+          "id": "q05",
+          "first_relevant_rank": 7,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/make_tracks.tcl > make_tracks.tcl",
+            "OpenROAD/src/grt/test/no_tracks.tcl > no_tracks.tcl",
+            "OpenROAD/src/ppl/test/no_tracks.tcl > no_tracks.tcl",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Detail Routing",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/fastroute.tcl > fastroute.tcl",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Routing Layers"
+          ]
+        },
+        {
+          "id": "q06",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins > Options",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > IO Pin Placement",
+            "OpenROAD/src/ppl/src/IOPlacer.tcl > place_pins",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set IO Pin Constraint > Options",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement)",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins"
+          ]
+        },
+        {
+          "id": "q07",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/ppl/test/group_pins9.tcl > group_pins9.tcl",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set IO Pin Constraint > Options",
+            "OpenROAD/src/ppl/test/group_pins8.tcl > group_pins8.tcl",
+            "OpenROAD/src/ppl/test/group_pins1.tcl > group_pins1.tcl",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins > Options",
+            "OpenROAD/src/gui/README.md > Graphical User Interface > Commands > Limit drawing to specific nets"
+          ]
+        },
+        {
+          "id": "q08",
+          "first_relevant_rank": 3,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion)",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Tapcell insertion",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Add Tapcell/Endcap > Options",
+            "OpenROAD/src/tap/src/tapcell.tcl > tapcell_ripup",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Only cutting rows",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Only adding boundary/endcap cells"
+          ]
+        },
+        {
+          "id": "q09",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/grid_strategy-M1-M4-M7.tcl > global connections",
+            "OpenROAD/src/pdn/README.md > PDNGEN (pdn: PDN Generation) > Example scripts > Defining a SoC power grid with pads",
+            "OpenROAD/src/pdn/test/power_switch.tcl > power_switch.tcl",
+            "OpenROAD/src/pdn/test/macros_cells.tcl > macros_cells.tcl",
+            "OpenROAD/src/pdn/test/max_width.tcl > max_width.tcl",
+            "OpenROAD/src/pdn/test/macros_different_nets.tcl > macros_different_nets.tcl"
+          ]
+        },
+        {
+          "id": "q10",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/pdn/README.md > PDNGEN (pdn: PDN Generation) > Commands > Add straps / stripes",
+            "OpenROAD/src/pdn/test/design_width.tcl > design_width.tcl",
+            "OpenROAD/src/pdn/test/core_grid_with_rings_with_limit_straps.tcl > core_grid_with_rings_with_limit_straps.tcl",
+            "OpenROAD/src/pdn/test/core_grid_with_rings_with_straps_rings_over_core.tcl > core_grid_with_rings_with_straps_rings_over_core.tcl",
+            "OpenROAD/src/pdn/src/pdn.tcl > add_pdn_stripe",
+            "OpenROAD/src/pdn/test/core_grid_start_power_strap_ground.tcl > core_grid_start_power_strap_ground.tcl"
+          ]
+        },
+        {
+          "id": "q11",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Estimate Parasitics",
+            "OpenROAD/src/rsz/test/make_parasitics1.tcl > make_parasitics1.tcl",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Wire RC",
+            "OpenROAD/src/rsz/src/Resizer.tcl > set_wire_rc",
+            "OpenROAD/src/rsz/test/make_parasitics3.tcl > make_parasitics3.tcl",
+            "OpenSTA/tcl/CmdUtil.tcl > set_cmd_units"
+          ]
+        },
+        {
+          "id": "q12",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Estimate Parasitics",
+            "OpenROAD/src/rsz/test/make_parasitics1.tcl > make_parasitics1.tcl",
+            "OpenROAD/src/grt/test/est_rc1.tcl > est_rc1.tcl",
+            "OpenROAD/src/grt/test/est_rc3.tcl > est_rc3.tcl",
+            "OpenROAD/src/grt/test/est_rc2.tcl > est_rc2.tcl",
+            "OpenROAD/src/cts/test/array_full_flow.tcl > array_full_flow.tcl"
+          ]
+        },
+        {
+          "id": "q13",
+          "first_relevant_rank": null,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/test/flow.tcl > Repair max slew/cap/fanout violations and normalize slews",
+            "OpenROAD/src/rsz/test/max_slew_cap.tcl > max_slew_cap.tcl",
+            "OpenROAD/src/rsz/test/repair_slew10.tcl > repair_slew10.tcl",
+            "OpenROAD/src/rsz/test/repair_slew4.tcl > repair_slew4.tcl",
+            "OpenROAD/src/rsz/test/repair_slew5.tcl > repair_slew5.tcl",
+            "OpenROAD/src/rsz/test/repair_slew1.tcl > repair_slew1.tcl"
+          ]
+        },
+        {
+          "id": "q14",
+          "first_relevant_rank": 4,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Timing Optimization Using repair_timing",
+            "OpenROAD/src/rsz/test/repair_hold13.tcl > repair_hold13.tcl",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Clock Tree Synthesis (CTS)",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Repair Timing",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations",
+            "OpenROAD/test/flow.tcl > Clock Tree Synthesis"
+          ]
+        },
+        {
+          "id": "q15",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Don't Use",
+            "OpenROAD/src/rsz/src/Resizer.tcl > unset_dont_use",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > get_lib_cells",
+            "OpenROAD/src/rsz/src/Resizer.tcl > set_dont_use",
+            "OpenSTA/tcl/Sdc.tcl > get_lib_cells",
+            "OpenROAD/src/dpl/test/mirror3.tcl > mirror3.tcl"
+          ]
+        },
+        {
+          "id": "q16",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Remove Buffers",
+            "OpenROAD/src/rsz/src/Resizer.tcl > remove_buffers",
+            "OpenROAD/src/rsz/test/remove_buffers1.tcl > remove_buffers1.tcl",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Generate verilog netlist",
+            "OpenSTA/tcl/CmdUtil.tcl > delete_from_list",
+            "OpenROAD/src/rsz/src/Resizer.tcl > buffer_ports"
+          ]
+        },
+        {
+          "id": "q17",
+          "first_relevant_rank": 4,
+          "first_command_rank": 4,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Tie Cells",
+            "OpenROAD/src/ifp/README.md > Initialize Floorplan (ifp: Floorplan Initialization) > Commands > Inserting tieoff cells",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Tapcell insertion",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Repair Tie Fanout",
+            "OpenROAD/src/pdn/test/core_grid_with_rings_with_limit_straps.tcl > core_grid_with_rings_with_limit_straps.tcl",
+            "OpenROAD/src/rsz/test/tie_fanout.tcl > tie_fanout.tcl"
+          ]
+        },
+        {
+          "id": "q18",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Clock Tree Synthesis",
+            "OpenROAD/src/cts/src/TritonCTS.tcl > clock_tree_synthesis",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Clock Tree Synthesis > Options",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Clock Tree Synthesis",
+            "OpenROAD/test/flow.tcl > Clock Tree Synthesis",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Clock Tree Synthesis"
+          ]
+        },
+        {
+          "id": "q19",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Clock Tree Synthesis > Reporting CTS Metrics",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Report CTS",
+            "OpenROAD/test/flow.tcl > Clock Tree Synthesis",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Clock Tree Synthesis > Options",
+            "OpenROAD/src/cts/test/find_clock_pad.tcl > find_clock_pad.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/cts.tcl > cts.tcl"
+          ]
+        },
+        {
+          "id": "q20",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Filler Placement",
+            "OpenROAD/src/pad/README.md > Chip-level Connections (pad: ICeWall chip-level connections) > Commands > Placing IO Filler Cells",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Adding Filler Cells",
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Remove Fillers",
+            "OpenROAD/src/dpl/test/fillers5.tcl > fillers5.tcl",
+            "OpenROAD/src/dpl/test/fillers3.tcl > fillers3.tcl"
+          ]
+        },
+        {
+          "id": "q21",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Check Placement",
+            "OpenROAD/src/dpl/test/check6.tcl > check6.tcl",
+            "OpenROAD/src/dpl/test/check7.tcl > check7.tcl",
+            "OpenROAD/src/dpl/src/Opendp.tcl > check_placement",
+            "OpenROAD/src/dpl/test/check5.tcl > check5.tcl",
+            "OpenROAD/src/dpl/test/check3.tcl > check3.tcl"
+          ]
+        },
+        {
+          "id": "q22",
+          "first_relevant_rank": null,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dpl/test/check8.tcl > check8.tcl",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/config.mk > Place / Cell padding in SITE widths to ease rout-ability.  Applied to both sides / CTS / TritonCTS options / Route",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Floorplan",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Add Tapcell/Endcap > Options",
+            "OpenROAD/src/dpl/test/check3.tcl > check3.tcl",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Placement"
+          ]
+        },
+        {
+          "id": "q23",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Write Global Routing Guides",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Using the Python interface to grt",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Example scripts",
+            "OpenROAD-flow-scripts/flow/scripts/global_route.tcl > If GLOBAL_ROUTE_ARGS is specified, then we do only what the",
+            "OpenROAD/src/grt/test/set_nets_to_route1.tcl > set_nets_to_route1.tcl",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Plot Global Routing Guides"
+          ]
+        },
+        {
+          "id": "q24",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Routing Layers",
+            "OpenROAD/src/grt/src/GlobalRouter.tcl > set_routing_layers",
+            "OpenROAD/src/grt/test/clock_route.tcl > clock_route.tcl",
+            "OpenROAD/src/grt/test/clock_route_alpha.tcl > clock_route_alpha.tcl",
+            "OpenROAD/src/cts/test/array_full_flow.tcl > array_full_flow.tcl",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/fastroute.tcl > fastroute.tcl"
+          ]
+        },
+        {
+          "id": "q25",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Global Routing Layer Adjustment",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Routing",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Global Route",
+            "OpenROAD/src/gpl/test/route02.tcl > route02.tcl",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Global Routing Region Adjustment",
+            "OpenROAD/src/gpl/test/route01.tcl > route01.tcl"
+          ]
+        },
+        {
+          "id": "q26",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/drt/README.md > Detailed Routing (drt: TritonRoute Detailed routing) > Commands > Detailed Route > Options",
+            "OpenROAD/src/drt/README.md > Detailed Routing (drt: TritonRoute Detailed routing) > Commands > Detailed Route",
+            "OpenROAD/src/drt/README.md > Detailed Routing (drt: TritonRoute Detailed routing) > Commands > Detailed Route Debugging",
+            "OpenROAD/test/flow.tcl > Detailed routing",
+            "OpenROAD/src/drt/src/TritonRoute.tcl > detailed_route",
+            "OpenROAD/src/drt/README.md > Detailed Routing (drt: TritonRoute Detailed routing)"
+          ]
+        },
+        {
+          "id": "q27",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion)",
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion) > Commands",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Antenna Checker",
+            "OpenROAD/src/ant/src/AntennaChecker.tcl > check_antennas",
+            "OpenROAD/src/ant/test/check_drt1.tcl > check_drt1.tcl",
+            "OpenROAD/test/flow.tcl > Global routing / Antenna repair / Filler placement"
+          ]
+        },
+        {
+          "id": "q28",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Repair Antennas",
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion)",
+            "OpenROAD/test/flow.tcl > Global routing / Antenna repair / Filler placement",
+            "OpenROAD/src/grt/test/repair_antennas_error1.tcl > repair_antennas_error1.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/global_route.tcl > If GLOBAL_ROUTE_ARGS is specified, then we do only what the",
+            "OpenROAD/src/ant/test/check_grt1.tcl > check_grt1.tcl"
+          ]
+        },
+        {
+          "id": "q29",
+          "first_relevant_rank": 3,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/test/flow.tcl > Extraction",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Write Rule File",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Write SPEF",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Extract Parasitics",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction)",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Extraction Rules File Generation"
+          ]
+        },
+        {
+          "id": "q30",
+          "first_relevant_rank": 3,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD-flow-scripts/flow/scripts/report_metrics.tcl > report_metrics.tcl",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_checks",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > find_timing_paths",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_crpr_enabled",
+            "OpenROAD/test/flow.tcl > Final Report"
+          ]
+        },
+        {
+          "id": "q31",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_worst_slack",
+            "OpenSTA/tcl/Search.tcl > report_worst_slack",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Viewing Results And Logs > Timing",
+            "OpenROAD-flow-scripts/flow/scripts/report_metrics.tcl > report_metrics.tcl",
+            "OpenROAD/test/flow.tcl > Final Report",
+            "OpenSTA/tcl/Search.tcl > report_slack"
+          ]
+        },
+        {
+          "id": "q32",
+          "first_relevant_rank": 5,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dbSta/test/find_clks2.tcl > find_clks2.tcl",
+            "OpenROAD/src/dbSta/test/find_clks1.tcl > find_clks1.tcl",
+            "OpenSTA/examples/spef_parasitics.tcl > spef_parasitics.tcl",
+            "OpenSTA/examples/delay_calc.tcl > delay_calc.tcl",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > create_clock",
+            "OpenROAD/src/rsz/test/buffer_ports5.tcl > buffer_ports5.tcl"
+          ]
+        },
+        {
+          "id": "q33",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_input_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > unset_output_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > unset_input_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_clock_latency",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_input_port_default_clock",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Configuring The Design > Timing Constraints"
+          ]
+        },
+        {
+          "id": "q34",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_propagated_clock",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_clock_latency",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_propagate_all_clocks",
+            "OpenSTA/tcl/Sdc.tcl > set_propagated_clock",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_propagate_gated_clock_enable",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis"
+          ]
+        },
+        {
+          "id": "q35",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Viewing Results And Logs > Power",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_power",
+            "OpenSTA/doc/OpenSTA.pdf > Example Command Scripts > Power Analysis",
+            "OpenSTA/power/Power.tcl > report_power",
+            "OpenROAD/src/dbSta/test/power1.tcl > power1.tcl",
+            "OpenSTA/tcl/Sdc.tcl > set_max_leakage_power"
+          ]
+        },
+        {
+          "id": "q36",
+          "first_relevant_rank": null,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/test/repair_slew10.tcl > repair_slew10.tcl",
+            "OpenROAD/src/rsz/test/repair_slew4.tcl > repair_slew4.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/report_metrics.tcl > report_metrics.tcl",
+            "OpenROAD/src/rsz/test/repair_slew15.tcl > repair_slew15.tcl",
+            "OpenROAD/src/rsz/test/repair_slew17.tcl > repair_slew17.tcl",
+            "OpenROAD/src/rsz/test/repair_slew5.tcl > repair_slew5.tcl"
+          ]
+        },
+        {
+          "id": "q37",
+          "first_relevant_rank": 6,
+          "first_command_rank": 6,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > find_timing_paths",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_crpr_enabled",
+            "OpenSTA/README.md > Parallax Static Timing Analyzer > Exception paths",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Clock Tree Synthesis (CTS)",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_clock_groups"
+          ]
+        },
+        {
+          "id": "q38",
+          "first_relevant_rank": 4,
+          "first_command_rank": 4,
+          "top": [
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser)",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/config.mk > IR Drop / IR drop estimation supply net name to be analyzed and supply voltage variable",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Power Planning And Analysis",
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser) > Commands > Analyze Power Grid",
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser) > Commands > Write Spice Power Grid",
+            "OpenSTA/doc/OpenSTA.pdf > Example Command Scripts > Power Analysis"
+          ]
+        },
+        {
+          "id": "q39",
+          "first_relevant_rank": 5,
+          "first_command_rank": 5,
+          "top": [
+            "OpenROAD/src/dft/README.md > TCL Commands",
+            "OpenSTA/tcl/Sdc.tcl > current_design",
+            "OpenROAD/src/rsz/test/fanin_fanout1.tcl > fanin_fanout1.tcl",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > get_fanin",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > all_registers",
+            "OpenROAD/src/dbSta/test/block_sta1.tcl > block_sta1.tcl"
+          ]
+        },
+        {
+          "id": "q40",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > write_verilog",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Generate verilog netlist",
+            "OpenROAD/src/dbSta/src/dbReadVerilog.tcl > write_verilog",
+            "OpenROAD/src/dbSta/test/write_verilog7.tcl > write_verilog7.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/load.tcl > Routines to run equivalence tests when they are enabled.",
+            "OpenSTA/verilog/Verilog.tcl > write_verilog"
+          ]
+        }
+      ]
+    },
+    "bm25": {
+      "metrics": {
+        "recall@1": 0.4,
+        "recall@3": 0.675,
+        "recall@6": 0.8,
+        "mrr@10": 0.5630853174603174,
+        "command_hit@6": 0.9,
+        "mean_latency_ms": 0.8020997047424316
+      },
+      "questions": [
+        {
+          "id": "q01",
+          "first_relevant_rank": 4,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Check Placement",
+            "OpenROAD/src/dpl/test/pad04.tcl > pad04.tcl",
+            "OpenROAD/README.md > OpenROAD > Getting Started with OpenROAD-flow-scripts",
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Detailed Placement",
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Set Placement Padding",
+            "OpenROAD/src/dpl/test/gcd_nangate45.tcl > gcd_nangate45.tcl"
+          ]
+        },
+        {
+          "id": "q02",
+          "first_relevant_rank": 7,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/flow/scripts/global_place_skip_io.tcl > global_place_skip_io.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/global_place.tcl > global_place.tcl",
+            "OpenROAD/src/gpl/README.md > RePlAce (gpl: RePlAce Global Placer) > Commands > Tuning Parameters",
+            "OpenROAD/test/flow.tcl > Global placement",
+            "OpenROAD/src/gpl/test/density01.tcl > density01.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/tdms_place.tcl > tdms_place.tcl"
+          ]
+        },
+        {
+          "id": "q03",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/mpl/README.md > Macro Placement (mpl: Triton Macro Placer) > Commands",
+            "OpenROAD-flow-scripts/flow/scripts/macro_place_util.tcl > macro_place_util.tcl",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Floorplan",
+            "OpenROAD/test/flow.tcl > IO Placement (random) / Macro Placement / Tapcell insertion / Power distribution network insertion",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Macro or Standard Cell Placement > Macro Placement",
+            "OpenROAD/src/mpl/src/MacroPlacer.tcl > macro_placement"
+          ]
+        },
+        {
+          "id": "q04",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/flow/scripts/floorplan.tcl > Initialize floorplan by reading in floorplan DEF",
+            "OpenROAD/src/ifp/src/InitFloorplan.tcl > initialize_floorplan",
+            "OpenROAD/src/ifp/README.md > Initialize Floorplan (ifp: Floorplan Initialization) > Commands > Initialize Floorplan > Method 1: Automatic die size calculation",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Design Specific Configuration Variables > Optional Variables > Floorplan",
+            "OpenROAD/src/ifp/README.md > Initialize Floorplan (ifp: Floorplan Initialization) > Commands > Initialize Floorplan",
+            "OpenROAD/src/ifp/test/init_floorplan6.tcl > init_floorplan6.tcl"
+          ]
+        },
+        {
+          "id": "q05",
+          "first_relevant_rank": 9,
+          "first_command_rank": 9,
+          "top": [
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins > Options",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Floorplan",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Routing",
+            "OpenROAD/src/pdn/README.md > PDNGEN (pdn: PDN Generation)",
+            "OpenROAD/src/grt/test/pin_track_not_aligned.tcl > pin_track_not_aligned.tcl",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Metal Fill"
+          ]
+        },
+        {
+          "id": "q06",
+          "first_relevant_rank": 5,
+          "first_command_rank": 5,
+          "top": [
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Floorplan",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set Pin Length",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set Pin Thick Multiplier",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set Pin Extension",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins > Options",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement)"
+          ]
+        },
+        {
+          "id": "q07",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set IO Pin Constraint > Options",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins > Options",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_false_path",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set IO Pin Constraint",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Useful Developer Commands",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > group_path"
+          ]
+        },
+        {
+          "id": "q08",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Tapcell insertion",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Add Tapcell/Endcap > Options",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Only adding boundary/endcap cells > Options",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Only cutting rows",
+            "OpenROAD/src/tap/src/tapcell.tcl > tapcell_ripup",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Remove Tapcells/Endcaps"
+          ]
+        },
+        {
+          "id": "q09",
+          "first_relevant_rank": null,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/pdn/test/macros_cells_dont_touch.tcl > macros_cells_dont_touch.tcl",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/grid_strategy-M1-M4-M7.tcl > global connections",
+            "OpenROAD/src/pdn/test/region_secondary_nets.tcl > region_secondary_nets.tcl",
+            "OpenROAD/src/pdn/test/power_switch.tcl > power_switch.tcl",
+            "OpenROAD/src/pdn/test/macros_cells_no_grid.tcl > macros_cells_no_grid.tcl",
+            "OpenROAD/src/pdn/test/names.tcl > names.tcl"
+          ]
+        },
+        {
+          "id": "q10",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/pdn/README.md > PDNGEN (pdn: PDN Generation) > Commands > Add straps / stripes",
+            "OpenROAD/src/pdn/test/core_grid_with_rings_with_limit_straps.tcl > core_grid_with_rings_with_limit_straps.tcl",
+            "OpenROAD/src/pdn/test/core_grid_with_rings_with_straps_rings_over_core.tcl > core_grid_with_rings_with_straps_rings_over_core.tcl",
+            "OpenROAD/src/pdn/test/core_grid_strap_count.tcl > core_grid_strap_count.tcl",
+            "OpenROAD/src/pdn/test/core_grid_offset_strap.tcl > core_grid_offset_strap.tcl",
+            "OpenROAD/src/pdn/README.md > PDNGEN (pdn: PDN Generation) > Commands > Add rings"
+          ]
+        },
+        {
+          "id": "q11",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Wire RC",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Estimate Parasitics",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Layer RC",
+            "OpenROAD/src/rsz/test/make_parasitics1.tcl > make_parasitics1.tcl",
+            "OpenROAD/src/rsz/src/Resizer.tcl > set_wire_rc",
+            "OpenROAD/src/rsz/test/repair_hold10.tcl > repair_hold10.tcl"
+          ]
+        },
+        {
+          "id": "q12",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Estimate Parasitics",
+            "OpenROAD/README.md > OpenROAD > Getting Started with OpenROAD-flow-scripts",
+            "OpenROAD/src/rsz/test/repair_hold10.tcl > repair_hold10.tcl",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Running The Automated RTL-to-GDS Flow",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Repair Design",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Timing Optimization Using repair_design"
+          ]
+        },
+        {
+          "id": "q13",
+          "first_relevant_rank": null,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD-flow-scripts/flow/scripts/report_metrics.tcl > report_metrics.tcl",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Timing Optimization Using repair_design",
+            "OpenROAD/test/flow.tcl > Repair max slew/cap/fanout violations and normalize slews",
+            "OpenSTA/tcl/Search.tcl > report_check_types",
+            "OpenROAD/src/rsz/test/max_slew_cap.tcl > max_slew_cap.tcl",
+            "OpenROAD/src/rsz/test/repair_slew3.tcl > repair_slew3.tcl"
+          ]
+        },
+        {
+          "id": "q14",
+          "first_relevant_rank": 4,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Clock Tree Synthesis (CTS)",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Timing Optimization Using repair_timing",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Hold Violations",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Repair Timing",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Clock Tree Synthesis > Reporting Clock Skews",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations"
+          ]
+        },
+        {
+          "id": "q15",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Don't Use",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Library Setup",
+            "OpenSTA/README.md > Parallax Static Timing Analyzer > Build > Installing with CMake",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > get_lib_pins",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > get_lib_cells",
+            "OpenROAD/src/dft/README.md > Limitations"
+          ]
+        },
+        {
+          "id": "q16",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Remove Buffers",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Synthesis",
+            "OpenROAD/test/flow.tcl > flow.tcl",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Repair Clock Nets",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > write_verilog",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Report CTS"
+          ]
+        },
+        {
+          "id": "q17",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Repair Tie Fanout",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Tie Cells",
+            "OpenROAD/src/rsz/test/tie_fanout.tcl > tie_fanout.tcl",
+            "OpenROAD/src/rsz/test/repair_tie4.tcl > repair_tie4.tcl",
+            "OpenROAD/src/rsz/test/repair_tie7.tcl > repair_tie7.tcl",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Synthesis"
+          ]
+        },
+        {
+          "id": "q18",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Clock Tree Synthesis > Options",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Clock Tree Synthesis",
+            "OpenROAD/test/flow.tcl > Clock Tree Synthesis",
+            "OpenROAD/src/cts/src/TritonCTS.tcl > clock_tree_synthesis",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Clock Tree Synthesis",
+            "OpenROAD/src/cts/test/check_buffers.tcl > check_buffers.tcl"
+          ]
+        },
+        {
+          "id": "q19",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Clock Tree Synthesis > Reporting CTS Metrics",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Report CTS",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Clock Tree Synthesis > Options",
+            "OpenROAD/test/flow.tcl > Clock Tree Synthesis",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Clock Tree Synthesis",
+            "OpenROAD/src/cts/test/check_wire_rc_cts.tcl > check_wire_rc_cts.tcl"
+          ]
+        },
+        {
+          "id": "q20",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Filler Placement",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Adding Filler Cells",
+            "OpenROAD/src/pad/README.md > Chip-level Connections (pad: ICeWall chip-level connections) > Commands > Placing IO Filler Cells",
+            "OpenROAD/test/flow.tcl > Global routing / Antenna repair / Filler placement",
+            "OpenROAD/src/dpl/test/fillers5.tcl > fillers5.tcl",
+            "OpenROAD/src/dpl/test/multi_height_rows.tcl > multi_height_rows.tcl"
+          ]
+        },
+        {
+          "id": "q21",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Check Placement",
+            "OpenROAD/src/dpl/src/Opendp.tcl > check_placement",
+            "OpenROAD/src/dpl/test/check7.tcl > check7.tcl",
+            "OpenROAD/src/dpl/test/fragmented_row04.tcl > fragmented_row04.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/detail_place.tcl > detail_place.tcl",
+            "OpenROAD/src/dpl/test/check6.tcl > check6.tcl"
+          ]
+        },
+        {
+          "id": "q22",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Set Placement Padding",
+            "OpenROAD/src/dpl/test/check8.tcl > check8.tcl",
+            "OpenROAD/src/gpl/README.md > RePlAce (gpl: RePlAce Global Placer) > Commands",
+            "OpenROAD/src/gpl/src/replace.tcl > global_placement",
+            "OpenROAD-flow-scripts/flow/scripts/global_place.tcl > global_place.tcl",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Only adding boundary/endcap cells > Options"
+          ]
+        },
+        {
+          "id": "q23",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Global Route",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Example scripts",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Write Global Routing Guides",
+            "OpenROAD-flow-scripts/flow/scripts/global_route.tcl > If GLOBAL_ROUTE_ARGS is specified, then we do only what the",
+            "OpenROAD/test/flow.tcl > Detailed routing",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Using the Python interface to grt"
+          ]
+        },
+        {
+          "id": "q24",
+          "first_relevant_rank": 3,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Wire RC",
+            "OpenROAD/src/grt/test/critical_nets_percentage.tcl > critical_nets_percentage.tcl",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Routing Layers",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Routing Alpha",
+            "OpenROAD/src/grt/test/clock_route_alpha.tcl > clock_route_alpha.tcl",
+            "OpenROAD/src/pdn/README.md > PDNGEN (pdn: PDN Generation) > Example scripts > Sroute"
+          ]
+        },
+        {
+          "id": "q25",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Global Routing Randomness",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Global Routing Layer Adjustment",
+            "OpenROAD/src/grt/src/GlobalRouter.tcl > set_global_routing_random",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Global Route",
+            "OpenROAD/src/grt/src/GlobalRouter.tcl > global_route",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Troubleshooting Problems"
+          ]
+        },
+        {
+          "id": "q26",
+          "first_relevant_rank": 3,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/flow/scripts/detail_route.tcl > The idea is to have a policy that gives progress information soon without",
+            "OpenROAD/test/flow.tcl > Detailed routing",
+            "OpenROAD/src/drt/README.md > Detailed Routing (drt: TritonRoute Detailed routing) > Commands > Detailed Route",
+            "OpenROAD/src/drt/src/TritonRoute.tcl > detailed_route",
+            "OpenROAD/src/drt/README.md > Detailed Routing (drt: TritonRoute Detailed routing) > Commands > Detailed Route > Options",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > OpenROAD GUI > DRC Viewer"
+          ]
+        },
+        {
+          "id": "q27",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion)",
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion) > Commands",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Antenna Checker",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Repair Antennas",
+            "OpenROAD/test/flow.tcl > Global routing / Antenna repair / Filler placement",
+            "OpenROAD/src/ant/test/check_api1.tcl > check_api1.tcl"
+          ]
+        },
+        {
+          "id": "q28",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Repair Antennas",
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion)",
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion) > Commands",
+            "OpenROAD/src/grt/test/repair_antennas_error1.tcl > repair_antennas_error1.tcl",
+            "OpenROAD/docs/contrib/DeveloperGuide.md > Developer Guide > Tool Flow Namespace",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Hold Violations"
+          ]
+        },
+        {
+          "id": "q29",
+          "first_relevant_rank": 9,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/test/flow.tcl > Extraction",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction)",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Extraction Rules File Generation",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Write Rule File",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Example scripts",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Parasitics Extraction"
+          ]
+        },
+        {
+          "id": "q30",
+          "first_relevant_rank": 8,
+          "first_command_rank": 8,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Timing Optimization Based On Multiple Corners",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Viewing Results And Logs > Timing",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_operating_conditions",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_worst_slack",
+            "OpenROAD/test/flow.tcl > Setup/hold timing repair",
+            "OpenROAD/src/rsz/test/repair_setup2.tcl > repair_setup2.tcl"
+          ]
+        },
+        {
+          "id": "q31",
+          "first_relevant_rank": 5,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Viewing Results And Logs > Timing",
+            "OpenROAD/test/flow.tcl > Setup/hold timing repair",
+            "OpenROAD/test/flow.tcl > Final Report",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Repair Timing",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_worst_slack",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Timing Optimization Based On Multiple Corners"
+          ]
+        },
+        {
+          "id": "q32",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/user/AddingNewDesign.md > Adding New Designs to the ORFS",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > create_clock",
+            "OpenROAD/src/dbSta/test/find_clks2.tcl > find_clks2.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/write_ref_sdc.tcl > write_ref_sdc.tcl",
+            "OpenROAD/src/dbSta/test/find_clks1.tcl > find_clks1.tcl",
+            "OpenROAD/src/cts/test/find_clock_pad.tcl > find_clock_pad.tcl"
+          ]
+        },
+        {
+          "id": "q33",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_input_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_output_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > unset_input_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > unset_output_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_input_port_default_clock",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_clock_min_period"
+          ]
+        },
+        {
+          "id": "q34",
+          "first_relevant_rank": 3,
+          "first_command_rank": 3,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_clock_latency",
+            "OpenSTA/README.md > Parallax Static Timing Analyzer > Clocks",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_propagated_clock",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_input_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_output_delay",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Clock Tree Synthesis"
+          ]
+        },
+        {
+          "id": "q35",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_power",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Viewing Results And Logs > Power",
+            "OpenSTA/doc/OpenSTA.pdf > Example Command Scripts > Power Analysis",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_max_leakage_power",
+            "OpenSTA/tcl/Sdc.tcl > set_max_leakage_power",
+            "OpenROAD/src/pdn/README.md > PDNGEN (pdn: PDN Generation) > Commands > Power switch insertion"
+          ]
+        },
+        {
+          "id": "q36",
+          "first_relevant_rank": 5,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD-flow-scripts/flow/scripts/report_metrics.tcl > report_metrics.tcl",
+            "OpenROAD/test/flow.tcl > Final Report",
+            "OpenROAD/test/flow.tcl > Repair max slew/cap/fanout violations and normalize slews",
+            "OpenROAD/src/rsz/test/max_slew_cap.tcl > max_slew_cap.tcl",
+            "OpenSTA/tcl/Search.tcl > report_check_types",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Configure CTS Characterization"
+          ]
+        },
+        {
+          "id": "q37",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_clock_groups",
+            "OpenSTA/tcl/Sdc.tcl > set_clock_groups",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_preset_clear_arcs_enabled",
+            "OpenSTA/README.md > Parallax Static Timing Analyzer > Exception paths",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_max_transition",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_check_types"
+          ]
+        },
+        {
+          "id": "q38",
+          "first_relevant_rank": null,
+          "first_command_rank": 10,
+          "top": [
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser)",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Power Planning And Analysis",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/config.mk > IR Drop / IR drop estimation supply net name to be analyzed and supply voltage variable",
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser) > Commands > Check Power Grid",
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser) > Example scripts",
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser) > Commands > Set PDNSim Net voltage"
+          ]
+        },
+        {
+          "id": "q39",
+          "first_relevant_rank": 10,
+          "first_command_rank": 10,
+          "top": [
+            "OpenROAD/src/gpl/README.md > RePlAce (gpl: RePlAce Global Placer) > Commands > Tuning Parameters",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Design Specific Configuration Variables > Optional Variables > Synthesis",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > get_fanin",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > get_fanout",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > get_nets"
+          ]
+        },
+        {
+          "id": "q40",
+          "first_relevant_rank": 3,
+          "first_command_rank": 3,
+          "top": [
+            "OpenROAD/src/par/README.md > TritonPart : An Open-Source Constraints-Driven Partitioner (par: TritonPart: constraints-driven paritioner)",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > read_verilog",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > write_verilog",
+            "OpenSTA/README.md > Parallax Static Timing Analyzer",
+            "OpenROAD/test/flow.tcl > Global routing / Antenna repair / Filler placement",
+            "OpenROAD-flow-scripts/flow/scripts/load.tcl > Routines to run equivalence tests when they are enabled."
+          ]
+        }
+      ]
+    },
+    "hybrid": {
+      "metrics": {
+        "recall@1": 0.475,
+        "recall@3": 0.8,
+        "recall@6": 0.925,
+        "mrr@10": 0.6502380952380953,
+        "command_hit@6": 1.0,
+        "mean_latency_ms": 14.007949829101562
+      },
+      "questions": [
+        {
+          "id": "q01",
+          "first_relevant_rank": 4,
+          "first_command_rank": 4,
+          "top": [
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Check Placement",
+            "OpenROAD-flow-scripts/flow/scripts/global_place.tcl > global_place.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/global_place_skip_io.tcl > global_place_skip_io.tcl",
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Detailed Placement",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Placement",
+            "OpenROAD/src/dpl/test/pad04.tcl > pad04.tcl"
+          ]
+        },
+        {
+          "id": "q02",
+          "first_relevant_rank": 6,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/flow/scripts/global_place_skip_io.tcl > global_place_skip_io.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/global_place.tcl > global_place.tcl",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Placement",
+            "OpenROAD/src/gpl/README.md > RePlAce (gpl: RePlAce Global Placer) > Commands > Tuning Parameters",
+            "OpenROAD/test/flow.tcl > Global placement",
+            "OpenROAD/src/gpl/src/replace.tcl > global_placement"
+          ]
+        },
+        {
+          "id": "q03",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/mpl/README.md > Macro Placement (mpl: Triton Macro Placer) > Commands",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Floorplan",
+            "OpenROAD-flow-scripts/flow/scripts/macro_place_util.tcl > macro_place_util.tcl",
+            "OpenROAD/src/mpl/src/MacroPlacer.tcl > macro_placement",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Macro or Standard Cell Placement > Macro Placement",
+            "OpenROAD/src/mpl/README.md > Macro Placement (mpl: Triton Macro Placer)"
+          ]
+        },
+        {
+          "id": "q04",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/ifp/src/InitFloorplan.tcl > initialize_floorplan",
+            "OpenROAD/src/ifp/README.md > Initialize Floorplan (ifp: Floorplan Initialization) > Commands > Initialize Floorplan > Method 1: Automatic die size calculation",
+            "OpenROAD-flow-scripts/flow/scripts/floorplan.tcl > Initialize floorplan by reading in floorplan DEF",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Design Specific Configuration Variables > Optional Variables > Floorplan",
+            "OpenROAD/src/ifp/test/init_floorplan6.tcl > init_floorplan6.tcl",
+            "OpenROAD/src/ifp/README.md > Initialize Floorplan (ifp: Floorplan Initialization) > Commands > Initialize Floorplan"
+          ]
+        },
+        {
+          "id": "q05",
+          "first_relevant_rank": 3,
+          "first_command_rank": 3,
+          "top": [
+            "OpenROAD/src/grt/test/no_tracks.tcl > no_tracks.tcl",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Routing",
+            "OpenROAD/src/ifp/README.md > Initialize Floorplan (ifp: Floorplan Initialization) > Commands > Make Tracks",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/make_tracks.tcl > make_tracks.tcl",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins > Options",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Floorplan"
+          ]
+        },
+        {
+          "id": "q06",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins > Options",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement)",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set IO Pin Constraint > Options",
+            "OpenROAD/src/pad/README.md > Chip-level Connections (pad: ICeWall chip-level connections) > Commands > Define IO Rows",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Floorplan"
+          ]
+        },
+        {
+          "id": "q07",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set IO Pin Constraint > Options",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Place All Pins > Options",
+            "OpenROAD/src/ppl/README.md > Pin Placer (ppl: I/O Placement) > Commands > Set IO Pin Constraint",
+            "OpenROAD/src/ppl/test/group_pins9.tcl > group_pins9.tcl",
+            "OpenROAD/src/ppl/test/group_pins8.tcl > group_pins8.tcl",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_false_path"
+          ]
+        },
+        {
+          "id": "q08",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Tapcell insertion",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Add Tapcell/Endcap > Options",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion)",
+            "OpenROAD/src/tap/src/tapcell.tcl > tapcell_ripup",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Only cutting rows",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Only adding boundary/endcap cells > Options"
+          ]
+        },
+        {
+          "id": "q09",
+          "first_relevant_rank": 6,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/grid_strategy-M1-M4-M7.tcl > global connections",
+            "OpenROAD/src/pdn/test/power_switch.tcl > power_switch.tcl",
+            "OpenROAD/src/pdn/test/macros_cells_no_grid.tcl > macros_cells_no_grid.tcl",
+            "OpenROAD/src/pdn/test/macros_cells_overlapping_ports.tcl > macros_cells_overlapping_ports.tcl",
+            "OpenROAD/src/pdn/test/macros_cells_dont_touch.tcl > macros_cells_dont_touch.tcl",
+            "OpenROAD/src/pdn/README.md > PDNGEN (pdn: PDN Generation) > Example scripts > Defining a SoC power grid with pads"
+          ]
+        },
+        {
+          "id": "q10",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/pdn/README.md > PDNGEN (pdn: PDN Generation) > Commands > Add straps / stripes",
+            "OpenROAD/src/pdn/test/core_grid_with_rings_with_limit_straps.tcl > core_grid_with_rings_with_limit_straps.tcl",
+            "OpenROAD/src/pdn/test/core_grid_with_rings_with_straps_rings_over_core.tcl > core_grid_with_rings_with_straps_rings_over_core.tcl",
+            "OpenROAD/src/pdn/test/core_grid_strap_count.tcl > core_grid_strap_count.tcl",
+            "OpenROAD/src/pdn/src/pdn.tcl > add_pdn_stripe",
+            "OpenROAD/src/pdn/test/core_grid_offset_strap.tcl > core_grid_offset_strap.tcl"
+          ]
+        },
+        {
+          "id": "q11",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Estimate Parasitics",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Wire RC",
+            "OpenROAD/src/rsz/test/make_parasitics1.tcl > make_parasitics1.tcl",
+            "OpenROAD/src/rsz/src/Resizer.tcl > set_wire_rc",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/setRC.tcl > setRC.tcl",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Layer RC"
+          ]
+        },
+        {
+          "id": "q12",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Estimate Parasitics",
+            "OpenROAD/src/rsz/test/make_parasitics1.tcl > make_parasitics1.tcl",
+            "OpenROAD/README.md > OpenROAD > Getting Started with OpenROAD-flow-scripts",
+            "OpenROAD/src/grt/test/est_rc1.tcl > est_rc1.tcl",
+            "OpenROAD/src/rsz/test/repair_hold10.tcl > repair_hold10.tcl",
+            "OpenROAD/src/grt/test/est_rc3.tcl > est_rc3.tcl"
+          ]
+        },
+        {
+          "id": "q13",
+          "first_relevant_rank": null,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/test/flow.tcl > Repair max slew/cap/fanout violations and normalize slews",
+            "OpenROAD/src/rsz/test/max_slew_cap.tcl > max_slew_cap.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/report_metrics.tcl > report_metrics.tcl",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Timing Optimization Using repair_design",
+            "OpenROAD/src/rsz/test/repair_slew4.tcl > repair_slew4.tcl",
+            "OpenROAD/src/rsz/test/repair_slew1.tcl > repair_slew1.tcl"
+          ]
+        },
+        {
+          "id": "q14",
+          "first_relevant_rank": 3,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Timing Optimization Using repair_timing",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Clock Tree Synthesis (CTS)",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Repair Timing",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Hold Violations",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations",
+            "OpenROAD/src/rsz/test/repair_hold5.tcl > repair_hold5.tcl"
+          ]
+        },
+        {
+          "id": "q15",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Don't Use",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > get_lib_cells",
+            "OpenROAD/src/rsz/src/Resizer.tcl > unset_dont_use",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Library Setup",
+            "OpenSTA/README.md > Parallax Static Timing Analyzer > Build > Installing with CMake",
+            "OpenROAD/src/rsz/src/Resizer.tcl > set_dont_use"
+          ]
+        },
+        {
+          "id": "q16",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Remove Buffers",
+            "OpenROAD/src/rsz/src/Resizer.tcl > remove_buffers",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Synthesis",
+            "OpenROAD/src/rsz/test/remove_buffers1.tcl > remove_buffers1.tcl",
+            "OpenROAD/test/flow.tcl > flow.tcl",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Generate verilog netlist"
+          ]
+        },
+        {
+          "id": "q17",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Tie Cells",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Repair Tie Fanout",
+            "OpenROAD/src/rsz/test/tie_fanout.tcl > tie_fanout.tcl",
+            "OpenROAD/src/ifp/README.md > Initialize Floorplan (ifp: Floorplan Initialization) > Commands > Inserting tieoff cells",
+            "OpenROAD/src/rsz/test/repair_tie8.tcl > repair_tie8.tcl",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Tapcell insertion"
+          ]
+        },
+        {
+          "id": "q18",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Clock Tree Synthesis",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Clock Tree Synthesis > Options",
+            "OpenROAD/src/cts/src/TritonCTS.tcl > clock_tree_synthesis",
+            "OpenROAD/test/flow.tcl > Clock Tree Synthesis",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Clock Tree Synthesis",
+            "OpenROAD/src/cts/test/check_buffers.tcl > check_buffers.tcl"
+          ]
+        },
+        {
+          "id": "q19",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Clock Tree Synthesis > Reporting CTS Metrics",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Report CTS",
+            "OpenROAD/test/flow.tcl > Clock Tree Synthesis",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Clock Tree Synthesis > Options",
+            "OpenROAD-flow-scripts/flow/scripts/cts.tcl > cts.tcl",
+            "OpenROAD/src/cts/test/find_clock_pad.tcl > find_clock_pad.tcl"
+          ]
+        },
+        {
+          "id": "q20",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Filler Placement",
+            "OpenROAD/src/pad/README.md > Chip-level Connections (pad: ICeWall chip-level connections) > Commands > Placing IO Filler Cells",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Adding Filler Cells",
+            "OpenROAD/src/dpl/test/fillers5.tcl > fillers5.tcl",
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Remove Fillers",
+            "OpenROAD/test/flow.tcl > Global routing / Antenna repair / Filler placement"
+          ]
+        },
+        {
+          "id": "q21",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Check Placement",
+            "OpenROAD/src/dpl/src/Opendp.tcl > check_placement",
+            "OpenROAD/src/dpl/test/check7.tcl > check7.tcl",
+            "OpenROAD/src/dpl/test/check6.tcl > check6.tcl",
+            "OpenROAD/src/dpl/test/check3.tcl > check3.tcl",
+            "OpenROAD/src/dpl/test/fragmented_row04.tcl > fragmented_row04.tcl"
+          ]
+        },
+        {
+          "id": "q22",
+          "first_relevant_rank": 4,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dpl/test/check8.tcl > check8.tcl",
+            "OpenROAD-flow-scripts/flow/scripts/global_place.tcl > global_place.tcl",
+            "OpenROAD/src/tap/README.md > Tapcell (tap: Tapcell and Welltie Insertion) > Commands > Only adding boundary/endcap cells > Options",
+            "OpenROAD/src/dpl/README.md > Detailed Placement > Commands > Set Placement Padding",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/config.mk > Place / Cell padding in SITE widths to ease rout-ability.  Applied to both sides / CTS / TritonCTS options / Route",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Floorplan"
+          ]
+        },
+        {
+          "id": "q23",
+          "first_relevant_rank": 3,
+          "first_command_rank": 3,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Write Global Routing Guides",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Example scripts",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Global Route",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Using the Python interface to grt",
+            "OpenROAD-flow-scripts/flow/scripts/global_route.tcl > If GLOBAL_ROUTE_ARGS is specified, then we do only what the",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Plot Global Routing Guides"
+          ]
+        },
+        {
+          "id": "q24",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Routing Layers",
+            "OpenROAD/src/grt/test/clock_route_alpha.tcl > clock_route_alpha.tcl",
+            "OpenROAD/src/cts/test/array_full_flow.tcl > array_full_flow.tcl",
+            "OpenROAD/src/grt/test/pd2.tcl > pd2.tcl",
+            "OpenROAD/src/rsz/README.md > Gate Resizer (rsz: Gate resizing and buffering) > Commands > Set Wire RC",
+            "OpenROAD/src/grt/src/GlobalRouter.tcl > set_routing_layers"
+          ]
+        },
+        {
+          "id": "q25",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Global Routing Layer Adjustment",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Global Route",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Set Global Routing Randomness",
+            "OpenROAD/src/grt/src/GlobalRouter.tcl > set_global_routing_random",
+            "OpenROAD/src/grt/src/GlobalRouter.tcl > global_route",
+            "OpenROAD-flow-scripts/docs/user/FlowVariables.md > Platform Specific Environment Variables > Routing"
+          ]
+        },
+        {
+          "id": "q26",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/drt/README.md > Detailed Routing (drt: TritonRoute Detailed routing) > Commands > Detailed Route",
+            "OpenROAD/src/drt/README.md > Detailed Routing (drt: TritonRoute Detailed routing) > Commands > Detailed Route > Options",
+            "OpenROAD/test/flow.tcl > Detailed routing",
+            "OpenROAD-flow-scripts/flow/scripts/detail_route.tcl > The idea is to have a policy that gives progress information soon without",
+            "OpenROAD/src/drt/src/TritonRoute.tcl > detailed_route",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > OpenROAD GUI > DRC Viewer"
+          ]
+        },
+        {
+          "id": "q27",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion)",
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion) > Commands",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Antenna Checker",
+            "OpenROAD/test/flow.tcl > Global routing / Antenna repair / Filler placement",
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Repair Antennas",
+            "OpenROAD/src/ant/test/check_api1.tcl > check_api1.tcl"
+          ]
+        },
+        {
+          "id": "q28",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/grt/README.md > Global Routing (grt: FastRoute Global routing) > Commands > Repair Antennas",
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion)",
+            "OpenROAD/src/grt/test/repair_antennas_error1.tcl > repair_antennas_error1.tcl",
+            "OpenROAD/test/flow.tcl > Global routing / Antenna repair / Filler placement",
+            "OpenROAD/src/ant/README.md > Antenna Rule Checker (ant: Antenna check and diode insertion) > Commands",
+            "OpenROAD-flow-scripts/flow/scripts/global_route.tcl > If GLOBAL_ROUTE_ARGS is specified, then we do only what the"
+          ]
+        },
+        {
+          "id": "q29",
+          "first_relevant_rank": 5,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/test/flow.tcl > Extraction",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Write Rule File",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction)",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Extraction Rules File Generation",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Write SPEF",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Extract Parasitics"
+          ]
+        },
+        {
+          "id": "q30",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Timing Optimization Based On Multiple Corners",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_checks",
+            "OpenROAD/test/flow.tcl > Setup/hold timing repair",
+            "OpenROAD-flow-scripts/flow/scripts/report_metrics.tcl > report_metrics.tcl",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Viewing Results And Logs > Timing"
+          ]
+        },
+        {
+          "id": "q31",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Viewing Results And Logs > Timing",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_worst_slack",
+            "OpenROAD/test/flow.tcl > Final Report",
+            "OpenSTA/tcl/Search.tcl > report_worst_slack",
+            "OpenROAD/test/flow.tcl > Setup/hold timing repair",
+            "OpenROAD-flow-scripts/flow/scripts/report_metrics.tcl > report_metrics.tcl"
+          ]
+        },
+        {
+          "id": "q32",
+          "first_relevant_rank": 3,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD/src/dbSta/test/find_clks2.tcl > find_clks2.tcl",
+            "OpenROAD/src/dbSta/test/find_clks1.tcl > find_clks1.tcl",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > create_clock",
+            "OpenROAD-flow-scripts/flow/scripts/write_ref_sdc.tcl > write_ref_sdc.tcl",
+            "OpenROAD/src/dbSta/test/sta1.tcl > sta1.tcl",
+            "OpenROAD-flow-scripts/docs/user/AddingNewDesign.md > Adding New Designs to the ORFS"
+          ]
+        },
+        {
+          "id": "q33",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_input_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > unset_output_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > unset_input_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_output_delay",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_input_port_default_clock",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations"
+          ]
+        },
+        {
+          "id": "q34",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_clock_latency",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_propagated_clock",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Clock Tree Synthesis",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > unset_clock_latency",
+            "OpenSTA/README.md > Parallax Static Timing Analyzer > Clocks",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_propagate_all_clocks"
+          ]
+        },
+        {
+          "id": "q35",
+          "first_relevant_rank": 2,
+          "first_command_rank": 1,
+          "top": [
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Viewing Results And Logs > Power",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > report_power",
+            "OpenSTA/doc/OpenSTA.pdf > Example Command Scripts > Power Analysis",
+            "OpenSTA/tcl/Sdc.tcl > set_max_leakage_power",
+            "OpenSTA/power/Power.tcl > report_power",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_max_leakage_power"
+          ]
+        },
+        {
+          "id": "q36",
+          "first_relevant_rank": null,
+          "first_command_rank": 2,
+          "top": [
+            "OpenROAD-flow-scripts/flow/scripts/report_metrics.tcl > report_metrics.tcl",
+            "OpenROAD/src/rsz/test/repair_slew10.tcl > repair_slew10.tcl",
+            "OpenROAD/src/rsz/test/max_slew_cap.tcl > max_slew_cap.tcl",
+            "OpenROAD/src/rsz/test/repair_slew17.tcl > repair_slew17.tcl",
+            "OpenROAD/src/cts/README.md > Clock Tree Synthesis > Commands > Configure CTS Characterization",
+            "OpenROAD/src/rsz/test/repair_slew5.tcl > repair_slew5.tcl"
+          ]
+        },
+        {
+          "id": "q37",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > set_clock_groups",
+            "OpenSTA/README.md > Parallax Static Timing Analyzer > Exception paths",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > find_timing_paths",
+            "OpenSTA/doc/OpenSTA.pdf > Variables > sta_crpr_enabled",
+            "OpenSTA/tcl/Sdc.tcl > set_clock_groups"
+          ]
+        },
+        {
+          "id": "q38",
+          "first_relevant_rank": 7,
+          "first_command_rank": 6,
+          "top": [
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser)",
+            "OpenROAD-flow-scripts/flow/platforms/nangate45/config.mk > IR Drop / IR drop estimation supply net name to be analyzed and supply voltage variable",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Power Planning And Analysis",
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser) > Commands > Check Power Grid",
+            "OpenROAD/src/psm/README.md > IR Drop Analysis (psm: Static IR analyser) > Commands > Write Spice Power Grid",
+            "OpenROAD-flow-scripts/flow/scripts/final_report.tcl > final_report.tcl"
+          ]
+        },
+        {
+          "id": "q39",
+          "first_relevant_rank": 2,
+          "first_command_rank": 2,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > get_fanin",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > all_registers",
+            "OpenROAD/src/dft/README.md > TCL Commands",
+            "OpenROAD/src/gpl/README.md > RePlAce (gpl: RePlAce Global Placer) > Commands > Tuning Parameters",
+            "OpenSTA/tcl/Sdc.tcl > current_design",
+            "OpenROAD-flow-scripts/docs/tutorials/FlowTutorial.md > OpenROAD Flow Scripts Tutorial > Understanding and Analyzing OpenROAD Flow Stages and Results > Timing Optimizations > Fixing Setup Violations"
+          ]
+        },
+        {
+          "id": "q40",
+          "first_relevant_rank": 1,
+          "first_command_rank": 1,
+          "top": [
+            "OpenSTA/doc/OpenSTA.pdf > Commands > write_verilog",
+            "OpenROAD-flow-scripts/flow/scripts/load.tcl > Routines to run equivalence tests when they are enabled.",
+            "OpenROAD/src/rcx/README.md > Parasitics Extraction (rcx: OpenRCX Parasitic Extraction) > Commands > Generate verilog netlist",
+            "OpenROAD/src/odb/test/dump_netlists_withfill.tcl > dump_netlists_withfill.tcl",
+            "OpenROAD/src/par/README.md > TritonPart : An Open-Source Constraints-Driven Partitioner (par: TritonPart: constraints-driven paritioner)",
+            "OpenSTA/doc/OpenSTA.pdf > Commands > read_verilog"
+          ]
+        }
+      ]
+    }
+  },
+  "config": {
+    "top_k_semantic": 8,
+    "top_k_keyword": 8,
+    "rrf_k": 60,
+    "dedupe": "source+section",
+    "max_examples": null,
+    "embedding_model": "BAAI/bge-small-en-v1.5",
+    "embedding_revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+    "chunks": 1632,
+    "index_built": "2026-07-08T09:37:04+00:00"
+  },
+  "definitions": {
+    "relevant": "chunk source matches a labeled source file AND the chunk text/section mentions a labeled command (whole word)",
+    "recall@k": "fraction of questions with >= 1 relevant chunk among the top k (hit rate)",
+    "mrr@10": "mean reciprocal rank of the first relevant chunk in the top 10 (0 when none)",
+    "command_hit@6": "secondary: fraction of questions whose top 6 contain a chunk from ANY source (documentation, example or flow script) naming a labeled command"
+  },
+  "note": "The questions were written before any retrieval result was seen. There is no separate development set: the same 40 questions were used to check three design changes (Porter stemming in BM25, per-ranker source+section deduplication before fusion, tool names in README titles), so the numbers are slightly optimistic. Relevance counts only the labeled primary documentation; usage examples are credited by command_hit@6 only.",
+  "evaluated_at": "2026-07-08T09:37:17+00:00"
+}

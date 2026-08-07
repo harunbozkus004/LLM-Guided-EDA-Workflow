@@ -1,0 +1,322 @@
+[
+ {
+  "id": "DEV-CT-01",
+  "category": "cts",
+  "difficulty": "medium",
+  "instruction": "Synthesize the clock tree of the placed design with BUF_X2 as the root clock buffer and as the clock-tree buffer cell, then legalize the placement so that the inserted clock buffers are on legal sites without overlaps.",
+  "start_state": "placed",
+  "expected_commands": [
+   "clock_tree_synthesis",
+   "detailed_placement"
+  ],
+  "expected_outcome": "All-BUF_X2 clock tree driving the 35 register clock pins; legal placement.",
+  "validator": {
+   "name": "ct_clock_tree",
+   "params": {
+    "tree_masters": [
+     "BUF_X2"
+    ],
+    "root_master": "BUF_X2",
+    "require_legal": true
+   }
+  },
+  "reference_script": "reference_scripts/DEV-CT-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-CT-01.alt1.tcl",
+    "controls/DEV-CT-01.alt2.tcl",
+    "controls/DEV-CT-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-CT-01.neg1.tcl",
+    "controls/DEV-CT-01.neg2.tcl",
+    "controls/DEV-CT-01.neg3.tcl",
+    "controls/DEV-CT-01.neg4.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Development task (prompt/debug work only). CTS leaves the clock buffers on unaligned, overlapping locations; legality comes from the probe's check_placement."
+ },
+ {
+  "id": "DEV-EX-01",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "Initialize the floorplan for the loaded gcd netlist with a target core utilization of 35%, a core aspect ratio of 1.0 and 5 um of spacing between the core and the die boundary on every side. Then create the routing tracks for all metal layers.",
+  "start_state": "synth",
+  "expected_commands": [
+   "initialize_floorplan",
+   "make_tracks"
+  ],
+  "expected_outcome": "Die and core defined with ~35% core utilization, a square core, ~5 um core-to-die margins, placement rows, and routing tracks on metal1-metal10.",
+  "validator": {
+   "name": "example_floorplan_init",
+   "params": {
+    "utilization": 0.35,
+    "util_tol": 0.03,
+    "aspect_ratio": 1.0,
+    "ar_tol": 0.06,
+    "margin_um": 5.0,
+    "margin_tol_low": 0.05,
+    "margin_tol_high": 1.5
+   }
+  },
+  "reference_script": "reference_scripts/DEV-EX-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-EX-01.alt1.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-EX-01.neg1.tcl",
+    "controls/DEV-EX-01.neg2.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Worked example of the task / validator / control format. Utilization is measured on the resulting core (logic cell area / core area), so any construction method that achieves it passes."
+ },
+ {
+  "id": "DEV-FP-01",
+  "category": "floorplanning",
+  "difficulty": "medium",
+  "instruction": "The floorplan is initialized but the IO pins are not placed yet. Place all IO pins on the die boundary using metal3 for pins on the left/right edges and metal2 for pins on the top/bottom edges, such that every input pin is on the left edge and every output pin is on the right edge. Do not modify the floorplan or the netlist.",
+  "start_state": "fp_init",
+  "expected_commands": [
+   "set_io_pin_constraint",
+   "place_pins"
+  ],
+  "expected_outcome": "36 input pins on the left edge and 18 output pins on the right edge, all on metal3.",
+  "validator": {
+   "name": "fp_io_direction_edges",
+   "params": {
+    "hor_layer": "metal3",
+    "ver_layer": "metal2",
+    "input_edge": "left",
+    "output_edge": "right"
+   }
+  },
+  "reference_script": "reference_scripts/DEV-FP-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-FP-01.alt1.tcl",
+    "controls/DEV-FP-01.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-FP-01.neg1.tcl",
+    "controls/DEV-FP-01.neg2.tcl",
+    "controls/DEV-FP-01.neg3.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Development task for the pin-constraint commands (direction-based region constraints)."
+ },
+ {
+  "id": "DEV-IN-01",
+  "category": "inspection",
+  "difficulty": "medium",
+  "instruction": "Find every signal net in the design that has a driver but no load at all, i.e. it is connected to no cell input pin and to no top-level output port. Write outputs/unloaded_nets.txt with one line per such net in the form '<net_name> <driver_instance>/<driver_pin>' (any order); write no other lines. Do not modify the design.",
+  "start_state": "floorplan",
+  "expected_commands": [
+   "get_nets",
+   "get_pins",
+   "get_ports",
+   "get_property"
+  ],
+  "expected_outcome": "34 nets (_311_ ... _344_), each driven by the unused QN output of a flip-flop (_673_/QN ... _706_/QN); the design is unchanged.",
+  "validator": {
+   "name": "in_unloaded_nets",
+   "params": {
+    "file": "outputs/unloaded_nets.txt"
+   }
+  },
+  "reference_script": "reference_scripts/DEV-IN-01.tcl",
+  "required_outputs": [
+   "outputs/unloaded_nets.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-IN-01.alt1.tcl",
+    "controls/DEV-IN-01.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-IN-01.neg1.tcl",
+    "controls/DEV-IN-01.neg2.tcl",
+    "controls/DEV-IN-01.neg3.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Ground truth: OpenDB oracle (signal nets with an OUTPUT ITerm or INPUT BTerm driver and no INPUT ITerm / OUTPUT BTerm sink). The floating-net check (report_floating_nets: loads but no driver) finds nothing in this design and answers a different question. The shortcut 'every flip-flop QN net' is wrong because _672_/QN drives _003_, which has loads. Writing only the driving instance (no /pin) fails driver_pins."
+ },
+ {
+  "id": "DEV-OP-01",
+  "category": "optimization",
+  "difficulty": "medium",
+  "instruction": "Enforce a maximum fanout of 10 on this placed design: afterwards no signal net may drive more than 10 cell input pins (output ports are not counted). The clock net is exempt and must be left exactly as it is, since clock tree synthesis will buffer it later. Fix the violations by inserting buffers without changing the logic function, and leave the design legally placed.",
+  "start_state": "placed",
+  "expected_commands": [
+   "set_max_fanout 10 [current_design]",
+   "estimate_parasitics -placement",
+   "repair_design",
+   "detailed_placement"
+  ],
+  "expected_outcome": "The five nets with fanout 16-40 are split by buffer trees so that no non-clock net drives more than 10 cell inputs; the clock net still drives all 35 registers directly; placement legal.",
+  "validator": {
+   "name": "op_max_fanout",
+   "params": {
+    "max_fanout": 10,
+    "clock_port": "clk"
+   }
+  },
+  "reference_script": "reference_scripts/DEV-OP-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-OP-01.alt1.tcl",
+    "controls/DEV-OP-01.alt2.tcl",
+    "controls/DEV-OP-01.alt3.tcl",
+    "controls/DEV-OP-01.alt4.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-OP-01.neg1.tcl",
+    "controls/DEV-OP-01.neg2.tcl",
+    "controls/DEV-OP-01.neg3.tcl",
+    "controls/DEV-OP-01.neg4.tcl",
+    "controls/DEV-OP-01.neg5.tcl",
+    "controls/DEV-OP-01.neg6.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Fanout is counted as in OpenSTA's max-fanout check (number of cell input pins on the net, top-level output ports excluded); nets on the clock path of any register are exempt. The Nangate45 library defines no max_fanout, so repair_design only repairs fanout after set_max_fanout on the design. Starting fanout: req_rdy 40 (+1 output port), _188_ 32, three nets with 16, one with 9. Logic guard: buffer-transparent connectivity identical to the start; clock path of every register unchanged. Accepted: remove_buffers first, limits on ports in addition to the design, a stricter limit. Rejected: building a clock tree (clock net changed), splitting nets with inverters (inverters are not buffers for the logic guard)."
+ },
+ {
+  "id": "DEV-PL-01",
+  "category": "placement",
+  "difficulty": "medium",
+  "instruction": "Legalize the existing global placement of the gcd design while keeping extra routing space around the flip-flops: every flip-flop instance (master DFF_X1) must have at least 3 empty placement sites between itself and its left neighbour and at least 3 empty sites between itself and its right neighbour in its row. Other cells need no extra spacing. Keep the cells close to their current global-placement locations (do not re-run global placement; no cell may move by more than 10 um and the average movement must not exceed 2 um); every cell must end up on a legal row site in the orientation of its row, without overlaps.",
+  "start_state": "gplaced",
+  "expected_commands": [
+   "set_placement_padding -masters",
+   "detailed_placement"
+  ],
+  "expected_outcome": "Legal placement in which every DFF_X1 has >= 3 empty sites on both sides.",
+  "validator": {
+   "name": "pl_legalize",
+   "params": {
+    "max_disp_um": 10.0,
+    "mean_disp_um": 2.0,
+    "master_pattern": "DFF_*",
+    "min_master_gap_sites": 3
+   }
+  },
+  "reference_script": "reference_scripts/DEV-PL-01.tcl",
+  "required_outputs": [],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-PL-01.alt1.tcl",
+    "controls/DEV-PL-01.alt2.tcl",
+    "controls/DEV-PL-01.alt3.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-PL-01.neg1.tcl",
+    "controls/DEV-PL-01.neg2.tcl",
+    "controls/DEV-PL-01.neg3.tcl",
+    "controls/DEV-PL-01.neg4.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Development task (prompt engineering only). Gaps are measured on final.odb to the nearest non-filler neighbour (logic or tap cell) in the same row. Master padding with only -right leaves left gaps of 0 sites. Two sites around the flip-flops (off by one) fails."
+ },
+ {
+  "id": "DEV-RT-01",
+  "category": "routing",
+  "difficulty": "hard",
+  "instruction": "The design is already globally routed. Run detailed routing for the whole design with metal2 as the lowest and metal10 as the highest routing layer, so that no routing wire is placed on metal1. Then write the total detailed-routing wirelength of the design in micrometers to outputs/dr_wirelength.txt; the file must contain that value and no other number.",
+  "start_state": "grouted",
+  "expected_commands": [
+   "detailed_route -bottom_routing_layer metal2 -top_routing_layer metal10",
+   "report_wire_length -net * -detailed_route -file"
+  ],
+  "expected_outcome": "All nets are detail-routed on metal2-metal10 only and outputs/dr_wirelength.txt holds the routed wirelength (about 5753 um).",
+  "validator": {
+   "name": "rt_detailed_route_wirelength",
+   "params": {
+    "report": "outputs/dr_wirelength.txt",
+    "bottom_layer": "metal2",
+    "top_layer": "metal10",
+    "rtol": 0.005
+   }
+  },
+  "reference_script": "reference_scripts/DEV-RT-01.tcl",
+  "required_outputs": [
+   "outputs/dr_wirelength.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-RT-01.alt1.tcl",
+    "controls/DEV-RT-01.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-RT-01.neg1.tcl",
+    "controls/DEV-RT-01.neg2.tcl",
+    "controls/DEV-RT-01.neg3.tcl",
+    "controls/DEV-RT-01.neg4.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Layer use is measured by walking every dbWire in final.odb (dbWireDecoder). Without the layer options the router puts ~28 um of wire on metal1. Truth: probe detailed_wirelength_um (sum of dbWire lengths = report_wire_length -detailed_route); the router's own log total (5755 um, path-based) differs by <0.05%, hence rtol 0.5%. The global-route total (~7.7k um) is rejected. Runtime ~6 s. set_routing_layers does not affect detailed_route in this build (metal1 wires remain), so it is rejected."
+ },
+ {
+  "id": "DEV-TA-01",
+  "category": "timing",
+  "difficulty": "medium",
+  "instruction": "What-if analysis: re-time the design with the period of the clock core_clock changed to 0.40 ns (same clock name and source port), keeping every input and output delay at its current absolute value. Analyze the design exactly as it is loaded in the session (ideal clock, no wire parasitics): do not estimate, extract or load any parasitics. Write outputs/period_0p40.txt with exactly these two lines:\nworst_setup_slack <value>\nsetup_violating_endpoints <count>\nwith the worst setup slack in ns with 4 decimal places and the number of timing endpoints with negative setup slack as an integer. Do not modify the design netlist or placement.",
+  "start_state": "placed",
+  "expected_commands": [
+   "create_clock",
+   "report_worst_slack"
+  ],
+  "expected_outcome": "outputs/period_0p40.txt reads worst_setup_slack -0.0961 and setup_violating_endpoints 41.",
+  "validator": {
+   "name": "ta_timing_summary",
+   "params": {
+    "file": "outputs/period_0p40.txt",
+    "parasitics": "none",
+    "clock_period": 0.4,
+    "layout": "lines",
+    "min_decimals": 4,
+    "fields": [
+     {
+      "label": "worst_setup_slack",
+      "gt": "worst_setup_slack",
+      "tol": 0.0001
+     },
+     {
+      "label": "setup_violating_endpoints",
+      "gt": "setup_violating_endpoints",
+      "integer": true
+     }
+    ]
+   }
+  },
+  "reference_script": "reference_scripts/DEV-TA-01.tcl",
+  "required_outputs": [
+   "outputs/period_0p40.txt"
+  ],
+  "controls": {
+   "alternatives": [
+    "controls/DEV-TA-01.alt1.tcl",
+    "controls/DEV-TA-01.alt2.tcl"
+   ],
+   "negatives": [
+    "controls/DEV-TA-01.neg1.tcl",
+    "controls/DEV-TA-01.neg2.tcl",
+    "controls/DEV-TA-01.neg3.tcl",
+    "controls/DEV-TA-01.neg4.tcl",
+    "controls/DEV-TA-01.neg5.tcl"
+   ]
+  },
+  "split": "dev",
+  "notes": "Redefining core_clock with create_clock keeps the input/output delays that reference it (0.097 ns), so WNS drops by exactly 0.085 ns to -0.0961 ns with 41 violating endpoints. Rescaling the IO delays to 20% of the new period (0.08 ns) is a plausible mistake that changes both numbers. Deleting the clock before re-creating it, or creating the new clock under another name on clk (which replaces core_clock), drops the IO delays that referenced it (WNS -0.0692, 32 violators)."
+ }
+]

@@ -1,0 +1,973 @@
+{
+  "bm25": {
+    "b": 0.75,
+    "epsilon": 0.25,
+    "implementation": "rank_bm25.BM25Okapi",
+    "indexed_text": "same as embedded text",
+    "k1": 1.5,
+    "tokenizer_version": "2"
+  },
+  "build_timestamp": "2026-07-08T09:37:04+00:00",
+  "chunking": {
+    "atomic": "command syntax cards and code blocks <= target are never split",
+    "chunker_version": "1.0",
+    "duplicate_chunks_dropped": 17,
+    "max_chunks_per_document": {
+      "example": 6
+    },
+    "overlap_tokens": 80,
+    "target_tokens": 600,
+    "tokenizer": "BAAI/bge-small-en-v1.5 (WordPiece, no special tokens)",
+    "truncated_documents": {
+      "OpenROAD/src/pad/test/assign_bumps.tcl": 29,
+      "OpenROAD/src/pad/test/skywater130_caravel.tcl": 17,
+      "OpenROAD/src/pad/test/skywater130_coyote_tc.tcl": 24
+    }
+  },
+  "chunks": {
+    "by_doc_type": {
+      "command_syntax": 304,
+      "example": 655,
+      "flow_script": 129,
+      "guide": 139,
+      "readme": 240,
+      "reference_pdf": 165
+    },
+    "by_tool": {
+      "ant": 9,
+      "cts": 31,
+      "dbsta": 41,
+      "dft": 10,
+      "dpl": 60,
+      "dpo": 4,
+      "drt": 29,
+      "dst": 4,
+      "fin": 5,
+      "flow": 40,
+      "gpl": 35,
+      "grt": 84,
+      "gui": 24,
+      "ifp": 31,
+      "mpl": 9,
+      "mpl2": 13,
+      "odb": 36,
+      "openroad": 49,
+      "orfs": 193,
+      "pad": 72,
+      "par": 14,
+      "pdn": 108,
+      "ppl": 120,
+      "psm": 32,
+      "rcx": 27,
+      "rmp": 8,
+      "rsz": 143,
+      "sta": 340,
+      "stt": 6,
+      "tap": 35,
+      "upf": 19,
+      "utl": 1
+    },
+    "over_model_window": 175,
+    "tokens": {
+      "max": 888,
+      "mean": 197.5,
+      "median": 144.0,
+      "min": 3,
+      "p95": 575
+    },
+    "total": 1632
+  },
+  "corpus": {
+    "benchmark_content_included": false,
+    "documents": {
+      "by_doc_type": {
+        "command_syntax": 305,
+        "example": 607,
+        "flow_script": 65,
+        "guide": 16,
+        "readme": 26,
+        "reference_pdf": 161
+      },
+      "by_tool": {
+        "ant": 7,
+        "cts": 19,
+        "dbsta": 39,
+        "dft": 7,
+        "dpl": 52,
+        "dpo": 4,
+        "drt": 21,
+        "dst": 4,
+        "fin": 3,
+        "flow": 20,
+        "gpl": 31,
+        "grt": 67,
+        "gui": 8,
+        "ifp": 23,
+        "mpl": 7,
+        "mpl2": 6,
+        "odb": 24,
+        "openroad": 6,
+        "orfs": 58,
+        "pad": 41,
+        "par": 9,
+        "pdn": 81,
+        "ppl": 103,
+        "psm": 26,
+        "rcx": 16,
+        "rmp": 8,
+        "rsz": 120,
+        "sta": 329,
+        "stt": 4,
+        "tap": 26,
+        "upf": 10,
+        "utl": 1
+      },
+      "source_files": 759,
+      "total": 1180
+    },
+    "near_duplicate_examples_skipped": [
+      {
+        "jaccard": 0.935,
+        "near_duplicate_of": "OpenROAD/src/cts/test/array_full_flow.tcl",
+        "source": "OpenROAD/src/cts/test/array_no_blockages.tcl"
+      },
+      {
+        "jaccard": 0.916,
+        "near_duplicate_of": "OpenROAD/src/cts/test/check_buffers.tcl",
+        "source": "OpenROAD/src/cts/test/check_buffers_blockages.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/check5.tcl",
+        "source": "OpenROAD/src/dpl/test/check9.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/fence02.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/fragmented_row01.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/fragmented_row02.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/pad05.tcl",
+        "source": "OpenROAD/src/dpl/test/pad06.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/regions1.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/regions2.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/simple01.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/simple02.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/simple03.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/simple04.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/simple05.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/simple07.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/simple08.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpl/test/fence01.tcl",
+        "source": "OpenROAD/src/dpl/test/simple10.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpo/test/aes.tcl",
+        "source": "OpenROAD/src/dpo/test/gcd.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpo/test/aes.tcl",
+        "source": "OpenROAD/src/dpo/test/ibex.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpo/test/aes.tcl",
+        "source": "OpenROAD/src/dpo/test/regions1.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/dpo/test/aes.tcl",
+        "source": "OpenROAD/src/dpo/test/regions2.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/drt/test/aes_nangate45.tcl",
+        "source": "OpenROAD/src/drt/test/gcd_nangate45.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/drt/test/ta_ap_aligned.tcl",
+        "source": "OpenROAD/src/drt/test/ta_pin_aligned.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/drt/test/top_level_term.tcl",
+        "source": "OpenROAD/src/drt/test/top_level_term2.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/ar01.tcl",
+        "source": "OpenROAD/src/gpl/test/ar02.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/ar01.tcl",
+        "source": "OpenROAD/src/gpl/test/core01.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/large01.tcl",
+        "source": "OpenROAD/src/gpl/test/large02.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/large01.tcl",
+        "source": "OpenROAD/src/gpl/test/large03.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/large01.tcl",
+        "source": "OpenROAD/src/gpl/test/medium01.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/large01.tcl",
+        "source": "OpenROAD/src/gpl/test/medium02.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/large01.tcl",
+        "source": "OpenROAD/src/gpl/test/medium03.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/large01.tcl",
+        "source": "OpenROAD/src/gpl/test/medium04.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/large01.tcl",
+        "source": "OpenROAD/src/gpl/test/medium06.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/ar01.tcl",
+        "source": "OpenROAD/src/gpl/test/simple02.tcl"
+      },
+      {
+        "jaccard": 0.909,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/large01.tcl",
+        "source": "OpenROAD/src/gpl/test/simple03.tcl"
+      },
+      {
+        "jaccard": 0.909,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/large01.tcl",
+        "source": "OpenROAD/src/gpl/test/simple04.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/gpl/test/simple01.tcl",
+        "source": "OpenROAD/src/gpl/test/simple09.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/grt/test/clock_route_error1.tcl",
+        "source": "OpenROAD/src/grt/test/clock_route_error2.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/grt/test/ndr_1w_3s.tcl",
+        "source": "OpenROAD/src/grt/test/ndr_2w_3s.tcl"
+      },
+      {
+        "jaccard": 0.905,
+        "near_duplicate_of": "OpenROAD/src/grt/test/clock_route_alpha.tcl",
+        "source": "OpenROAD/src/grt/test/pd1.tcl"
+      },
+      {
+        "jaccard": 0.912,
+        "near_duplicate_of": "OpenROAD/src/grt/test/pin_access1.tcl",
+        "source": "OpenROAD/src/grt/test/pin_access2.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/grt/test/clock_route.tcl",
+        "source": "OpenROAD/src/grt/test/pre_routed1.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/grt/test/top_level_term1.tcl",
+        "source": "OpenROAD/src/grt/test/top_level_term2.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/ifp/test/init_floorplan2.tcl",
+        "source": "OpenROAD/src/ifp/test/init_floorplan3.tcl"
+      },
+      {
+        "jaccard": 0.917,
+        "near_duplicate_of": "OpenROAD/src/ifp/test/init_floorplan4.tcl",
+        "source": "OpenROAD/src/ifp/test/init_floorplan7.tcl"
+      },
+      {
+        "jaccard": 0.939,
+        "near_duplicate_of": "OpenROAD/src/ifp/test/placement_blockage1.tcl",
+        "source": "OpenROAD/src/ifp/test/placement_blockage2.tcl"
+      },
+      {
+        "jaccard": 0.987,
+        "near_duplicate_of": "OpenROAD/src/pad/test/assign_bumps.tcl",
+        "source": "OpenROAD/src/pad/test/rdl_route_assignments.tcl"
+      },
+      {
+        "jaccard": 0.938,
+        "near_duplicate_of": "OpenROAD/src/pad/test/skywater130_caravel.tcl",
+        "source": "OpenROAD/src/pad/test/skywater130_overlapping_filler.tcl"
+      },
+      {
+        "jaccard": 0.928,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/asap7_no_via_generate.tcl",
+        "source": "OpenROAD/src/pdn/test/asap7_no_via_generate_v1_snapped.tcl"
+      },
+      {
+        "jaccard": 0.914,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/asap7_vias_arrayspacing.tcl",
+        "source": "OpenROAD/src/pdn/test/asap7_vias_arrayspacing_notfirst.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/asap7_vias_arrayspacing.tcl",
+        "source": "OpenROAD/src/pdn/test/asap7_vias_arrayspacing_partial.tcl"
+      },
+      {
+        "jaccard": 0.913,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/core_grid_extend_to_boundary.tcl",
+        "source": "OpenROAD/src/pdn/test/core_grid_extend_to_boundary_no_pins.tcl"
+      },
+      {
+        "jaccard": 0.923,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/core_grid_snap.tcl",
+        "source": "OpenROAD/src/pdn/test/core_grid_via_snap.tcl"
+      },
+      {
+        "jaccard": 0.912,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/core_grid_start_power.tcl",
+        "source": "OpenROAD/src/pdn/test/core_grid_with_rings.tcl"
+      },
+      {
+        "jaccard": 0.955,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/core_grid_strap_count.tcl",
+        "source": "OpenROAD/src/pdn/test/core_grid_with_rings_with_straps.tcl"
+      },
+      {
+        "jaccard": 0.907,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/macros_cells.tcl",
+        "source": "OpenROAD/src/pdn/test/macros_cells_extend_boundary.tcl"
+      },
+      {
+        "jaccard": 0.925,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/macros_grid_through.tcl",
+        "source": "OpenROAD/src/pdn/test/macros_grid_through_without_middle.tcl"
+      },
+      {
+        "jaccard": 0.952,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/macros_narrow_channel.tcl",
+        "source": "OpenROAD/src/pdn/test/macros_narrow_channel_large_spacing.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/macros_narrow_channel.tcl",
+        "source": "OpenROAD/src/pdn/test/macros_narrow_channel_repair_overlap.tcl"
+      },
+      {
+        "jaccard": 0.909,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/macros_with_halo.tcl",
+        "source": "OpenROAD/src/pdn/test/macros_with_rings.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/min_spacing.tcl",
+        "source": "OpenROAD/src/pdn/test/min_width.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/min_spacing.tcl",
+        "source": "OpenROAD/src/pdn/test/offgrid.tcl"
+      },
+      {
+        "jaccard": 0.927,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/pads_black_parrot_no_connect.tcl",
+        "source": "OpenROAD/src/pdn/test/pads_black_parrot_offset.tcl"
+      },
+      {
+        "jaccard": 0.95,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/power_switch_cut_rows.tcl",
+        "source": "OpenROAD/src/pdn/test/power_switch_daisy.tcl"
+      },
+      {
+        "jaccard": 0.902,
+        "near_duplicate_of": "OpenROAD/src/pdn/test/power_switch_cut_rows.tcl",
+        "source": "OpenROAD/src/pdn/test/power_switch_star.tcl"
+      },
+      {
+        "jaccard": 0.926,
+        "near_duplicate_of": "OpenROAD/src/ppl/test/add_constraint12.tcl",
+        "source": "OpenROAD/src/ppl/test/add_constraint13.tcl"
+      },
+      {
+        "jaccard": 0.918,
+        "near_duplicate_of": "OpenROAD/src/ppl/test/add_constraint11.tcl",
+        "source": "OpenROAD/src/ppl/test/add_constraint14.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/ppl/test/group_pins4.tcl",
+        "source": "OpenROAD/src/ppl/test/group_pins6.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/ppl/test/group_pins1.tcl",
+        "source": "OpenROAD/src/ppl/test/group_pins_warn1.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/ppl/test/min_dist_in_tracks1.tcl",
+        "source": "OpenROAD/src/ppl/test/min_dist_in_tracks2.tcl"
+      },
+      {
+        "jaccard": 0.907,
+        "near_duplicate_of": "OpenROAD/src/ppl/test/write_pin_placement3.tcl",
+        "source": "OpenROAD/src/ppl/test/write_pin_placement4.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/psm/test/aes_test_vdd_set_node_density.tcl",
+        "source": "OpenROAD/src/psm/test/aes_test_vdd_set_node_density_fact.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/rmp/test/blif_reader.tcl",
+        "source": "OpenROAD/src/rmp/test/blif_reader_const.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/rmp/test/blif_reader.tcl",
+        "source": "OpenROAD/src/rmp/test/blif_reader_sequential.tcl"
+      },
+      {
+        "jaccard": 0.906,
+        "near_duplicate_of": "OpenROAD/src/rmp/test/blif_writer.tcl",
+        "source": "OpenROAD/src/rmp/test/blif_writer_consts.tcl"
+      },
+      {
+        "jaccard": 0.906,
+        "near_duplicate_of": "OpenROAD/src/rmp/test/blif_writer.tcl",
+        "source": "OpenROAD/src/rmp/test/blif_writer_hanging.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/rsz/test/remove_buffers1.tcl",
+        "source": "OpenROAD/src/rsz/test/remove_buffers2.tcl"
+      },
+      {
+        "jaccard": 0.946,
+        "near_duplicate_of": "OpenROAD/src/rsz/test/repair_fanout7.tcl",
+        "source": "OpenROAD/src/rsz/test/repair_fanout8.tcl"
+      },
+      {
+        "jaccard": 0.909,
+        "near_duplicate_of": "OpenROAD/src/rsz/test/repair_setup4.tcl",
+        "source": "OpenROAD/src/rsz/test/repair_setup4_verbose.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/rsz/test/repair_tie3.tcl",
+        "source": "OpenROAD/src/rsz/test/repair_tie5.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/rsz/test/repair_tie1.tcl",
+        "source": "OpenROAD/src/rsz/test/repair_tie6.tcl"
+      },
+      {
+        "jaccard": 0.978,
+        "near_duplicate_of": "OpenROAD/src/rsz/test/repair_wire6.tcl",
+        "source": "OpenROAD/src/rsz/test/repair_wire7.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/rsz/test/report_floating_nets1.tcl",
+        "source": "OpenROAD/src/rsz/test/report_floating_nets2.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/rsz/test/report_floating_nets1.tcl",
+        "source": "OpenROAD/src/rsz/test/report_floating_nets3.tcl"
+      },
+      {
+        "jaccard": 1.0,
+        "near_duplicate_of": "OpenROAD/src/rsz/test/resize_slack1.tcl",
+        "source": "OpenROAD/src/rsz/test/resize_slack3.tcl"
+      }
+    ],
+    "pdf_unmatched_headings": [],
+    "preprocessing": [
+      "markdown: images, badges, html tags/comments, mermaid diagrams and link targets removed; code blocks kept verbatim; License/Authors/References/Regression tests/FAQs sections dropped",
+      "tcl: leading license headers and decorative '####' / '# ----' comment rules removed",
+      "examples: 'source helpers.tcl' and diff_file lines removed; a one-line note marks make_result_file as a regression-test helper",
+      "command syntax cards: exact define_cmd_args text, the proc's leading comments, and the keys/flags of its parse_key_args call",
+      "OpenSTA.pdf: split by font (Helvetica-Bold headings, LiberationMono-Bold command names); table of contents and alphabetical index dropped",
+      "tool READMEs (src/<tool>/README.md): the title in the heading path is extended with the tool namespace and the name given in docs/contrib/DeveloperGuide.md, e.g. 'RePlAce (gpl: RePlAce Global Placer)'",
+      "chunks with identical text (whitespace-normalised) are kept once"
+    ],
+    "root": "third_party/",
+    "skipped_files": [
+      {
+        "reason": "documentation build instructions",
+        "source": "OpenROAD/docs/README.md"
+      },
+      {
+        "reason": "contributor process",
+        "source": "OpenROAD/docs/contrib/CI.md"
+      },
+      {
+        "reason": "C++ coding practices",
+        "source": "OpenROAD/docs/contrib/CodingPractices.md"
+      },
+      {
+        "reason": "contributor process",
+        "source": "OpenROAD/docs/contrib/GettingInvolved.md"
+      },
+      {
+        "reason": "contributor process",
+        "source": "OpenROAD/docs/contrib/GitGuide.md"
+      },
+      {
+        "reason": "documentation template",
+        "source": "OpenROAD/docs/misc/NewToolDocExample.md"
+      },
+      {
+        "reason": "link-only page",
+        "source": "OpenROAD/docs/tutorials/index.md"
+      },
+      {
+        "reason": "link-only page",
+        "source": "OpenROAD/docs/user/FAQS.md"
+      },
+      {
+        "reason": "link-only page",
+        "source": "OpenROAD-flow-scripts/docs/user/DockerShell.md"
+      },
+      {
+        "reason": "CI process",
+        "source": "OpenROAD-flow-scripts/docs/user/Flow_QoR_CI.md"
+      },
+      {
+        "reason": "CI process",
+        "source": "OpenROAD-flow-scripts/docs/user/Jenkins.md"
+      },
+      {
+        "reason": "link-only page",
+        "source": "OpenROAD-flow-scripts/docs/tutorials/TutorialHome.md"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/regression.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/regression_vars.tcl"
+      },
+      {
+        "reason": "KLayout launcher",
+        "source": "OpenROAD-flow-scripts/flow/scripts/klayout.tcl"
+      },
+      {
+        "reason": "Yosys script, not OpenROAD Tcl",
+        "source": "OpenROAD-flow-scripts/flow/scripts/synth.tcl"
+      },
+      {
+        "reason": "Yosys script, not OpenROAD Tcl",
+        "source": "OpenROAD-flow-scripts/flow/scripts/synth_hier_report.tcl"
+      },
+      {
+        "reason": "Yosys script, not OpenROAD Tcl",
+        "source": "OpenROAD-flow-scripts/flow/scripts/synth_preamble.tcl"
+      },
+      {
+        "reason": "Yosys launcher",
+        "source": "OpenROAD-flow-scripts/flow/scripts/yosys.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/ant/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/cts/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/dbSta/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/dft/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/dpl/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/dpo/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/drt/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/dst/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/fin/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/gpl/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/gpl/test/regression_tests_large.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/grt/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/gui/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/ifp/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/mpl/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/mpl2/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/odb/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/pad/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/par/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/pdn/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/ppl/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/psm/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/rcx/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/rmp/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/rsz/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/stt/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/tap/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/upf/test/regression_tests.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/test/helpers.tcl"
+      },
+      {
+        "reason": "test infrastructure",
+        "source": "OpenROAD/src/utl/test/regression_tests.tcl"
+      }
+    ],
+    "trivial_examples_skipped": 59
+  },
+  "embedding": {
+    "batch_size": 32,
+    "device": "cpu",
+    "dim": 384,
+    "document_prefix": "",
+    "embedded_text": "'<source> > <section>' line + chunk text",
+    "max_seq_length": 512,
+    "model": "BAAI/bge-small-en-v1.5",
+    "normalized": true,
+    "query_prefix": "Represent this sentence for searching relevant passages: ",
+    "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a"
+  },
+  "environment": {
+    "faiss": "1.15.1",
+    "platform": "macOS-26.7.1-arm64-arm-64bit",
+    "python": "3.11.18",
+    "sentence_transformers": "6.2.0",
+    "tokenizers": "0.23.3",
+    "torch": "2.15.0",
+    "transformers": "5.22.2"
+  },
+  "files": {
+    "documentation/chunks.jsonl": {
+      "chunks": 848,
+      "sha256": "bc22d1767ad554a7d7a45617669e6b1e999c441113b0b8842ea772abc850fe03"
+    },
+    "embeddings/bm25_offsets.npy": {
+      "sha256": "bf261c40fddb11e404b8c107c521bae13a7f25bec13719956f037c8329a28a6e"
+    },
+    "embeddings/bm25_tokens.npy": {
+      "sha256": "f8cb3485c9ea7f1ff54ecc962054504616376d55b3f40659ccb36c1f81fb9c01"
+    },
+    "embeddings/bm25_vocab.json": {
+      "sha256": "0708a6375a98092cd2627068f4cd61f5376087c72e2159c713be1a38eeb6d513"
+    },
+    "embeddings/chunk_ids.json": {
+      "sha256": "166a6dee7bc01bf5d84ba01e6026db013fa3462d0c3e88e76b55c30f4a7c5c97"
+    },
+    "embeddings/chunks.faiss": {
+      "sha256": "473718c54b547063a7a09447ce85f26ed1a6ad8137c783db48171645fd1b2e39"
+    },
+    "embeddings/embeddings.npy": {
+      "sha256": "3b4ff07fc60860508e399542b48b1b807374c879ecea70b8fce8a015c098e51a"
+    },
+    "examples/chunks.jsonl": {
+      "chunks": 784,
+      "sha256": "d986bc1769a8b5a11987c14ed62285904d23968486bc278c812445f556fe8dac"
+    }
+  },
+  "sources": {
+    "OpenROAD": {
+      "commit": "0922eecb9b6a9de5fc7209e11f0781c75d2a0ff2",
+      "include": [
+        "README.md",
+        "docs/**/*.md (contributor-process and link-only pages skipped)",
+        "src/<tool>/README.md",
+        "src/<tool>/src/*.tcl -> command syntax cards",
+        "src/<tool>/test/*.tcl -> examples (near-duplicates and < 3 commands skipped)",
+        "test/*.tcl flow scripts (regression infrastructure skipped)"
+      ],
+      "repository": "https://github.com/The-OpenROAD-Project/OpenROAD"
+    },
+    "OpenROAD-flow-scripts": {
+      "commit": "2271f5d9648b825a7702d30df54a7bc7b7bbbcf1",
+      "include": [
+        "README.md",
+        "docs/user/*.md",
+        "docs/tutorials/*.md",
+        "flow/scripts/*.tcl (Yosys/KLayout scripts skipped)",
+        "flow/platforms/nangate45/*.tcl and config.mk"
+      ],
+      "repository": "https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts"
+    },
+    "OpenSTA": {
+      "commit": "3e2295adfd5ffb7053aa6bb68f31b0eae8f2986f",
+      "include": [
+        "README.md",
+        "doc/OpenSTA.pdf -> one entry per section / command / variable",
+        "tcl/*.tcl and */*.tcl -> command syntax cards",
+        "examples/*.tcl -> examples"
+      ],
+      "repository": "https://github.com/The-OpenROAD-Project/OpenSTA"
+    }
+  },
+  "timings_s": {
+    "embedding": 29.1,
+    "load_and_chunk": 3.1,
+    "total": 36.2,
+    "write_index": 29.4
+  },
+  "vector_store": {
+    "metric": "inner product of normalised vectors (cosine)",
+    "n_vectors": 1632,
+    "type": "faiss.IndexFlatIP"
+  }
+}

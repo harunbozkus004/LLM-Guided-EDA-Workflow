@@ -1,0 +1,8 @@
+config,expected_episodes,recorded_episodes,coverage_pct,missing_episodes,unexpected_episodes,runs,n_tasks,harness_errors,harness_errors_dropped,duplicates_dropped,inconsistent_records
+A_baseline,150,150,100.0,0,0,1;2;3,50,0,0,0,0
+B_rag,150,150,100.0,0,0,1;2;3,50,0,0,0,0
+C_feedback,150,150,100.0,0,0,1;2;3,50,0,0,0,0
+D_full,150,150,100.0,0,0,1;2;3,50,0,0,0,0
+E_vector_only,150,150,100.0,0,0,1;2;3,50,0,0,0,0
+F_single_repair,150,150,100.0,0,0,1;2;3,50,0,0,0,0
+G_targeted_repair,150,150,100.0,0,0,1;2;3,50,0,0,0,0
